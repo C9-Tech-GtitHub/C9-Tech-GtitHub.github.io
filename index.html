@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Title Structure Analysis Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .controls-section {
+            background: #f8f9ff;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(102, 126, 234, 0.1);
+        }
+        
+        .controls-row {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .control-group label {
+            font-weight: 600;
+            color: #667eea;
+            font-size: 0.9em;
+        }
+        
+        .date-filter-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .date-filter-btn {
+            padding: 8px 16px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 0.9em;
+        }
+        
+        .date-filter-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .date-filter-btn.active {
+            background: #667eea;
+            color: white;
+        }
+        
+        .custom-date-inputs {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .custom-date-inputs input {
+            padding: 8px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 0.9em;
+        }
+        
+        .custom-date-inputs input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .filter-info {
+            background: #e8f0ff;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .filter-info.active {
+            display: block;
+        }
+        
+        .section {
+            margin-bottom: 50px;
+        }
+        
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .metric-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
+            transition: transform 0.3s ease;
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .metric-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .metric-label {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .pattern-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .pattern-table th {
+            background: #667eea;
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .pattern-table td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .pattern-table tr:hover {
+            background: #f8f9ff;
+        }
+        
+        .performance-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+        }
+        
+        .badge-excellent {
+            background: #10b981;
+            color: white;
+        }
+        
+        .badge-good {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .badge-average {
+            background: #f59e0b;
+            color: white;
+        }
+        
+        .badge-poor {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin: 30px 0;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .insights-box {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 30px;
+        }
+        
+        .insights-box h3 {
+            color: #2d3436;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+        
+        .insights-box ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .insights-box li {
+            margin-bottom: 15px;
+            padding-left: 30px;
+            position: relative;
+            color: #2d3436;
+            line-height: 1.6;
+        }
+        
+        .insights-box li:before {
+            content: "💡";
+            position: absolute;
+            left: 0;
+            font-size: 1.2em;
+        }
+        
+        .recommendation-box {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 30px;
+        }
+        
+        .recommendation-box h3 {
+            color: #2d3436;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+        
+        .recommendation-box .formula {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .file-upload {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9ff;
+            border-radius: 15px;
+            text-align: center;
+        }
+        
+        .file-upload input[type="file"] {
+            display: none;
+        }
+        
+        .file-upload label {
+            display: inline-block;
+            padding: 12px 30px;
+            background: #667eea;
+            color: white;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        
+        .file-upload label:hover {
+            background: #764ba2;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 50px;
+            font-size: 1.2em;
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 Product Title Structure Analysis</h1>
+            <p>Optimizing Product Titles for Maximum Search Performance</p>
+        </div>
+        
+        <div class="content">
+            <div class="file-upload">
+                <label for="csvFile">
+                    📊 Upload Your Product Data CSV
+                </label>
+                <input type="file" id="csvFile" accept=".csv">
+                <p style="margin-top: 10px; color: #666;">Upload a CSV with columns: position, title, Date</p>
+            </div>
+            
+            <div id="loadingMessage" class="loading" style="display: none;">
+                Analyzing your data... This may take a moment for large files.
+            </div>
+            
+            <div id="dashboard" style="display: none;">
+                <div class="controls-section">
+                    <div class="controls-row">
+                        <div class="control-group">
+                            <label>📅 Date Range Filter</label>
+                            <div class="date-filter-buttons">
+                                <button class="date-filter-btn active" data-range="all">All Time</button>
+                                <button class="date-filter-btn" data-range="year">Last Year</button>
+                                <button class="date-filter-btn" data-range="6months">Last 6 Months</button>
+                                <button class="date-filter-btn" data-range="3months">Last 3 Months</button>
+                                <button class="date-filter-btn" data-range="month">Last Month</button>
+                                <button class="date-filter-btn" data-range="week">Last Week</button>
+                                <button class="date-filter-btn" data-range="custom">Custom Range</button>
+                            </div>
+                        </div>
+                        
+                        <div class="control-group" id="customDateInputs" style="display: none;">
+                            <label>Custom Date Range</label>
+                            <div class="custom-date-inputs">
+                                <input type="date" id="startDate" placeholder="Start Date">
+                                <span>to</span>
+                                <input type="date" id="endDate" placeholder="End Date">
+                                <button class="date-filter-btn" id="applyCustomDate">Apply</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="filter-info" id="filterInfo">
+                    <strong>Active Filter:</strong> <span id="filterDescription"></span><br>
+                    <strong>Date Range:</strong> <span id="dateRangeDisplay"></span><br>
+                    <strong>Products in Range:</strong> <span id="filteredCount"></span> of <span id="totalCount"></span>
+                </div>
+                
+                <div class="section">
+                    <h2>📈 Key Metrics</h2>
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <div class="metric-value" id="totalProducts">-</div>
+                            <div class="metric-label">Products in Range</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value" id="avgPosition">-</div>
+                            <div class="metric-label">Average Position</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value" id="uniquePatterns">-</div>
+                            <div class="metric-label">Unique Patterns</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value" id="bestPattern">-</div>
+                            <div class="metric-label">Best Avg Position</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h2>🏆 Top Performing Title Structures</h2>
+                    <div id="topPatternsTable"></div>
+                </div>
+                
+                <div class="section">
+                    <h2>📊 Pattern Performance Distribution</h2>
+                    <div class="chart-container">
+                        <canvas id="patternChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h2>📊 Attribute Usage Analysis</h2>
+                    <div class="chart-container">
+                        <canvas id="attributeChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h2>📊 Performance Over Time</h2>
+                    <div class="chart-container">
+                        <canvas id="timeChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="insights-box">
+                    <h3>🔍 Key Insights</h3>
+                    <ul id="insightsList"></ul>
+                </div>
+                
+                <div class="recommendation-box">
+                    <h3>💡 Recommendations</h3>
+                    <div id="recommendations"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Enhanced Pattern definitions with better brand detection and sorting priority
+        const patterns = {
+            // BRANDS - Multi-word brands FIRST to avoid false matches
+            brand: new RegExp(
+                '\\b(' +
+                // Multi-word brands (longer phrases first for better matching)
+                'polo\\s*ralph\\s*lauren|' +
+                'tommy\\s*hilfiger|' +
+                'calvin\\s*klein|' +
+                'hugo\\s*boss|' +
+                'hoka\\s*one\\s*one|' +
+                'russell\\s*athletic|' +
+                'new\\s*balance|' +
+                'under\\s*armour|' +
+                'muscle\\s*republic|' +
+                'cotton\\s*on|' +
+                'brilliant\\s*basics?|' +
+                'p\\.?e\\.?\\s*nation|' +
+                'kiss\\s*chacey|' +
+                'unit\\s*craft|' +
+                'saint\\s*morta|' +
+                'gmaxx\\s*active|' +
+                'supa\\s*pro|' +
+                'common\\s*need|' +
+                'imperial\\s*supplements|' +
+                'asos\\s*design|' +
+                'biz\\s*collection|' +
+                'article\\s*one|' +
+                'atmos\\s*&\\s*here|' +
+                'rip\\s*curl|' +
+                'bad\\s*boy|' +
+                // Single word brands (alphabetically sorted for consistency)
+                'adidas|afends|afl|ambra|and1|armani|asics|asos|aspire|berkner|billabong|' +
+                'bisley|bonds|brooks|calvin|canterbury|champion|chesty|connor|desolve|' +
+                'everlast|fila|ghanda|hallensteins?|hayabusa|hillbilly|hurley|jb\'?s|' +
+                'jockey|kmart|lacoste|lululemon|mambo|maxx|medal|merrell|na-kd|neuw|' +
+                'nike|nrl|onebyone|puma|reebok|reef|rvca|salomon|saucony|sbd|' +
+                'sportscraft|tapout|tradie|unit|venum|volcom|yd\\.' +
+                ')\\b', 'i'
+            ),
+            // PRODUCT TYPES - High priority for pattern matching
+            productType: /\b(singlets?|tanks?|tank\s*tops?|vests?|undershirts?|a-shirts?|muscle\s*shirts?|camisoles?|cami|tube\s*tops?|crop\s*tops?|sleeveless|halter\s*tops?|tees?|t-shirts?|shirts?|tops?)\b/i,
+            
+            gender: /\b(mens?|men\'?s?|womens?|women\'?s?|ladies|lady\'?s?|girls?|boys?|unisex|kids?|childrens?|junior|youth)\b/i,
+            
+            // Size information - more specific patterns
+            size: /\b(xs|x-small|small|medium|large|x-large|xl|xxl|2xl|3xl|plus\s*size|petite|tall)\b/i,
+            
+            activity: /\b(wrestling|powerlifting|training|running|athletic|sports?|gym|fitness|workout|exercise|yoga|pilates|crossfit|boxing|mma|martial\s*arts|basketball|football|soccer|tennis|golf|swimming|cycling|hiking|climbing|skiing|snowboarding|surfing|skateboarding|bodybuilding|weightlifting|jogging|cardio|aerobic|strength|endurance|performance|competition|racing|triathlon)\b/i,
+            
+            material: /\b(100%\s*cotton|cotton|polyester|poly|nylon|spandex|elastane|lycra|wool|merino|bamboo|modal|viscose|rayon|acrylic|silk|linen|hemp|organic|recycled|sustainable|eco-friendly|breathable|moisture-wicking|quick-dry|dry-fit|thermal|insulated|mesh|jersey|soft|super\s*soft|dri-fit|vapodri|coolmax|microfiber|fleece|terry|waffle\s*knit)\b/i,
+            
+            style: /\b(classic|basic|essential|premium|deluxe|luxury|vintage|retro|modern|contemporary|traditional|casual|formal|smart|relaxed|fitted|slim|skinny|regular|loose|oversized|longline|cropped|reversible|solid|plain|muscle|wide\s*strap|razor|chesty|authentic|craft|marauder|stringer|react|squared\s*neck|scoop\s*neck|v-neck|crew\s*neck|beater|full\s*back|boardmaker|y\s*back|tempo|interval|foundation|seamfree|reflect|momentum|forge|ribbed?|rib)\b/i,
+            
+            color: /\b(black|white|grey|gray|iron\s*grey|charcoal|red|blue|navy|royal\s*blue|sky\s*blue|green|yellow|orange|purple|pink|brown|beige|tan|cream|ivory|baby\s*blue|powder\s*blue|light\s*blue|dark\s*blue|bright|neon|pastel|metallic|gold|silver|bronze|copper|rose\s*gold|multi|multicolour|rainbow|maroon|burgundy|crimson|coral|turquoise|teal|aqua|mint|olive|khaki|sand)\b/i,
+            
+            features: /\b(reversible|seamless|seamfree|tagless|tag-free|anti-odor|anti-bacterial|antibacterial|uv\s*protection|sun\s*protection|compression|support|stretch|flex|flexible|adjustable|reinforced|padded|lined|unlined|quick\s*dry|moisture\s*wicking|breathable)\b/i,
+            
+            collection: /\b(momentum\s*range|reflect\s*range|forge\s*range|essentials?|basics?|core\s*range|pro\s*range|elite\s*range|premium\s*collection|signature\s*series|active\s*range|performance\s*range|comfort\s*range)\b/i,
+            
+            // Price/value indicators - more specific to avoid false matches
+            value: /\b(sale|clearance|discount|reduced|was\s*\$|now\s*\$|\$\d+|\d+\.\d+|(\d+)\s*pack|multi-pack|bulk)\b/i
+        };
+        
+        // Global variables
+        let rawData = [];
+        let filteredData = [];
+        let currentDateRange = 'all';
+        let charts = {};
+        
+        function extractAttributes(title) {
+            const attributes = {
+                title: title,
+                brand: null,
+                productType: null,
+                gender: null,
+                size: null,
+                activity: null,
+                material: null,
+                style: null,
+                color: null,
+                features: null,
+                collection: null,
+                value: null
+            };
+            
+            // Track used positions to avoid overlapping matches
+            const usedPositions = [];
+            
+            function isOverlapping(start, end) {
+                return usedPositions.some(used => 
+                    (start >= used.start && start <= used.end) || 
+                    (end >= used.start && end <= used.end) ||
+                    (start <= used.start && end >= used.end)
+                );
+            }
+            
+            function addMatch(key, match, title) {
+                const start = title.toLowerCase().indexOf(match[0].toLowerCase());
+                const end = start + match[0].length - 1;
+                
+                if (!isOverlapping(start, end)) {
+                    attributes[key] = match[0];
+                    usedPositions.push({ start, end, key });
+                    return true;
+                }
+                return false;
+            }
+            
+            // Extract brand first (highest priority for overlaps)
+            const brandMatch = title.match(patterns.brand);
+            if (brandMatch) {
+                addMatch('brand', brandMatch, title);
+            }
+            
+            // Extract other attributes in priority order, avoiding overlaps
+            const attributeOrder = [
+                'productType', 'gender', 'value', 'size', 'activity', 
+                'material', 'style', 'color', 'features', 'collection'
+            ];
+            
+            for (const key of attributeOrder) {
+                const match = title.match(patterns[key]);
+                if (match) {
+                    // Special handling for cotton/Cotton On conflict
+                    if (key === 'material' && match[0].toLowerCase() === 'cotton') {
+                        if (attributes.brand && attributes.brand.toLowerCase().includes('cotton on')) {
+                            continue;
+                        }
+                        if (/cotton\s*on/i.test(title)) {
+                            if (!attributes.brand) {
+                                attributes.brand = 'Cotton On';
+                                usedPositions.push({ 
+                                    start: title.toLowerCase().indexOf('cotton on'), 
+                                    end: title.toLowerCase().indexOf('cotton on') + 8, 
+                                    key: 'brand' 
+                                });
+                            }
+                            continue;
+                        }
+                    }
+                    
+                    addMatch(key, match, title);
+                }
+            }
+            
+            return attributes;
+        }
+        
+        function getStructurePattern(title, attributes) {
+            const positions = [];
+            
+            // Get all detected attributes with their actual positions in the title
+            for (const [attrType, value] of Object.entries(attributes)) {
+                if (value && attrType !== 'title') {
+                    const pos = title.toLowerCase().indexOf(value.toLowerCase());
+                    if (pos !== -1) {
+                        positions.push({ 
+                            type: attrType.charAt(0).toUpperCase() + attrType.slice(1), 
+                            pos,
+                            value
+                        });
+                    }
+                }
+            }
+            
+            // Sort strictly by position in title (left to right)
+            positions.sort((a, b) => a.pos - b.pos);
+            
+            const pattern = positions.map(p => `[${p.type}]`).join(' + ');
+            
+            return pattern || '[No Pattern]';
+        }
+        
+        function parseDate(dateStr) {
+            // Try different date formats
+            const formats = [
+                'YYYY-MM-DD',
+                'DD/MM/YYYY',
+                'MM/DD/YYYY',
+                'YYYY/MM/DD',
+                'DD-MM-YYYY',
+                'MM-DD-YYYY'
+            ];
+            
+            for (const format of formats) {
+                const parsed = moment(dateStr, format, true);
+                if (parsed.isValid()) {
+                    return parsed;
+                }
+            }
+            
+            // Try default parsing
+            const parsed = moment(dateStr);
+            if (parsed.isValid()) {
+                return parsed;
+            }
+            
+            return null;
+        }
+        
+        function filterDataByDateRange(data, range) {
+            const now = moment();
+            let startDate;
+            
+            switch (range) {
+                case 'all':
+                    return data;
+                case 'year':
+                    startDate = now.clone().subtract(1, 'year');
+                    break;
+                case '6months':
+                    startDate = now.clone().subtract(6, 'months');
+                    break;
+                case '3months':
+                    startDate = now.clone().subtract(3, 'months');
+                    break;
+                case 'month':
+                    startDate = now.clone().subtract(1, 'month');
+                    break;
+                case 'week':
+                    startDate = now.clone().subtract(1, 'week');
+                    break;
+                case 'custom':
+                    const customStart = document.getElementById('startDate').value;
+                    const customEnd = document.getElementById('endDate').value;
+                    if (customStart && customEnd) {
+                        startDate = moment(customStart);
+                        const endDate = moment(customEnd);
+                        return data.filter(item => {
+                            if (!item.parsedDate) return false;
+                            return item.parsedDate.isBetween(startDate, endDate, null, '[]');
+                        });
+                    }
+                    return data;
+                default:
+                    return data;
+            }
+            
+            if (startDate) {
+                return data.filter(item => {
+                    if (!item.parsedDate) return false;
+                    return item.parsedDate.isAfter(startDate);
+                });
+            }
+            
+            return data;
+        }
+        
+        function updateFilterInfo(filtered, total) {
+            const filterInfo = document.getElementById('filterInfo');
+            const filterDesc = document.getElementById('filterDescription');
+            const dateRangeDisplay = document.getElementById('dateRangeDisplay');
+            const filteredCount = document.getElementById('filteredCount');
+            const totalCount = document.getElementById('totalCount');
+            
+            filterInfo.classList.add('active');
+            
+            let description = '';
+            let dateRange = '';
+            
+            switch (currentDateRange) {
+                case 'all':
+                    description = 'All time data';
+                    dateRange = 'All available dates';
+                    break;
+                case 'year':
+                    description = 'Last 12 months';
+                    dateRange = `${moment().subtract(1, 'year').format('MMM DD, YYYY')} - ${moment().format('MMM DD, YYYY')}`;
+                    break;
+                case '6months':
+                    description = 'Last 6 months';
+                    dateRange = `${moment().subtract(6, 'months').format('MMM DD, YYYY')} - ${moment().format('MMM DD, YYYY')}`;
+                    break;
+                case '3months':
+                    description = 'Last 3 months';
+                    dateRange = `${moment().subtract(3, 'months').format('MMM DD, YYYY')} - ${moment().format('MMM DD, YYYY')}`;
+                    break;
+                case 'month':
+                    description = 'Last 30 days';
+                    dateRange = `${moment().subtract(1, 'month').format('MMM DD, YYYY')} - ${moment().format('MMM DD, YYYY')}`;
+                    break;
+                case 'week':
+                    description = 'Last 7 days';
+                    dateRange = `${moment().subtract(1, 'week').format('MMM DD, YYYY')} - ${moment().format('MMM DD, YYYY')}`;
+                    break;
+                case 'custom':
+                    const start = document.getElementById('startDate').value;
+                    const end = document.getElementById('endDate').value;
+                    if (start && end) {
+                        description = 'Custom date range';
+                        dateRange = `${moment(start).format('MMM DD, YYYY')} - ${moment(end).format('MMM DD, YYYY')}`;
+                    }
+                    break;
+            }
+            
+            filterDesc.textContent = description;
+            dateRangeDisplay.textContent = dateRange;
+            filteredCount.textContent = filtered.toLocaleString();
+            totalCount.textContent = total.toLocaleString();
+        }
+        
+        function analyzeData(data) {
+            const analyzedData = data.map(row => {
+                const attrs = extractAttributes(row.title);
+                const pattern = getStructurePattern(row.title, attrs);
+                
+                return {
+                    ...row,
+                    ...attrs,
+                    pattern: pattern
+                };
+            });
+            
+            // Calculate pattern statistics
+            const patternStats = {};
+            const attributeCounts = {
+                brand: 0,
+                productType: 0,
+                gender: 0,
+                size: 0,
+                activity: 0,
+                material: 0,
+                style: 0,
+                color: 0,
+                features: 0,
+                collection: 0,
+                value: 0
+            };
+            
+            analyzedData.forEach(item => {
+                // Pattern stats
+                if (!patternStats[item.pattern]) {
+                    patternStats[item.pattern] = {
+                        count: 0,
+                        totalPosition: 0,
+                        examples: [],
+                        positions: []
+                    };
+                }
+                
+                patternStats[item.pattern].count++;
+                patternStats[item.pattern].totalPosition += item.position;
+                patternStats[item.pattern].positions.push(item.position);
+                
+                if (patternStats[item.pattern].examples.length < 3) {
+                    patternStats[item.pattern].examples.push({
+                        title: item.title,
+                        position: item.position
+                    });
+                }
+                
+                // Attribute counts
+                for (const attr of Object.keys(attributeCounts)) {
+                    if (item[attr]) attributeCounts[attr]++;
+                }
+            });
+            
+            // Calculate averages and sort
+            const sortedPatterns = Object.entries(patternStats)
+                .map(([pattern, stats]) => ({
+                    pattern,
+                    count: stats.count,
+                    avgPosition: stats.totalPosition / stats.count,
+                    minPosition: Math.min(...stats.positions),
+                    maxPosition: Math.max(...stats.positions),
+                    examples: stats.examples
+                }))
+                .filter(p => p.count >= 3) // Minimum threshold
+                .sort((a, b) => a.avgPosition - b.avgPosition);
+            
+            return {
+                totalProducts: data.length,
+                avgPosition: data.reduce((sum, item) => sum + item.position, 0) / data.length,
+                patterns: sortedPatterns,
+                attributeCounts: attributeCounts,
+                analyzedData: analyzedData
+            };
+        }
+        
+        function getPerformanceBadge(avgPosition) {
+            if (avgPosition <= 10) return '<span class="performance-badge badge-excellent">Excellent</span>';
+            if (avgPosition <= 20) return '<span class="performance-badge badge-good">Good</span>';
+            if (avgPosition <= 30) return '<span class="performance-badge badge-average">Average</span>';
+            return '<span class="performance-badge badge-poor">Poor</span>';
+        }
+        
+        function displayResults(analysis) {
+            // Update metrics
+            document.getElementById('totalProducts').textContent = analysis.totalProducts.toLocaleString();
+            document.getElementById('avgPosition').textContent = analysis.avgPosition.toFixed(1);
+            document.getElementById('uniquePatterns').textContent = analysis.patterns.length;
+            document.getElementById('bestPattern').textContent = analysis.patterns[0]?.avgPosition.toFixed(1) || '-';
+            
+            // Create top patterns table
+            const tableHtml = `
+                <table class="pattern-table">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Pattern Structure</th>
+                            <th>Count</th>
+                            <th>Avg Position</th>
+                            <th>Performance</th>
+                            <th>Example Titles</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${analysis.patterns.slice(0, 10).map((pattern, index) => `
+                            <tr>
+                                <td>${index + 1}</td>
+                                <td><strong>${pattern.pattern}</strong></td>
+                                <td>${pattern.count}</td>
+                                <td>${pattern.avgPosition.toFixed(2)}</td>
+                                <td>${getPerformanceBadge(pattern.avgPosition)}</td>
+                                <td>
+                                    ${pattern.examples.map(ex => 
+                                        `"${ex.title.length > 50 ? ex.title.substring(0, 50) + '...' : ex.title}" (Pos: ${ex.position})`
+                                    ).join('<br>')}
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+            document.getElementById('topPatternsTable').innerHTML = tableHtml;
+            
+            // Destroy existing charts if they exist
+            if (charts.pattern) charts.pattern.destroy();
+            if (charts.attribute) charts.attribute.destroy();
+            if (charts.time) charts.time.destroy();
+            
+            // Create pattern performance chart
+            const ctx1 = document.getElementById('patternChart').getContext('2d');
+            charts.pattern = new Chart(ctx1, {
+                type: 'bar',
+                data: {
+                    labels: analysis.patterns.slice(0, 10).map(p => p.pattern),
+                    datasets: [{
+                        label: 'Average Position (Lower is Better)',
+                        data: analysis.patterns.slice(0, 10).map(p => p.avgPosition),
+                        backgroundColor: 'rgba(102, 126, 234, 0.8)',
+                        borderColor: 'rgba(102, 126, 234, 1)',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        title: {
+                            display: true,
+                            text: 'Top 10 Title Patterns by Average Position',
+                            font: {
+                                size: 16
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Average Position'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                maxRotation: 45,
+                                minRotation: 45
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Create attribute usage chart
+            const ctx2 = document.getElementById('attributeChart').getContext('2d');
+            charts.attribute = new Chart(ctx2, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(analysis.attributeCounts).map(k => k.charAt(0).toUpperCase() + k.slice(1)),
+                    datasets: [{
+                        data: Object.values(analysis.attributeCounts),
+                        backgroundColor: [
+                            'rgba(102, 126, 234, 0.8)',
+                            'rgba(118, 75, 162, 0.8)',
+                            'rgba(255, 99, 132, 0.8)',
+                            'rgba(54, 162, 235, 0.8)',
+                            'rgba(255, 206, 86, 0.8)',
+                            'rgba(75, 192, 192, 0.8)',
+                            'rgba(153, 102, 255, 0.8)',
+                            'rgba(255, 159, 64, 0.8)'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Attribute Usage in Titles',
+                            font: {
+                                size: 16
+                            }
+                        },
+                        legend: {
+                            position: 'right'
+                        }
+                    }
+                }
+            });
+            
+            // Create time series chart
+            const timeData = prepareTimeSeriesData(analysis.analyzedData);
+            const ctx3 = document.getElementById('timeChart').getContext('2d');
+            charts.time = new Chart(ctx3, {
+                type: 'line',
+                data: {
+                    labels: timeData.labels,
+                    datasets: [{
+                        label: 'Average Position',
+                        data: timeData.avgPositions,
+                        borderColor: 'rgba(102, 126, 234, 1)',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        tension: 0.3
+                    }, {
+                        label: 'Product Count',
+                        data: timeData.counts,
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        backgroundColor: 'rgba(255, 99, 132, 0.1)',
+                        yAxisID: 'y1',
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Performance Trends Over Time',
+                            font: {
+                                size: 16
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            title: {
+                                display: true,
+                                text: 'Average Position'
+                            }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            title: {
+                                display: true,
+                                text: 'Product Count'
+                            },
+                            grid: {
+                                drawOnChartArea: false,
+                            },
+                        }
+                    }
+                }
+            });
+            
+            // Generate insights
+            const insights = [];
+            
+            if (analysis.patterns[0]) {
+                insights.push(`The best performing title structure is <strong>${analysis.patterns[0].pattern}</strong> with an average position of ${analysis.patterns[0].avgPosition.toFixed(1)}`);
+            }
+            
+            // Find most common pattern
+            const mostCommon = analysis.patterns.reduce((prev, current) => 
+                (prev.count > current.count) ? prev : current
+            );
+            if (mostCommon) {
+                insights.push(`The most frequently used pattern is <strong>${mostCommon.pattern}</strong> appearing ${mostCommon.count} times`);
+            }
+            
+            // Attribute insights
+            const mostUsedAttr = Object.entries(analysis.attributeCounts)
+                .sort((a, b) => b[1] - a[1])[0];
+            insights.push(`<strong>${mostUsedAttr[0].charAt(0).toUpperCase() + mostUsedAttr[0].slice(1)}</strong> is the most commonly used attribute, appearing in ${((mostUsedAttr[1] / analysis.totalProducts) * 100).toFixed(1)}% of titles`);
+            
+            // Performance insights
+            const excellentPatterns = analysis.patterns.filter(p => p.avgPosition <= 10);
+            if (excellentPatterns.length > 0) {
+                insights.push(`${excellentPatterns.length} title patterns achieve excellent performance (average position ≤ 10)`);
+            }
+            
+            // Date range specific insights
+            if (currentDateRange !== 'all') {
+                insights.push(`This analysis covers the ${currentDateRange === 'custom' ? 'selected date range' : currentDateRange.replace(/(\d)/, ' $1 ')}`);
+            }
+            
+            document.getElementById('insightsList').innerHTML = insights.map(i => `<li>${i}</li>`).join('');
+            
+            // Generate recommendations
+            const recommendations = [];
+            
+            if (analysis.patterns[0]) {
+                recommendations.push({
+                    title: 'Optimal Title Structure',
+                    formula: analysis.patterns[0].pattern,
+                    description: `This pattern achieves the best average position of ${analysis.patterns[0].avgPosition.toFixed(1)}. Consider restructuring underperforming titles to follow this pattern.`
+                });
+            }
+            
+            // Check for brand-first patterns
+            const brandFirstPatterns = analysis.patterns.filter(p => p.pattern.startsWith('[Brand]'));
+            if (brandFirstPatterns.length > 0 && brandFirstPatterns[0].avgPosition < analysis.avgPosition) {
+                recommendations.push({
+                    title: 'Lead with Brand',
+                    formula: '[Brand] + [Other Attributes]',
+                    description: 'Titles that start with the brand name tend to perform better. Consider moving brand names to the beginning of your titles.'
+                });
+            }
+            
+            // Check for gender inclusion
+            const genderPatterns = analysis.patterns.filter(p => p.pattern.includes('[Gender]'));
+            const avgWithGender = genderPatterns.reduce((sum, p) => sum + p.avgPosition, 0) / genderPatterns.length || 0;
+            const avgWithoutGender = analysis.patterns.filter(p => !p.pattern.includes('[Gender]'))
+                .reduce((sum, p) => sum + p.avgPosition, 0) / analysis.patterns.filter(p => !p.pattern.includes('[Gender]')).length || 0;
+            
+            if (avgWithGender < avgWithoutGender && genderPatterns.length > 0) {
+                recommendations.push({
+                    title: 'Include Gender Specification',
+                    formula: '[Brand] + [Gender] + [Product Type]',
+                    description: 'Titles with gender specification perform better on average. Consider adding gender attributes where relevant.'
+                });
+            }
+            
+            const recHtml = recommendations.map(rec => `
+                <div style="margin-bottom: 20px;">
+                    <h4 style="color: #2d3436; margin-bottom: 10px;">${rec.title}</h4>
+                    <div class="formula">${rec.formula}</div>
+                    <p style="color: #2d3436; line-height: 1.6;">${rec.description}</p>
+                </div>
+            `).join('');
+            
+            document.getElementById('recommendations').innerHTML = recHtml;
+            
+            // Show dashboard
+            document.getElementById('loadingMessage').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+        }
+        
+        function prepareTimeSeriesData(analyzedData) {
+            // Group by month
+            const monthlyData = {};
+            
+            analyzedData.forEach(item => {
+                if (item.parsedDate) {
+                    const monthKey = item.parsedDate.format('YYYY-MM');
+                    if (!monthlyData[monthKey]) {
+                        monthlyData[monthKey] = {
+                            positions: [],
+                            count: 0
+                        };
+                    }
+                    monthlyData[monthKey].positions.push(item.position);
+                    monthlyData[monthKey].count++;
+                }
+            });
+            
+            // Sort by date and calculate averages
+            const sortedMonths = Object.keys(monthlyData).sort();
+            const labels = sortedMonths.map(month => moment(month, 'YYYY-MM').format('MMM YYYY'));
+            const avgPositions = sortedMonths.map(month => {
+                const positions = monthlyData[month].positions;
+                return positions.reduce((sum, pos) => sum + pos, 0) / positions.length;
+            });
+            const counts = sortedMonths.map(month => monthlyData[month].count);
+            
+            return { labels, avgPositions, counts };
+        }
+        
+        function processData() {
+            filteredData = filterDataByDateRange(rawData, currentDateRange);
+            updateFilterInfo(filteredData.length, rawData.length);
+            
+            if (filteredData.length === 0) {
+                alert('No data found in the selected date range.');
+                return;
+            }
+            
+            const analysis = analyzeData(filteredData);
+            displayResults(analysis);
+        }
+        
+        // Event listeners
+        document.querySelectorAll('.date-filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                if (this.dataset.range === 'custom') {
+                    document.getElementById('customDateInputs').style.display = 'flex';
+                    return;
+                }
+                
+                document.querySelectorAll('.date-filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentDateRange = this.dataset.range;
+                document.getElementById('customDateInputs').style.display = 'none';
+                
+                if (rawData.length > 0) {
+                    processData();
+                }
+            });
+        });
+        
+        document.getElementById('applyCustomDate').addEventListener('click', function() {
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            
+            if (!startDate || !endDate) {
+                alert('Please select both start and end dates.');
+                return;
+            }
+            
+            if (moment(startDate).isAfter(moment(endDate))) {
+                alert('Start date must be before end date.');
+                return;
+            }
+            
+            document.querySelectorAll('.date-filter-btn').forEach(b => b.classList.remove('active'));
+            document.querySelector('[data-range="custom"]').classList.add('active');
+            currentDateRange = 'custom';
+            
+            if (rawData.length > 0) {
+                processData();
+            }
+        });
+        
+        // File upload handler
+        document.getElementById('csvFile').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            document.getElementById('loadingMessage').style.display = 'block';
+            document.getElementById('dashboard').style.display = 'none';
+            
+            Papa.parse(file, {
+                header: true,
+                dynamicTyping: true,
+                skipEmptyLines: true,
+                complete: function(results) {
+                    if (results.data && results.data.length > 0) {
+                        // Parse dates
+                        rawData = results.data.map(row => ({
+                            ...row,
+                            parsedDate: row.Date ? parseDate(row.Date) : null
+                        }));
+                        
+                        // Process with current filter
+                        processData();
+                    } else {
+                        alert('No valid data found in the CSV file.');
+                        document.getElementById('loadingMessage').style.display = 'none';
+                    }
+                },
+                error: function(error) {
+                    alert('Error parsing CSV: ' + error.message);
+                    document.getElementById('loadingMessage').style.display = 'none';
+                }
+            });
+        });
+        
+        // Load sample data if available
+        window.addEventListener('load', async function() {
+            try {
+                const response = await window.fs.readFile('sample title data  Singlets.csv', { encoding: 'utf8' });
+                if (response) {
+                    document.getElementById('loadingMessage').style.display = 'block';
+                    
+                    Papa.parse(response, {
+                        header: true,
+                        dynamicTyping: true,
+                        skipEmptyLines: true,
+                        complete: function(results) {
+                            if (results.data && results.data.length > 0) {
+                                // Parse dates
+                                rawData = results.data.map(row => ({
+                                    ...row,
+                                    parsedDate: row.Date ? parseDate(row.Date) : null
+                                }));
+                                
+                                // Process with current filter
+                                processData();
+                            }
+                        }
+                    });
+                }
+            } catch (error) {
+                console.log('Sample data not available');
+            }
+        });
+    </script>
+</body>
+</html>

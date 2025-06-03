@@ -773,6 +773,12 @@ function getStructurePattern(title, attributes) {
     
     return pattern || '[No Pattern]';
 }
+if (typeof module !== 'undefined' && module.exports) {
+        module.exports = {
+            patterns,
+            extractAttributes,
+            getStructurePattern
+        };
 
         
         function parseDate(dateStr) {

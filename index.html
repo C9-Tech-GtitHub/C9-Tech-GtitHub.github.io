@@ -781,6 +781,16 @@ if (typeof module !== 'undefined' && module.exports) {
         };
 
         
+// Global variables
+        let rawData = [];
+        let filteredData = [];
+        let currentDateRange = 'all';
+        let charts = {
+            pattern: null,
+            attribute: null,
+            time: null
+        };
+        
         function parseDate(dateStr) {
             // Try different date formats
             const formats = [

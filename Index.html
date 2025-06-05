@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C9 Tech Toolbox - Professional Business Tools</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 3.5em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.3em;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .tool-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+
+        .tool-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.3);
+        }
+
+        .tool-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
+            font-size: 2.5em;
+        }
+
+        .tool-title {
+            font-size: 1.8em;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #2d3748;
+        }
+
+        .tool-description {
+            font-size: 1.1em;
+            line-height: 1.6;
+            color: #4a5568;
+            margin-bottom: 20px;
+        }
+
+        .tool-features {
+            list-style: none;
+            margin-bottom: 25px;
+        }
+
+        .tool-features li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+            color: #4a5568;
+        }
+
+        .tool-features li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .tool-status {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+
+        .status-ready {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-beta {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .footer {
+            text-align: center;
+            color: white;
+            opacity: 0.8;
+        }
+
+        .footer h3 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+
+        .footer p {
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+
+        .github-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 30px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .github-link:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.5em;
+            }
+            
+            .header p {
+                font-size: 1.1em;
+            }
+            
+            .tools-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .tool-card {
+                padding: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🛠️ C9 Tech Toolbox</h1>
+            <p>Professional business tools to streamline your workflow and boost productivity. Access powerful analytics and automation tools built for modern businesses.</p>
+        </div>
+
+        <div class="tools-grid">
+            <a href="./title-analyzer.html" class="tool-card">
+                <div class="tool-icon">📊</div>
+                <h2 class="tool-title">Product Title Analyzer</h2>
+                <p class="tool-description">
+                    Advanced analytics tool that analyzes product title structures to optimize search performance and conversion rates.
+                </p>
+                <ul class="tool-features">
+                    <li>Pattern recognition and analysis</li>
+                    <li>Performance metrics tracking</li>
+                    <li>Attribute usage optimization</li>
+                    <li>Trend analysis over time</li>
+                    <li>CSV data import support</li>
+                </ul>
+                <span class="tool-status status-ready">Ready to Use</span>
+            </a>
+
+            <a href="./reviewer.html" class="tool-card">
+                <div class="tool-icon">🤖</div>
+                <h2 class="tool-title">AI Suggestion Reviewer</h2>
+                <p class="tool-description">
+                    Streamlined interface for reviewing and approving AI-generated product suggestions with visual feedback and batch processing.
+                </p>
+                <ul class="tool-features">
+                    <li>Visual product image preview</li>
+                    <li>Batch approval/denial system</li>
+                    <li>Detailed attribute analysis</li>
+                    <li>Progress tracking and statistics</li>
+                    <li>Export functionality with decisions</li>
+                </ul>
+                <span class="tool-status status-ready">Ready to Use</span>
+            </a>
+
+            <!-- Placeholder for future tools -->
+            <div class="tool-card" style="opacity: 0.7; cursor: default; transform: none;">
+                <div class="tool-icon">⚡</div>
+                <h2 class="tool-title">More Tools Coming Soon</h2>
+                <p class="tool-description">
+                    We're constantly developing new tools to help businesses optimize their operations and improve efficiency.
+                </p>
+                <ul class="tool-features">
+                    <li>Data visualization tools</li>
+                    <li>Automation workflows</li>
+                    <li>Performance dashboards</li>
+                    <li>Integration utilities</li>
+                </ul>
+                <span class="tool-status status-beta">In Development</span>
+            </div>
+        </div>
+
+        <div class="footer">
+            <h3>Open Source & Collaborative</h3>
+            <p>All tools are open source and available for contribution. Help us build better business tools for everyone.</p>
+            <a href="https://github.com/c9-tech-gtithub/c9-tech-gtithub.github.io" class="github-link">
+                📁 View on GitHub
+            </a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,1398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Suggestion Reviewer</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: #f9fafb;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+
+        .header {
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .title {
+            font-size: 2rem;
+            font-weight: bold;
+            background: linear-gradient(to right, #2563eb, #7c3aed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: #6b7280;
+            font-weight: 500;
+            margin-top: 0.25rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(to right, #2563eb, #1d4ed8);
+            color: white;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(to right, #1d4ed8, #1e40af);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #374151;
+            border: 1px solid #d1d5db;
+        }
+
+        .btn-secondary:hover {
+            background: #f9fafb;
+        }
+
+        .btn-secondary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-approve {
+            background: #dcfce7;
+            color: #166534;
+            border: 2px solid #bbf7d0;
+            flex: 1;
+            padding: 1rem 2rem;
+            border-radius: 0.75rem;
+            font-size: 1.125rem;
+            font-weight: bold;
+        }
+
+        .btn-approve:hover {
+            background: #bbf7d0;
+            border-color: #86efac;
+        }
+
+        .btn-approve.active {
+            background: linear-gradient(to right, #22c55e, #16a34a);
+            color: white;
+            transform: scale(1.05);
+            box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+        }
+
+        .btn-deny {
+            background: #fef2f2;
+            color: #991b1b;
+            border: 2px solid #fecaca;
+            flex: 1;
+            padding: 1rem 2rem;
+            border-radius: 0.75rem;
+            font-size: 1.125rem;
+            font-weight: bold;
+        }
+
+        .btn-deny:hover {
+            background: #fecaca;
+            border-color: #fca5a5;
+        }
+
+        .btn-deny.active {
+            background: linear-gradient(to right, #ef4444, #dc2626);
+            color: white;
+            transform: scale(1.05);
+            box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+        }
+
+        .upload-area {
+            background: white;
+            border: 2px dashed #d1d5db;
+            border-radius: 0.5rem;
+            padding: 3rem;
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .upload-icon {
+            width: 3rem;
+            height: 3rem;
+            color: #9ca3af;
+            margin: 0 auto 1rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border: 2px solid #e5e7eb;
+            padding: 1.5rem;
+            transition: all 0.3s;
+        }
+
+        .card.approved {
+            background: #f0fdf4;
+            border-color: #bbf7d0;
+        }
+
+        .card.denied {
+            background: #fef2f2;
+            border-color: #fecaca;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .image-container {
+            aspect-ratio: 1;
+            border-radius: 0.75rem;
+            background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 0.5rem;
+            transition: opacity 0.3s ease;
+        }
+
+        .image-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+            border-radius: 0.75rem;
+        }
+
+        .image-icon {
+            width: 4rem;
+            height: 4rem;
+            background: #dbeafe;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .image-loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            display: none;
+        }
+
+        .image-error {
+            color: #dc2626;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+
+        .image-controls {
+            position: absolute;
+            bottom: 0.5rem;
+            right: 0.5rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .image-controls button {
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            border-radius: 0.25rem;
+            padding: 0.5rem;
+            cursor: pointer;
+            font-size: 0.75rem;
+        }
+
+        .image-controls button:hover {
+            background: rgba(0, 0, 0, 0.9);
+        }
+
+        .product-details h1 {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.75rem;
+            color: #111827;
+        }
+
+        .product-details p {
+            color: #374151;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .product-meta {
+            background: #f9fafb;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .product-meta div {
+            display: flex;
+            margin-bottom: 0.75rem;
+        }
+
+        .product-meta div:last-child {
+            margin-bottom: 0;
+        }
+
+        .product-meta span:first-child {
+            font-weight: 500;
+            color: #4b5563;
+            margin-right: 0.5rem;
+        }
+
+        .product-meta a {
+            color: #2563eb;
+            text-decoration: none;
+            word-break: break-all;
+        }
+
+        .product-meta a:hover {
+            text-decoration: underline;
+        }
+
+        .category-toggle {
+            cursor: pointer;
+            color: #2563eb;
+            transition: color 0.2s;
+        }
+
+        .category-toggle:hover {
+            color: #1d4ed8;
+            text-decoration: underline;
+        }
+
+        .attributes-section h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #111827;
+        }
+
+        .attributes-table {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .attributes-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .attributes-table th {
+            background: #f9fafb;
+            padding: 0.75rem 1rem;
+            text-align: left;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .attributes-table td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #e5e7eb;
+            vertical-align: top;
+        }
+
+        .attributes-table tr:hover {
+            background: #f9fafb;
+        }
+
+        .detail-row-container:hover {
+            background: transparent !important;
+        }
+
+        .detail-row-container td {
+            border-bottom: none !important;
+        }
+
+        .attribute-name {
+            font-weight: 500;
+            color: #111827;
+            position: relative;
+            cursor: help;
+        }
+
+        .attribute-name:hover {
+            color: #2563eb;
+        }
+
+        .attribute-value {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .attribute-value.selected {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .attribute-value.na {
+            background: #fed7aa;
+            color: #c2410c;
+        }
+
+        .view-options {
+            color: #4b5563;
+            font-size: 0.875rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: color 0.2s;
+        }
+
+        .view-options:hover {
+            color: #111827;
+        }
+
+        .attribute-details {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.375rem;
+            padding: 1rem;
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .attribute-details.hidden {
+            display: none;
+        }
+
+        .detail-row {
+            display: flex;
+            margin-bottom: 0.5rem;
+        }
+
+        .detail-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .detail-label {
+            font-weight: 500;
+            color: #4b5563;
+            width: 120px;
+            flex-shrink: 0;
+        }
+
+        .detail-value {
+            color: #111827;
+        }
+
+        .possible-values {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.25rem;
+        }
+
+        .possible-value {
+            background: #e0e7ff;
+            color: #3730a3;
+            padding: 0.125rem 0.5rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+        }
+
+        .tooltip {
+            position: absolute;
+            background: #1f2937;
+            color: white;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            max-width: 250px;
+            z-index: 1000;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .tooltip.visible {
+            opacity: 1;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .nav-counter {
+            text-align: center;
+        }
+
+        .nav-counter .number {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #111827;
+        }
+
+        .nav-counter .total {
+            font-size: 0.75rem;
+            color: #6b7280;
+        }
+
+        .decisions-section {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .progress-bar {
+            background: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .progress-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .progress-count {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #4b5563;
+            background: #f3f4f6;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+        }
+
+        .progress-track {
+            width: 100%;
+            background: #e5e7eb;
+            border-radius: 9999px;
+            height: 0.75rem;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, #3b82f6, #7c3aed);
+            border-radius: 9999px;
+            transition: width 0.5s ease-out;
+        }
+
+        .progress-percent {
+            text-align: right;
+            margin-top: 0.5rem;
+            font-size: 0.75rem;
+            color: #6b7280;
+        }
+
+        .summary {
+            background: linear-gradient(to right, #f9fafb, #f3f4f6);
+            border-radius: 0.75rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .summary h3 {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #111827;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .summary-item {
+            background: white;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .summary-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .summary-number.approved { color: #16a34a; }
+        .summary-number.denied { color: #dc2626; }
+        .summary-number.pending { color: #4b5563; }
+
+        .summary-label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #4b5563;
+        }
+
+        .summary-bar {
+            width: 2rem;
+            height: 0.25rem;
+            border-radius: 9999px;
+            margin: 0.5rem auto 0;
+        }
+
+        .summary-bar.approved { background: #16a34a; }
+        .summary-bar.denied { background: #dc2626; }
+        .summary-bar.pending { background: #9ca3af; }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .spinner {
+            width: 3rem;
+            height: 3rem;
+            border: 3px solid #e5e7eb;
+            border-top: 3px solid #2563eb;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .icon {
+            width: 1.25rem;
+            height: 1.25rem;
+            margin-right: 0.5rem;
+        }
+
+        @media (max-width: 1024px) {
+            .product-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            
+            .summary-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Tooltip for attribute descriptions -->
+    <div id="tooltip" class="tooltip"></div>
+
+    <!-- Header -->
+    <div class="header">
+        <div class="header-content">
+            <div>
+                <h1 class="title">AI Suggestion Reviewer</h1>
+                <p class="subtitle" id="product-counter"></p>
+            </div>
+            <button id="export-btn" class="btn btn-primary hidden">
+                <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                Export (<span id="export-count">0</span>)
+            </button>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- File Upload -->
+        <div id="upload-section" class="upload-area">
+            <svg class="upload-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+            </svg>
+            <h3 style="font-size: 1.125rem; font-weight: 500; color: #111827; margin-bottom: 0.5rem;">Upload CSV File</h3>
+            <p style="color: #6b7280; margin-bottom: 1rem;">Select your AI suggestions CSV file to begin reviewing</p>
+            <input type="file" accept=".csv" id="csv-upload" style="display: none;">
+            <label for="csv-upload" class="btn btn-primary" style="cursor: pointer;">Choose File</label>
+        </div>
+
+        <!-- Loading -->
+        <div id="loading-section" class="loading hidden">
+            <div class="spinner"></div>
+            <p style="color: #4b5563;">Processing CSV...</p>
+        </div>
+
+        <!-- Product Review -->
+        <div id="review-section" class="hidden">
+            <!-- Navigation -->
+            <div class="navigation">
+                <button id="prev-btn" class="btn btn-secondary">
+                    <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                    Previous
+                </button>
+                
+                <div class="nav-counter">
+                    <div class="number" id="current-index">1</div>
+                    <div class="total" id="total-count">of 0</div>
+                </div>
+                
+                <div style="display: flex; gap: 0.5rem;">
+                    <button id="skip-btn" class="btn btn-secondary">
+                        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 9l3 3-3 3m-4-6l3 3-3 3"></path>
+                        </svg>
+                        Skip
+                    </button>
+                    <button id="next-btn" class="btn btn-secondary">
+                        Next
+                        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Product Card -->
+            <div id="product-card" class="card">
+                <div class="product-grid">
+                    <!-- Product Image -->
+                    <div>
+                        <div class="image-container">
+                            <img id="product-image" class="product-image hidden" alt="Product Image">
+                            <div id="image-placeholder" class="image-placeholder">
+                                <div class="image-icon">
+                                    <svg style="width: 2rem; height: 2rem; color: #2563eb;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                    </svg>
+                                </div>
+                                <h3 id="image-status" style="font-weight: 600; color: #111827; margin-bottom: 0.5rem;">Loading Image...</h3>
+                                <p id="image-description" style="font-size: 0.875rem; color: #4b5563; margin-bottom: 1rem;">Please wait while we load the product image</p>
+                                <div id="image-error" class="image-error hidden"></div>
+                            </div>
+                            <div class="image-loading" id="image-loading">
+                                <div class="spinner" style="width: 1.5rem; height: 1.5rem; margin: 0;"></div>
+                            </div>
+                            <div class="image-controls">
+                                <button id="retry-image-btn" class="hidden">Retry</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product Details -->
+                    <div class="product-details">
+                        <h1 id="product-title">Product Title</h1>
+                        <p id="product-description">Product description...</p>
+                        
+                        <div class="product-meta" id="product-meta">
+                            <div>
+                                <span>URL:</span>
+                                <a id="product-url" href="#" target="_blank" rel="noopener noreferrer">Product URL</a>
+                            </div>
+                            <div>
+                                <span>Category:</span>
+                                <span id="product-category" class="category-toggle">Category</span>
+                            </div>
+                        </div>
+
+                        <!-- Attributes -->
+                        <div class="attributes-section">
+                            <h3>AI Suggested Attributes</h3>
+                            <div class="attributes-table">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Attribute</th>
+                                            <th>Selected Value</th>
+                                            <th>Details</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="attributes-body">
+                                        <!-- Attributes will be populated here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Decision Buttons -->
+                        <div class="decisions-section">
+                            <button id="approve-btn" class="btn-approve">
+                                <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                Approve Suggestions
+                            </button>
+                            <button id="deny-btn" class="btn-deny">
+                                <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                                Deny Suggestions
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="progress-bar">
+                <div class="progress-header">
+                    <span class="progress-title">Review Progress</span>
+                    <span class="progress-count" id="progress-count">0 of 0 reviewed</span>
+                </div>
+                <div class="progress-track">
+                    <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+                </div>
+                <div class="progress-percent" id="progress-percent">0% complete</div>
+            </div>
+
+            <!-- Summary -->
+            <div id="summary-section" class="summary hidden">
+                <h3>Review Summary</h3>
+                <div class="summary-grid">
+                    <div class="summary-item">
+                        <div class="summary-number approved" id="approved-count">0</div>
+                        <div class="summary-label">Approved</div>
+                        <div class="summary-bar approved"></div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-number denied" id="denied-count">0</div>
+                        <div class="summary-label">Denied</div>
+                        <div class="summary-bar denied"></div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-number pending" id="pending-count">0</div>
+                        <div class="summary-label">Pending</div>
+                        <div class="summary-bar pending"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global state
+        let csvData = null;
+        let groupedProducts = [];
+        let currentProductIndex = 0;
+        let productImages = {};
+        let decisions = {};
+        let imagePreloadCache = {};
+        let categoryExpanded = false;
+
+        // DOM elements
+        const uploadSection = document.getElementById('upload-section');
+        const loadingSection = document.getElementById('loading-section');
+        const reviewSection = document.getElementById('review-section');
+        const csvUpload = document.getElementById('csv-upload');
+        const exportBtn = document.getElementById('export-btn');
+        const productCard = document.getElementById('product-card');
+        const tooltip = document.getElementById('tooltip');
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            csvUpload.addEventListener('change', handleFileUpload);
+            exportBtn.addEventListener('click', exportDecisions);
+            
+            document.getElementById('prev-btn').addEventListener('click', prevProduct);
+            document.getElementById('next-btn').addEventListener('click', nextProduct);
+            document.getElementById('skip-btn').addEventListener('click', skipProduct);
+            document.getElementById('approve-btn').addEventListener('click', () => handleDecision('approve'));
+            document.getElementById('deny-btn').addEventListener('click', () => handleDecision('deny'));
+            document.getElementById('retry-image-btn').addEventListener('click', retryImage);
+            document.getElementById('product-category').addEventListener('click', toggleCategory);
+
+            // Tooltip event listeners
+            document.addEventListener('mouseover', handleTooltip);
+            document.addEventListener('mouseout', hideTooltip);
+        }
+
+        async function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            showLoading();
+            
+            try {
+                const text = await file.text();
+                
+                Papa.parse(text, {
+                    header: true,
+                    skipEmptyLines: true,
+                    transformHeader: (header) => header.trim(),
+                    transform: (value) => value.trim(),
+                    complete: function(parsed) {
+                        if (parsed.errors.length > 0) {
+                            console.error('CSV parsing errors:', parsed.errors);
+                        }
+                        
+                        processData(parsed.data);
+                        hideLoading();
+                        showReviewSection();
+                    }
+                });
+                
+            } catch (error) {
+                console.error('Error parsing CSV:', error);
+                alert('Error parsing CSV file. Please check the format.');
+                hideLoading();
+            }
+        }
+
+        function processData(data) {
+            csvData = data;
+            
+            // Group by product address
+            const grouped = {};
+            const images = {};
+            
+            data.forEach((row, index) => {
+                const address = row.address;
+                if (!address) {
+                    console.warn(`Row ${index} missing address:`, row);
+                    return;
+                }
+
+                if (!grouped[address]) {
+                    grouped[address] = {
+                        title: row.title || '',
+                        h1: row.h1 || '',
+                        description: row.description || '',
+                        address: row.address || '',
+                        handle: row.handle || '',
+                        shopify_category: row.shopify_category || '',
+                        google_category_ids: row.google_category_ids || '',
+                        attributes: []
+                    };
+                    
+                    // Store the og_image_url for this product
+                    const imageUrl = row.og_image_url;
+                    if (imageUrl && imageUrl.trim()) {
+                        let cleanUrl = imageUrl.trim();
+                        // Convert HTTP to HTTPS for mixed content security
+                        if (cleanUrl.startsWith('http://')) {
+                            cleanUrl = cleanUrl.replace('http://', 'https://');
+                        }
+                        images[address] = cleanUrl;
+                    } else {
+                        images[address] = null;
+                    }
+                }
+                
+                grouped[address].attributes.push({
+                    attribute_name: row.attribute_name || '',
+                    attribute_handle: row.attribute_handle || '',
+                    attribute_description: row.attribute_description || '',
+                    possible_values: row.possible_values || '',
+                    selected_value: row.selected_value || '',
+                    ai_provider: row.ai_provider || '',
+                    processing_date: row.processing_date || ''
+                });
+            });
+            
+            groupedProducts = Object.values(grouped);
+            productImages = images;
+            
+            console.log('Loaded', groupedProducts.length, 'products with', Object.keys(images).length, 'images');
+            
+            currentProductIndex = 0;
+            updateDisplay();
+            preloadNextImages();
+        }
+
+        function showLoading() {
+            uploadSection.classList.add('hidden');
+            loadingSection.classList.remove('hidden');
+            reviewSection.classList.add('hidden');
+        }
+
+        function hideLoading() {
+            loadingSection.classList.add('hidden');
+        }
+
+        function showReviewSection() {
+            reviewSection.classList.remove('hidden');
+        }
+
+        function preloadNextImages() {
+            // Preload next 3 images
+            for (let i = 1; i <= 3; i++) {
+                const nextIndex = currentProductIndex + i;
+                if (nextIndex < groupedProducts.length) {
+                    const nextProduct = groupedProducts[nextIndex];
+                    const imageUrl = productImages[nextProduct.address];
+                    if (imageUrl && !imagePreloadCache[imageUrl]) {
+                        const img = new Image();
+                        img.onload = () => { imagePreloadCache[imageUrl] = true; };
+                        img.src = imageUrl;
+                    }
+                }
+            }
+        }
+
+        function loadProductImage(imageUrl, productAddress) {
+            const imageElement = document.getElementById('product-image');
+            const placeholderElement = document.getElementById('image-placeholder');
+            const loadingElement = document.getElementById('image-loading');
+            const statusElement = document.getElementById('image-status');
+            const descriptionElement = document.getElementById('image-description');
+            const errorElement = document.getElementById('image-error');
+            const retryBtn = document.getElementById('retry-image-btn');
+
+            // Reset state
+            imageElement.classList.add('hidden');
+            placeholderElement.classList.remove('hidden');
+            errorElement.classList.add('hidden');
+            retryBtn.classList.add('hidden');
+
+            if (!imageUrl) {
+                statusElement.textContent = 'No Image Available';
+                descriptionElement.textContent = 'This product does not have an associated image';
+                return;
+            }
+
+            // Check if image is already preloaded
+            if (imagePreloadCache[imageUrl]) {
+                imageElement.src = imageUrl;
+                imageElement.classList.remove('hidden');
+                placeholderElement.classList.add('hidden');
+                return;
+            }
+
+            // Show loading state
+            statusElement.textContent = 'Loading Image...';
+            descriptionElement.textContent = 'Please wait while we load the product image';
+            loadingElement.style.display = 'block';
+
+            // Create a new image object to test loading
+            const testImage = new Image();
+            
+            testImage.onload = function() {
+                // Image loaded successfully
+                imageElement.src = imageUrl;
+                imageElement.classList.remove('hidden');
+                placeholderElement.classList.add('hidden');
+                loadingElement.style.display = 'none';
+                imagePreloadCache[imageUrl] = true;
+            };
+
+            testImage.onerror = function() {
+                // Image failed to load
+                loadingElement.style.display = 'none';
+                statusElement.textContent = 'Image Load Failed';
+                descriptionElement.textContent = 'Unable to load the product image';
+                errorElement.textContent = `Failed to load: ${imageUrl}`;
+                errorElement.classList.remove('hidden');
+                retryBtn.classList.remove('hidden');
+            };
+
+            // Start loading
+            testImage.src = imageUrl;
+        }
+
+        function retryImage() {
+            const currentProduct = groupedProducts[currentProductIndex];
+            const imageUrl = productImages[currentProduct.address];
+            if (imageUrl) {
+                // Clear cache for retry
+                delete imagePreloadCache[imageUrl];
+                loadProductImage(imageUrl, currentProduct.address);
+            }
+        }
+
+        function toggleCategory() {
+            const categoryElement = document.getElementById('product-category');
+            const currentProduct = groupedProducts[currentProductIndex];
+            
+            categoryExpanded = !categoryExpanded;
+            
+            if (categoryExpanded) {
+                categoryElement.textContent = currentProduct.shopify_category;
+            } else {
+                categoryElement.textContent = currentProduct.shopify_category.split(' > ').pop();
+            }
+        }
+
+        function handleTooltip(event) {
+            if (event.target.classList.contains('attribute-name')) {
+                const attrIndex = parseInt(event.target.getAttribute('data-attr-index'));
+                const currentProduct = groupedProducts[currentProductIndex];
+                const attribute = currentProduct.attributes[attrIndex];
+                
+                if (attribute && attribute.attribute_description) {
+                    showTooltip(event.target, attribute.attribute_description);
+                }
+            }
+        }
+
+        function showTooltip(element, text) {
+            tooltip.textContent = text;
+            tooltip.classList.add('visible');
+            
+            const rect = element.getBoundingClientRect();
+            tooltip.style.left = rect.left + 'px';
+            tooltip.style.top = (rect.top - tooltip.offsetHeight - 5) + 'px';
+        }
+
+        function hideTooltip() {
+            tooltip.classList.remove('visible');
+        }
+
+        function updateDisplay() {
+            if (groupedProducts.length === 0) return;
+            
+            const currentProduct = groupedProducts[currentProductIndex];
+            
+            // Reset category display
+            categoryExpanded = false;
+            
+            // Update header
+            document.getElementById('product-counter').textContent = 
+                `Product ${currentProductIndex + 1} of ${groupedProducts.length}`;
+            
+            // Update navigation
+            document.getElementById('current-index').textContent = currentProductIndex + 1;
+            document.getElementById('total-count').textContent = `of ${groupedProducts.length}`;
+            
+            // Update navigation buttons
+            document.getElementById('prev-btn').disabled = currentProductIndex === 0;
+            document.getElementById('next-btn').disabled = currentProductIndex === groupedProducts.length - 1;
+            document.getElementById('skip-btn').disabled = currentProductIndex === groupedProducts.length - 1;
+            
+            // Update product details
+            document.getElementById('product-title').textContent = currentProduct.h1;
+            document.getElementById('product-description').textContent = currentProduct.description;
+            
+            const productUrl = document.getElementById('product-url');
+            productUrl.href = currentProduct.address;
+            productUrl.textContent = currentProduct.address.replace('https://www.wildpoppies.co.nz/products/', '');
+            
+            document.getElementById('product-category').textContent = 
+                currentProduct.shopify_category.split(' > ').pop();
+            
+            // Load product image
+            const currentImageUrl = productImages[currentProduct.address];
+            loadProductImage(currentImageUrl, currentProduct.address);
+            
+            // Update attributes
+            updateAttributesTable(currentProduct.attributes);
+            
+            // Update decision buttons
+            updateDecisionButtons();
+            
+            // Update progress
+            updateProgress();
+            
+            // Update card styling based on decision
+            updateCardStyling();
+            
+            // Preload next images
+            preloadNextImages();
+        }
+
+        function updateAttributesTable(attributes) {
+            const tbody = document.getElementById('attributes-body');
+            tbody.innerHTML = '';
+            
+            attributes.forEach((attr, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>
+                        <span class="attribute-name" data-attr-index="${index}">${attr.attribute_name}</span>
+                    </td>
+                    <td>
+                        ${attr.selected_value && attr.selected_value.trim() ? 
+                            `<span class="attribute-value selected">${attr.selected_value}</span>` :
+                            `<span class="attribute-value na">N/A</span>`
+                        }
+                    </td>
+                    <td>
+                        <span class="view-options" data-index="${index}">View Details ↓</span>
+                    </td>
+                `;
+                
+                tbody.appendChild(row);
+                
+                // Add detail row (initially hidden)
+                const detailRow = document.createElement('tr');
+                detailRow.className = 'detail-row-container';
+                detailRow.innerHTML = `
+                    <td colspan="3" style="padding: 0; border: none;">
+                        <div class="attribute-details hidden" id="details-${index}">
+                            <div class="detail-row">
+                                <span class="detail-label">Description:</span>
+                                <span class="detail-value">${attr.attribute_description || 'No description available'}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">AI Provider:</span>
+                                <span class="detail-value">${attr.ai_provider || 'Not specified'}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Processing Date:</span>
+                                <span class="detail-value">${attr.processing_date || 'Not specified'}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Possible Values:</span>
+                                <div class="detail-value">
+                                    <div class="possible-values">
+                                        ${attr.possible_values ? 
+                                            attr.possible_values.split(',').map(val => 
+                                                `<span class="possible-value">${val.trim()}</span>`
+                                            ).join('') : 
+                                            '<span style="color: #6b7280;">No values specified</span>'
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                `;
+                
+                tbody.appendChild(detailRow);
+                
+                // Add click handler for view options
+                row.querySelector('.view-options').addEventListener('click', function() {
+                    const detailsDiv = document.getElementById(`details-${index}`);
+                    const isHidden = detailsDiv.classList.contains('hidden');
+                    
+                    if (isHidden) {
+                        detailsDiv.classList.remove('hidden');
+                        this.textContent = 'Hide Details ↑';
+                    } else {
+                        detailsDiv.classList.add('hidden');
+                        this.textContent = 'View Details ↓';
+                    }
+                });
+            });
+        }
+
+        function updateDecisionButtons() {
+            const currentProduct = groupedProducts[currentProductIndex];
+            const currentDecision = decisions[currentProduct.address];
+            
+            const approveBtn = document.getElementById('approve-btn');
+            const denyBtn = document.getElementById('deny-btn');
+            
+            approveBtn.classList.toggle('active', currentDecision === 'approve');
+            denyBtn.classList.toggle('active', currentDecision === 'deny');
+        }
+
+        function updateCardStyling() {
+            const currentProduct = groupedProducts[currentProductIndex];
+            const currentDecision = decisions[currentProduct.address];
+            
+            productCard.classList.remove('approved', 'denied');
+            if (currentDecision === 'approve') {
+                productCard.classList.add('approved');
+            } else if (currentDecision === 'deny') {
+                productCard.classList.add('denied');
+            }
+        }
+
+        function updateProgress() {
+            const reviewedCount = Object.keys(decisions).length;
+            const totalCount = groupedProducts.length;
+            const percentage = Math.round((reviewedCount / totalCount) * 100);
+            
+            document.getElementById('progress-count').textContent = `${reviewedCount} of ${totalCount} reviewed`;
+            document.getElementById('progress-fill').style.width = `${percentage}%`;
+            document.getElementById('progress-percent').textContent = `${percentage}% complete`;
+            
+            // Update summary
+            if (reviewedCount > 0) {
+                updateSummary();
+                document.getElementById('summary-section').classList.remove('hidden');
+            }
+            
+            // Update export button
+            if (reviewedCount > 0) {
+                exportBtn.classList.remove('hidden');
+                document.getElementById('export-count').textContent = reviewedCount;
+            } else {
+                exportBtn.classList.add('hidden');
+            }
+        }
+
+        function updateSummary() {
+            const approved = Object.values(decisions).filter(d => d === 'approve').length;
+            const denied = Object.values(decisions).filter(d => d === 'deny').length;
+            const pending = groupedProducts.length - Object.keys(decisions).length;
+            
+            document.getElementById('approved-count').textContent = approved;
+            document.getElementById('denied-count').textContent = denied;
+            document.getElementById('pending-count').textContent = pending;
+        }
+
+        function handleDecision(decision) {
+            const currentProduct = groupedProducts[currentProductIndex];
+            decisions[currentProduct.address] = decision;
+            
+            updateDisplay();
+            
+            // Auto-advance to next product
+            if (currentProductIndex < groupedProducts.length - 1) {
+                setTimeout(() => {
+                    currentProductIndex++;
+                    updateDisplay();
+                }, 500);
+            }
+        }
+
+        function prevProduct() {
+            if (currentProductIndex > 0) {
+                currentProductIndex--;
+                updateDisplay();
+            }
+        }
+
+        function nextProduct() {
+            if (currentProductIndex < groupedProducts.length - 1) {
+                currentProductIndex++;
+                updateDisplay();
+            }
+        }
+
+        function skipProduct() {
+            if (currentProductIndex < groupedProducts.length - 1) {
+                currentProductIndex++;
+                updateDisplay();
+            }
+        }
+
+        function exportDecisions() {
+            // Create a new CSV with original data plus decision column
+            const csvHeader = Object.keys(csvData[0]).concat(['decision']);
+            
+            const enhancedData = csvData.map(row => {
+                const decision = decisions[row.address] || '';
+                return Object.values(row).concat([decision]);
+            });
+            
+            const csvContent = [
+                csvHeader.map(header => `"${header}"`).join(','),
+                ...enhancedData.map(row => row.map(cell => `"${cell}"`).join(','))
+            ].join('\n');
+            
+            try {
+                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                const link = document.createElement('a');
+                
+                if (navigator.msSaveBlob) {
+                    navigator.msSaveBlob(blob, 'ai_suggestions_with_decisions.csv');
+                } else {
+                    const url = URL.createObjectURL(blob);
+                    link.href = url;
+                    link.download = 'ai_suggestions_with_decisions.csv';
+                    link.style.visibility = 'hidden';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(url);
+                }
+                
+                const reviewedCount = Object.keys(decisions).length;
+                console.log('Export successful:', reviewedCount, 'decisions exported with original CSV data');
+            } catch (error) {
+                console.error('Export failed:', error);
+                
+                navigator.clipboard.writeText(csvContent).then(() => {
+                    alert('Export failed, but CSV data has been copied to your clipboard!');
+                }).catch(() => {
+                    alert('Export failed. Please check browser console.');
+                });
+            }
+        }
+    </script>
+</body>
+</html>

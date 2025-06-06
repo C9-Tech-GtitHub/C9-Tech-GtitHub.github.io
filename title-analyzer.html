@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -35,6 +36,10 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             padding: 40px;
+            position: relative;
+        }
+        
+        .header-content {
             text-align: center;
         }
         
@@ -47,6 +52,35 @@
         .header p {
             font-size: 1.2em;
             opacity: 0.9;
+        }
+        
+        .toolbox-link {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .toolbox-link:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .toolbox-icon {
+            width: 16px;
+            height: 16px;
         }
         
         .content {
@@ -336,15 +370,40 @@
             font-size: 1.2em;
             color: #667eea;
         }
+
+        @media (max-width: 768px) {
+            .toolbox-link {
+                position: static;
+                margin-bottom: 20px;
+                align-self: center;
+            }
+            
+            .header {
+                text-align: center;
+            }
+            
+            .header-content {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>🎯 Product Title Structure Analysis</h1>
-            <p>Optimizing Product Titles for Maximum Search Performance</p>
+            <a href="https://c9-tech-gtithub.github.io/" target="_blank" rel="noopener noreferrer" class="toolbox-link">
+                <svg class="toolbox-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                </svg>
+                Toolbox
+            </a>
+            <div class="header-content">
+                <h1>🎯 Product Title Structure Analysis</h1>
+                <p>Optimizing Product Titles for Maximum Search Performance</p>
+            </div>
         </div>
-        
         <div class="content">
             <div class="file-upload">
                 <label for="csvFile">

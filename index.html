@@ -79,6 +79,17 @@
             box-shadow: 0 30px 80px rgba(0, 0, 0, 0.3);
         }
 
+        .tool-card.coming-soon {
+            opacity: 0.7;
+            cursor: default;
+            transform: none !important;
+        }
+
+        .tool-card.coming-soon:hover {
+            transform: none;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+        }
+
         .tool-icon {
             width: 80px;
             height: 80px;
@@ -200,54 +211,57 @@
     <div class="container">
         <div class="header">
             <h1>🛠️ C9 Tech Toolbox</h1>
-            <p>Professional business tools to streamline your workflow and boost productivity. Access powerful analytics and automation tools built for modern businesses.</p>
+            <p>Professional e-commerce tools to optimize product titles, streamline AI review processes, and boost business performance with data-driven insights.</p>
         </div>
 
         <div class="tools-grid">
             <a href="./title-analyzer.html" class="tool-card">
-                <div class="tool-icon">📊</div>
-                <h2 class="tool-title">Product Title Analyzer</h2>
+                <div class="tool-icon">🎯</div>
+                <h2 class="tool-title">Product Title Structure Analyzer</h2>
                 <p class="tool-description">
-                    Advanced analytics tool that analyzes product title structures to optimize search performance and conversion rates.
+                    Comprehensive analytics dashboard that analyzes product title patterns to identify top-performing structures and optimize search rankings.
                 </p>
                 <ul class="tool-features">
-                    <li>Pattern recognition and analysis</li>
-                    <li>Performance metrics tracking</li>
-                    <li>Attribute usage optimization</li>
-                    <li>Trend analysis over time</li>
-                    <li>CSV data import support</li>
+                    <li>Advanced pattern recognition with 13+ attribute types</li>
+                    <li>Performance ranking by average position</li>
+                    <li>Interactive charts and visualizations</li>
+                    <li>Date range filtering and trend analysis</li>
+                    <li>CSV upload with automatic parsing</li>
+                    <li>Actionable recommendations and insights</li>
                 </ul>
                 <span class="tool-status status-ready">Ready to Use</span>
             </a>
 
             <a href="./reviewer.html" class="tool-card">
-                <div class="tool-icon">🤖</div>
+                <div class="tool-icon">✅</div>
                 <h2 class="tool-title">AI Suggestion Reviewer</h2>
                 <p class="tool-description">
-                    Streamlined interface for reviewing and approving AI-generated product suggestions with visual feedback and batch processing.
+                    Streamlined review interface for efficiently processing AI-generated product attribute suggestions with visual product previews and batch operations.
                 </p>
                 <ul class="tool-features">
-                    <li>Visual product image preview</li>
-                    <li>Batch approval/denial system</li>
-                    <li>Detailed attribute analysis</li>
-                    <li>Progress tracking and statistics</li>
-                    <li>Export functionality with decisions</li>
+                    <li>Live product image loading with fallback handling</li>
+                    <li>Fixed-position approve/deny buttons for efficiency</li>
+                    <li>Expandable attribute details with descriptions</li>
+                    <li>Real-time progress tracking and statistics</li>
+                    <li>CSV export with review decisions</li>
+                    <li>Navigation controls and skip functionality</li>
                 </ul>
                 <span class="tool-status status-ready">Ready to Use</span>
             </a>
 
             <!-- Placeholder for future tools -->
-            <div class="tool-card" style="opacity: 0.7; cursor: default; transform: none;">
-                <div class="tool-icon">⚡</div>
-                <h2 class="tool-title">More Tools Coming Soon</h2>
+            <div class="tool-card coming-soon">
+                <div class="tool-icon">🚀</div>
+                <h2 class="tool-title">More E-commerce Tools Coming</h2>
                 <p class="tool-description">
-                    We're constantly developing new tools to help businesses optimize their operations and improve efficiency.
+                    Expanding our toolkit with more specialized e-commerce optimization tools based on real business needs and user feedback.
                 </p>
                 <ul class="tool-features">
-                    <li>Data visualization tools</li>
-                    <li>Automation workflows</li>
-                    <li>Performance dashboards</li>
-                    <li>Integration utilities</li>
+                    <li>Product performance dashboards</li>
+                    <li>Category optimization tools</li>
+                    <li>Inventory analysis utilities</li>
+                    <li>SEO optimization helpers</li>
+                    <li>Automated reporting systems</li>
                 </ul>
                 <span class="tool-status status-beta">In Development</span>
             </div>
@@ -255,7 +269,7 @@
 
         <div class="footer">
             <h3>Open Source & Collaborative</h3>
-            <p>All tools are open source and available for contribution. Help us build better business tools for everyone.</p>
+            <p>Built for real e-commerce challenges. All tools are open source and continuously improved based on user feedback and business requirements.</p>
             <a href="https://github.com/c9-tech-gtithub/c9-tech-gtithub.github.io" class="github-link">
                 📁 View on GitHub
             </a>

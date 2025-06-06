@@ -962,8 +962,8 @@
                 if (!grouped[address]) {
                     grouped[address] = {
                         title: row.title || '',
-                        h1: row.h1 || '',
-                        description: row.description || '',
+                        h1: row.title || '',  // Use 'title' field
+                        description: row.clean_description || '',  // Use 'clean_description' field
                         address: row.address || '',
                         handle: row.handle || '',
                         shopify_category: row.shopify_category || '',

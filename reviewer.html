@@ -511,10 +511,16 @@
             color: #6b7280;
         }
 
+        /* Fixed position for decision buttons at top */
         .decisions-section {
             display: flex;
             gap: 1rem;
-            margin-top: 2rem;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
         }
 
         .progress-bar {
@@ -656,6 +662,7 @@
             width: 1.25rem;
             height: 1.25rem;
             margin-right: 0.5rem;
+            vertical-align: middle;
         }
 
         @media (max-width: 1024px) {
@@ -741,6 +748,22 @@
                 </div>
             </div>
 
+            <!-- Decision Buttons - Fixed at top -->
+            <div class="decisions-section">
+                <button id="approve-btn" class="btn-approve">
+                    <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    Approve Suggestions
+                </button>
+                <button id="deny-btn" class="btn-deny">
+                    <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                    Deny Suggestions
+                </button>
+            </div>
+
             <!-- Product Card -->
             <div id="product-card" class="card">
                 <div class="product-grid">
@@ -800,22 +823,6 @@
                                     </tbody>
                                 </table>
                             </div>
-                        </div>
-
-                        <!-- Decision Buttons -->
-                        <div class="decisions-section">
-                            <button id="approve-btn" class="btn-approve">
-                                <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                </svg>
-                                Approve Suggestions
-                            </button>
-                            <button id="deny-btn" class="btn-deny">
-                                <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                </svg>
-                                Deny Suggestions
-                            </button>
                         </div>
                     </div>
                 </div>

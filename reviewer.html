@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Suggestion Reviewer</title>
+    <title>Enhanced AI Suggestion Reviewer</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     <style>
         * {
@@ -99,9 +99,9 @@
             color: #166534;
             border: 2px solid #bbf7d0;
             flex: 1;
-            padding: 1rem 2rem;
+            padding: 1rem 1.5rem;
             border-radius: 0.75rem;
-            font-size: 1.125rem;
+            font-size: 1rem;
             font-weight: bold;
         }
 
@@ -122,9 +122,9 @@
             color: #991b1b;
             border: 2px solid #fecaca;
             flex: 1;
-            padding: 1rem 2rem;
+            padding: 1rem 1.5rem;
             border-radius: 0.75rem;
-            font-size: 1.125rem;
+            font-size: 1rem;
             font-weight: bold;
         }
 
@@ -135,6 +135,29 @@
 
         .btn-deny.active {
             background: linear-gradient(to right, #ef4444, #dc2626);
+            color: white;
+            transform: scale(1.05);
+            box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+        }
+
+        .btn-flag {
+            background: #fef3c7;
+            color: #92400e;
+            border: 2px solid #fde68a;
+            flex: 1;
+            padding: 1rem 1.5rem;
+            border-radius: 0.75rem;
+            font-size: 1rem;
+            font-weight: bold;
+        }
+
+        .btn-flag:hover {
+            background: #fde68a;
+            border-color: #fcd34d;
+        }
+
+        .btn-flag.active {
+            background: linear-gradient(to right, #f59e0b, #d97706);
             color: white;
             transform: scale(1.05);
             box-shadow: 0 10px 15px rgba(0,0,0,0.1);
@@ -173,6 +196,16 @@
         .card.denied {
             background: #fef2f2;
             border-color: #fecaca;
+        }
+
+        .card.flagged {
+            background: #fffbeb;
+            border-color: #fde68a;
+        }
+
+        .card.modified {
+            background: #f0f9ff;
+            border-color: #bae6fd;
         }
 
         .product-grid {
@@ -292,6 +325,7 @@
         .product-meta div {
             display: flex;
             margin-bottom: 0.75rem;
+            align-items: center;
         }
 
         .product-meta div:last-child {
@@ -302,6 +336,7 @@
             font-weight: 500;
             color: #4b5563;
             margin-right: 0.5rem;
+            min-width: 70px;
         }
 
         .product-meta a {
@@ -318,6 +353,7 @@
             cursor: pointer;
             color: #2563eb;
             transition: color 0.2s;
+            flex: 1;
         }
 
         .category-toggle:hover {
@@ -325,11 +361,58 @@
             text-decoration: underline;
         }
 
+        .category-flag-btn {
+            background: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+            border-radius: 0.375rem;
+            padding: 0.25rem 0.75rem;
+            font-size: 0.75rem;
+            cursor: pointer;
+            margin-left: 0.5rem;
+            transition: all 0.2s;
+        }
+
+        .category-flag-btn:hover {
+            background: #fecaca;
+        }
+
+        .category-flag-btn.active {
+            background: #dc2626;
+            color: white;
+        }
+
         .attributes-section h3 {
             font-size: 1.25rem;
             font-weight: 600;
             margin-bottom: 1rem;
             color: #111827;
+            display: flex;
+            align-items: center;
+        }
+
+        .edit-mode-toggle {
+            background: #f3f4f6;
+            color: #4b5563;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            padding: 0.5rem;
+            margin-left: auto;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+
+        .edit-mode-toggle:hover {
+            background: #e5e7eb;
+        }
+
+        .edit-mode-toggle.active {
+            background: #2563eb;
+            color: white;
         }
 
         .attributes-table {
@@ -403,6 +486,135 @@
         .attribute-value.na {
             background: #fed7aa;
             color: #c2410c;
+        }
+
+        .attribute-value.modified {
+            background: #dbeafe;
+            color: #1d4ed8;
+            border: 2px solid #3b82f6;
+        }
+
+        .attribute-values-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .edit-container {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.375rem;
+            padding: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .edit-mode-selector {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.375rem;
+            padding: 0.75rem;
+        }
+
+        .edit-mode-content {
+            margin-bottom: 1rem;
+        }
+
+        .possible-values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .value-button {
+            display: flex;
+            align-items: center;
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.875rem;
+            font-weight: 500;
+            min-height: 48px;
+        }
+
+        .value-button:hover {
+            background: #f9fafb;
+            border-color: #9ca3af;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .value-button.selected {
+            background: #dbeafe;
+            border-color: #3b82f6;
+            color: #1d4ed8;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(59, 130, 246, 0.2);
+        }
+
+        .value-button input[type="checkbox"] {
+            margin-right: 0.5rem;
+            width: 16px;
+            height: 16px;
+        }
+
+        .value-button span {
+            flex: 1;
+            text-align: center;
+        }
+
+        .value-dropdown {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            background: white;
+            margin-bottom: 1rem;
+            transition: all 0.2s;
+        }
+
+        .value-dropdown:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .custom-value-section {
+            border-top: 1px solid #e5e7eb;
+            padding-top: 1rem;
+            margin-top: 1rem;
+        }
+
+        .custom-value-input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+
+        .custom-value-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .edit-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .btn-small {
+            padding: 0.375rem 0.75rem;
+            font-size: 0.75rem;
+            border-radius: 0.375rem;
         }
 
         .view-options {
@@ -512,7 +724,6 @@
             color: #6b7280;
         }
 
-        /* Fixed position for decision buttons at top */
         .decisions-section {
             display: flex;
             gap: 1rem;
@@ -596,7 +807,7 @@
 
         .summary-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(4, 1fr);
             gap: 1.5rem;
         }
 
@@ -616,6 +827,7 @@
 
         .summary-number.approved { color: #16a34a; }
         .summary-number.denied { color: #dc2626; }
+        .summary-number.flagged { color: #f59e0b; }
         .summary-number.pending { color: #4b5563; }
 
         .summary-label {
@@ -633,6 +845,7 @@
 
         .summary-bar.approved { background: #16a34a; }
         .summary-bar.denied { background: #dc2626; }
+        .summary-bar.flagged { background: #f59e0b; }
         .summary-bar.pending { background: #9ca3af; }
 
         .loading {
@@ -666,6 +879,12 @@
             vertical-align: middle;
         }
 
+        .icon-small {
+            width: 1rem;
+            height: 1rem;
+            margin-right: 0.25rem;
+        }
+
         @media (max-width: 1024px) {
             .product-grid {
                 grid-template-columns: 1fr;
@@ -673,8 +892,13 @@
             }
             
             .summary-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(2, 1fr);
                 gap: 1rem;
+            }
+
+            .decisions-section {
+                flex-direction: column;
+                gap: 0.75rem;
             }
         }
     </style>
@@ -687,7 +911,7 @@
     <div class="header">
         <div class="header-content">
             <div>
-                <h1 class="title">AI Suggestion Reviewer</h1>
+                <h1 class="title">Enhanced AI Suggestion Reviewer</h1>
                 <p class="subtitle" id="product-counter"></p>
             </div>
             <div style="display: flex; gap: 1rem; align-items: center;">
@@ -739,19 +963,25 @@
                 <div class="progress-percent" id="progress-percent">0% complete</div>
             </div>
 
-            <!-- Decision Buttons - Fixed at top -->
+            <!-- Decision Buttons -->
             <div class="decisions-section">
                 <button id="approve-btn" class="btn-approve">
                     <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                     </svg>
-                    Approve Suggestions
+                    <span id="approve-text">Approve Suggestions</span>
                 </button>
                 <button id="deny-btn" class="btn-deny">
                     <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
                     Deny Suggestions
+                </button>
+                <button id="flag-btn" class="btn-flag">
+                    <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 2h7a2 2 0 012 2v7a2 2 0 01-2 2h-7.5l-1-2H5a2 2 0 00-2 2zm9-13.5V9"></path>
+                    </svg>
+                    Flag for Manual Enhancement
                 </button>
             </div>
 
@@ -794,18 +1024,32 @@
                             <div>
                                 <span>Category:</span>
                                 <span id="product-category" class="category-toggle">Category</span>
+                                <button id="category-flag-btn" class="category-flag-btn">
+                                    <svg class="icon-small" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 2h7a2 2 0 012 2v7a2 2 0 01-2 2h-7.5l-1-2H5a2 2 0 00-2 2zm9-13.5V9"></path>
+                                    </svg>
+                                    Wrong Category
+                                </button>
                             </div>
                         </div>
 
                         <!-- Attributes -->
                         <div class="attributes-section">
-                            <h3>AI Suggested Attributes</h3>
+                            <h3>
+                                AI Suggested Attributes
+                                <button id="edit-mode-toggle" class="edit-mode-toggle">
+                                    <svg class="icon-small" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                    </svg>
+                                    Edit Mode
+                                </button>
+                            </h3>
                             <div class="attributes-table">
                                 <table>
                                     <thead>
                                         <tr>
                                             <th>Attribute</th>
-                                            <th>Selected Value</th>
+                                            <th>Selected Values</th>
                                             <th>Details</th>
                                         </tr>
                                     </thead>
@@ -832,6 +1076,11 @@
                         <div class="summary-number denied" id="denied-count">0</div>
                         <div class="summary-label">Denied</div>
                         <div class="summary-bar denied"></div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-number flagged" id="flagged-count">0</div>
+                        <div class="summary-label">Flagged</div>
+                        <div class="summary-bar flagged"></div>
                     </div>
                     <div class="summary-item">
                         <div class="summary-number pending" id="pending-count">0</div>
@@ -880,8 +1129,11 @@
         let currentProductIndex = 0;
         let productImages = {};
         let decisions = {};
+        let productChanges = {}; // Track changes per product
+        let categoryFlags = {}; // Track category flags
         let imagePreloadCache = {};
         let categoryExpanded = false;
+        let editMode = false;
 
         // DOM elements
         const uploadSection = document.getElementById('upload-section');
@@ -906,8 +1158,11 @@
             document.getElementById('skip-btn').addEventListener('click', skipProduct);
             document.getElementById('approve-btn').addEventListener('click', () => handleDecision('approve'));
             document.getElementById('deny-btn').addEventListener('click', () => handleDecision('deny'));
+            document.getElementById('flag-btn').addEventListener('click', () => handleDecision('flag'));
             document.getElementById('retry-image-btn').addEventListener('click', retryImage);
             document.getElementById('product-category').addEventListener('click', toggleCategory);
+            document.getElementById('category-flag-btn').addEventListener('click', toggleCategoryFlag);
+            document.getElementById('edit-mode-toggle').addEventListener('click', toggleEditMode);
 
             // Tooltip event listeners
             document.addEventListener('mouseover', handleTooltip);
@@ -963,8 +1218,8 @@
                 if (!grouped[address]) {
                     grouped[address] = {
                         title: row.title || '',
-                        h1: row.title || '',  // Use 'title' field
-                        description: row.clean_description || '',  // Use 'clean_description' field
+                        h1: row.title || '',
+                        description: row.clean_description || '',
                         address: row.address || '',
                         handle: row.handle || '',
                         shopify_category: row.shopify_category || '',
@@ -976,7 +1231,6 @@
                     const imageUrl = row.og_image_url;
                     if (imageUrl && imageUrl.trim()) {
                         let cleanUrl = imageUrl.trim();
-                        // Convert HTTP to HTTPS for mixed content security
                         if (cleanUrl.startsWith('http://')) {
                             cleanUrl = cleanUrl.replace('http://', 'https://');
                         }
@@ -993,12 +1247,19 @@
                     possible_values: row.possible_values || '',
                     selected_value: row.selected_value || '',
                     ai_provider: row.ai_provider || '',
-                    processing_date: row.processing_date || ''
+                    processing_date: row.processing_date || '',
+                    original_selected_value: row.selected_value || '', // Keep original
+                    current_selected_values: row.selected_value ? [row.selected_value] : [] // Support multiple
                 });
             });
             
             groupedProducts = Object.values(grouped);
             productImages = images;
+            
+            // Initialize tracking objects
+            decisions = {};
+            productChanges = {};
+            categoryFlags = {};
             
             console.log('Loaded', groupedProducts.length, 'products with', Object.keys(images).length, 'images');
             
@@ -1022,7 +1283,6 @@
         }
 
         function preloadNextImages() {
-            // Preload next 3 images
             for (let i = 1; i <= 3; i++) {
                 const nextIndex = currentProductIndex + i;
                 if (nextIndex < groupedProducts.length) {
@@ -1046,7 +1306,6 @@
             const errorElement = document.getElementById('image-error');
             const retryBtn = document.getElementById('retry-image-btn');
 
-            // Reset state
             imageElement.classList.add('hidden');
             placeholderElement.classList.remove('hidden');
             errorElement.classList.add('hidden');
@@ -1058,7 +1317,6 @@
                 return;
             }
 
-            // Check if image is already preloaded
             if (imagePreloadCache[imageUrl]) {
                 imageElement.src = imageUrl;
                 imageElement.classList.remove('hidden');
@@ -1066,16 +1324,13 @@
                 return;
             }
 
-            // Show loading state
             statusElement.textContent = 'Loading Image...';
             descriptionElement.textContent = 'Please wait while we load the product image';
             loadingElement.style.display = 'block';
 
-            // Create a new image object to test loading
             const testImage = new Image();
             
             testImage.onload = function() {
-                // Image loaded successfully
                 imageElement.src = imageUrl;
                 imageElement.classList.remove('hidden');
                 placeholderElement.classList.add('hidden');
@@ -1084,7 +1339,6 @@
             };
 
             testImage.onerror = function() {
-                // Image failed to load
                 loadingElement.style.display = 'none';
                 statusElement.textContent = 'Image Load Failed';
                 descriptionElement.textContent = 'Unable to load the product image';
@@ -1093,7 +1347,6 @@
                 retryBtn.classList.remove('hidden');
             };
 
-            // Start loading
             testImage.src = imageUrl;
         }
 
@@ -1101,7 +1354,6 @@
             const currentProduct = groupedProducts[currentProductIndex];
             const imageUrl = productImages[currentProduct.address];
             if (imageUrl) {
-                // Clear cache for retry
                 delete imagePreloadCache[imageUrl];
                 loadProductImage(imageUrl, currentProduct.address);
             }
@@ -1117,6 +1369,62 @@
                 categoryElement.textContent = currentProduct.shopify_category;
             } else {
                 categoryElement.textContent = currentProduct.shopify_category.split(' > ').pop();
+            }
+        }
+
+        function toggleCategoryFlag() {
+            const currentProduct = groupedProducts[currentProductIndex];
+            const flagBtn = document.getElementById('category-flag-btn');
+            
+            if (categoryFlags[currentProduct.address]) {
+                delete categoryFlags[currentProduct.address];
+                flagBtn.classList.remove('active');
+            } else {
+                categoryFlags[currentProduct.address] = true;
+                flagBtn.classList.add('active');
+            }
+            
+            updateCardStyling();
+        }
+
+        function toggleEditMode() {
+            editMode = !editMode;
+            const toggleBtn = document.getElementById('edit-mode-toggle');
+            
+            if (!toggleBtn) {
+                console.error('Edit mode toggle button not found');
+                return;
+            }
+            
+            try {
+                if (editMode) {
+                    toggleBtn.classList.add('active');
+                    toggleBtn.innerHTML = `
+                        <svg class="icon-small" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                        Exit Edit Mode
+                    `;
+                } else {
+                    toggleBtn.classList.remove('active');
+                    toggleBtn.innerHTML = `
+                        <svg class="icon-small" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                        </svg>
+                        Edit Mode
+                    `;
+                }
+                
+                // Safely update attributes table
+                if (groupedProducts.length > 0 && currentProductIndex < groupedProducts.length) {
+                    const currentProduct = groupedProducts[currentProductIndex];
+                    if (currentProduct && currentProduct.attributes) {
+                        updateAttributesTable(currentProduct.attributes);
+                    }
+                }
+            } catch (error) {
+                console.error('Error in toggleEditMode:', error);
+                editMode = !editMode; // Revert the change
             }
         }
 
@@ -1150,23 +1458,18 @@
             
             const currentProduct = groupedProducts[currentProductIndex];
             
-            // Reset category display
             categoryExpanded = false;
             
-            // Update header
             document.getElementById('product-counter').textContent = 
                 `Product ${currentProductIndex + 1} of ${groupedProducts.length}`;
             
-            // Update navigation
             document.getElementById('current-index').textContent = currentProductIndex + 1;
             document.getElementById('total-count').textContent = `of ${groupedProducts.length}`;
             
-            // Update navigation buttons
             document.getElementById('prev-btn').disabled = currentProductIndex === 0;
             document.getElementById('next-btn').disabled = currentProductIndex === groupedProducts.length - 1;
             document.getElementById('skip-btn').disabled = currentProductIndex === groupedProducts.length - 1;
             
-            // Update product details
             document.getElementById('product-title').textContent = currentProduct.h1;
             document.getElementById('product-description').textContent = currentProduct.description;
             
@@ -1177,23 +1480,19 @@
             document.getElementById('product-category').textContent = 
                 currentProduct.shopify_category.split(' > ').pop();
             
-            // Load product image
+            // Update category flag button
+            const categoryFlagBtn = document.getElementById('category-flag-btn');
+            categoryFlagBtn.classList.toggle('active', !!categoryFlags[currentProduct.address]);
+            
             const currentImageUrl = productImages[currentProduct.address];
             loadProductImage(currentImageUrl, currentProduct.address);
             
-            // Update attributes
             updateAttributesTable(currentProduct.attributes);
-            
-            // Update decision buttons
             updateDecisionButtons();
-            
-            // Update progress
             updateProgress();
-            
-            // Update card styling based on decision
             updateCardStyling();
+            updateApproveButtonText();
             
-            // Preload next images
             preloadNextImages();
         }
 
@@ -1203,15 +1502,17 @@
             
             attributes.forEach((attr, index) => {
                 const row = document.createElement('tr');
+                const hasChanges = hasAttributeChanges(attr);
+                
                 row.innerHTML = `
                     <td>
                         <span class="attribute-name" data-attr-index="${index}">${attr.attribute_name}</span>
                     </td>
                     <td>
-                        ${attr.selected_value && attr.selected_value.trim() ? 
-                            `<span class="attribute-value selected">${attr.selected_value}</span>` :
-                            `<span class="attribute-value na">N/A</span>`
-                        }
+                        <div class="attribute-values-container" id="values-container-${index}">
+                            ${renderAttributeValues(attr, index, hasChanges)}
+                        </div>
+                        ${editMode ? renderEditContainer(attr, index) : ''}
                     </td>
                     <td>
                         <span class="view-options" data-index="${index}">View Details ↓</span>
@@ -1220,13 +1521,13 @@
                 
                 tbody.appendChild(row);
                 
-                // Add detail row (initially hidden)
+                // Add detail row
                 const detailRow = document.createElement('tr');
                 detailRow.className = 'detail-row-container';
                 detailRow.innerHTML = `
                     <td colspan="3" style="padding: 0; border: none;">
                         <div class="attribute-details hidden" id="details-${index}">
-                        <div class="detail-row">
+                            <div class="detail-row">
                                 <span class="detail-label">Description:</span>
                                 <span class="detail-value">${attr.attribute_description || 'No description available'}</span>
                             </div>
@@ -1235,7 +1536,10 @@
                                 <div class="detail-value">
                                     <div class="possible-values">
                                         ${attr.possible_values ? 
-                                            attr.possible_values.split(',').map(val => 
+                                            (attr.possible_values.includes(';') ? 
+                                                attr.possible_values.split(';') : 
+                                                attr.possible_values.split(',')
+                                            ).map(val => 
                                                 `<span class="possible-value">${val.trim()}</span>`
                                             ).join('') : 
                                             '<span style="color: #6b7280;">No values specified</span>'
@@ -1262,7 +1566,333 @@
                         this.textContent = 'View Details ↓';
                     }
                 });
+
+                // Setup edit mode listeners if in edit mode
+                if (editMode) {
+                    setupEditListeners(attr, index);
+                }
             });
+        }
+
+        function renderAttributeValues(attr, index, hasChanges) {
+            const values = attr.current_selected_values || [];
+            
+            if (values.length === 0) {
+                return `<span class="attribute-value na">N/A</span>`;
+            }
+            
+            return values.map(value => 
+                `<span class="attribute-value ${hasChanges ? 'modified' : 'selected'}">${value}</span>`
+            ).join('');
+        }
+
+        function renderEditContainer(attr, index) {
+            try {
+                // Handle both comma and semicolon separated values
+                let possibleValues = [];
+                if (attr.possible_values) {
+                    if (attr.possible_values.includes(';')) {
+                        possibleValues = attr.possible_values.split(';').map(v => v.trim()).filter(v => v.length > 0);
+                    } else {
+                        possibleValues = attr.possible_values.split(',').map(v => v.trim()).filter(v => v.length > 0);
+                    }
+                }
+                
+                const currentValues = attr.current_selected_values || [];
+                
+                return `
+                    <div class="edit-container" id="edit-container-${index}">
+                        <div class="edit-mode-selector" style="margin-bottom: 1rem;">
+                            <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; color: #4b5563;">
+                                <input type="radio" name="edit-mode-${index}" value="checkboxes" checked onchange="handleEditModeChange(${index}, 'checkboxes')">
+                                Multiple Selection (Checkboxes)
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; color: #4b5563; margin-top: 0.25rem;">
+                                <input type="radio" name="edit-mode-${index}" value="dropdown" onchange="handleEditModeChange(${index}, 'dropdown')">
+                                Single Selection (Dropdown)
+                            </label>
+                        </div>
+                        
+                        <!-- Checkbox Mode -->
+                        <div id="checkbox-mode-${index}" class="edit-mode-content">
+                            <div class="possible-values-grid">
+                                ${possibleValues.map(value => {
+                                    const isSelected = currentValues.includes(value);
+                                    const safeValue = value.replace(/'/g, "\\'").replace(/"/g, '\\"');
+                                    return `
+                                        <label class="value-button ${isSelected ? 'selected' : ''}" data-value="${safeValue}">
+                                            <input type="checkbox" ${isSelected ? 'checked' : ''} data-attr-index="${index}" data-value="${safeValue}">
+                                            <span>${value}</span>
+                                        </label>
+                                    `;
+                                }).join('')}
+                            </div>
+                        </div>
+                        
+                        <!-- Dropdown Mode -->
+                        <div id="dropdown-mode-${index}" class="edit-mode-content hidden">
+                            <select class="value-dropdown" data-attr-index="${index}">
+                                <option value="">Select a value...</option>
+                                ${possibleValues.map(value => {
+                                    const isSelected = currentValues.includes(value);
+                                    const safeValue = value.replace(/'/g, "\\'").replace(/"/g, '\\"');
+                                    return `<option value="${safeValue}" ${isSelected ? 'selected' : ''}>${value}</option>`;
+                                }).join('')}
+                            </select>
+                        </div>
+                        
+                        <div class="custom-value-section">
+                            <input type="text" class="custom-value-input" placeholder="Add custom value..." id="custom-input-${index}">
+                            <div class="edit-actions">
+                                <button class="btn btn-primary btn-small" onclick="safeAddCustomValue(${index})">
+                                    <svg class="icon-small" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                    </svg>
+                                    Add Custom
+                                </button>
+                                <button class="btn btn-secondary btn-small" onclick="safeClearAllValues(${index})">
+                                    <svg class="icon-small" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                    </svg>
+                                    Clear All
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } catch (error) {
+                console.error('Error in renderEditContainer:', error);
+                return '<div class="edit-container">Error rendering edit controls</div>';
+            }
+        }
+
+        function setupEditListeners(attr, index) {
+            // Add small delay to ensure DOM is rendered
+            setTimeout(() => {
+                try {
+                    // Setup checkbox listeners
+                    const checkboxes = document.querySelectorAll(`input[data-attr-index="${index}"][type="checkbox"]`);
+                    checkboxes.forEach(checkbox => {
+                        if (checkbox && !checkbox.hasAttribute('data-listener-added')) {
+                            checkbox.setAttribute('data-listener-added', 'true');
+                            checkbox.addEventListener('change', function() {
+                                try {
+                                    updateAttributeValues(index, this.dataset.value, this.checked);
+                                } catch (error) {
+                                    console.error('Error in checkbox change handler:', error);
+                                }
+                            });
+                        }
+                    });
+                    
+                    // Setup dropdown listener
+                    const dropdown = document.querySelector(`select[data-attr-index="${index}"]`);
+                    if (dropdown && !dropdown.hasAttribute('data-listener-added')) {
+                        dropdown.setAttribute('data-listener-added', 'true');
+                        dropdown.addEventListener('change', function() {
+                            try {
+                                handleDropdownChange(index, this.value);
+                            } catch (error) {
+                                console.error('Error in dropdown change handler:', error);
+                            }
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error in setupEditListeners:', error);
+                }
+            }, 100);
+        }
+
+        function toggleAttributeEditMode(attrIndex, mode) {
+            try {
+                const checkboxMode = document.getElementById(`checkbox-mode-${attrIndex}`);
+                const dropdownMode = document.getElementById(`dropdown-mode-${attrIndex}`);
+                
+                if (!checkboxMode || !dropdownMode) {
+                    console.warn(`Edit mode elements not found for attribute ${attrIndex}`);
+                    return;
+                }
+                
+                if (mode === 'checkboxes') {
+                    checkboxMode.classList.remove('hidden');
+                    dropdownMode.classList.add('hidden');
+                } else {
+                    checkboxMode.classList.add('hidden');
+                    dropdownMode.classList.remove('hidden');
+                }
+            } catch (error) {
+                console.error('Error in toggleAttributeEditMode:', error);
+            }
+        }
+
+        function handleEditModeChange(attrIndex, mode) {
+            toggleAttributeEditMode(attrIndex, mode);
+        }
+
+        function safeAddCustomValue(attrIndex) {
+            try {
+                addCustomValue(attrIndex);
+            } catch (error) {
+                console.error('Error in safeAddCustomValue:', error);
+            }
+        }
+
+        function safeClearAllValues(attrIndex) {
+            try {
+                clearAllValues(attrIndex);
+            } catch (error) {
+                console.error('Error in safeClearAllValues:', error);
+            }
+        }
+
+        function handleDropdownChange(attrIndex, selectedValue) {
+            const currentProduct = groupedProducts[currentProductIndex];
+            if (!currentProduct || !currentProduct.attributes[attrIndex]) return;
+            
+            const attribute = currentProduct.attributes[attrIndex];
+            
+            // For dropdown, replace all values with the single selected value
+            if (selectedValue) {
+                attribute.current_selected_values = [selectedValue];
+            } else {
+                attribute.current_selected_values = [];
+            }
+            
+            markProductAsChanged();
+            
+            // Update the values display
+            const valuesContainer = document.getElementById(`values-container-${attrIndex}`);
+            if (valuesContainer) {
+                const hasChanges = hasAttributeChanges(attribute);
+                valuesContainer.innerHTML = renderAttributeValues(attribute, attrIndex, hasChanges);
+            }
+            
+            updateApproveButtonText();
+        }
+
+        function updateAttributeValues(attrIndex, value, isSelected) {
+            const currentProduct = groupedProducts[currentProductIndex];
+            if (!currentProduct || !currentProduct.attributes[attrIndex]) return;
+            
+            const attribute = currentProduct.attributes[attrIndex];
+            
+            if (!attribute.current_selected_values) {
+                attribute.current_selected_values = [];
+            }
+            
+            if (isSelected && !attribute.current_selected_values.includes(value)) {
+                attribute.current_selected_values.push(value);
+            } else if (!isSelected) {
+                attribute.current_selected_values = attribute.current_selected_values.filter(v => v !== value);
+            }
+            
+            // Update checkbox styling
+            const label = document.querySelector(`label[data-value="${value}"]`);
+            if (label) {
+                label.classList.toggle('selected', isSelected);
+            }
+            
+            // Mark as changed
+            markProductAsChanged();
+            
+            // Update the values display
+            const valuesContainer = document.getElementById(`values-container-${attrIndex}`);
+            if (valuesContainer) {
+                const hasChanges = hasAttributeChanges(attribute);
+                valuesContainer.innerHTML = renderAttributeValues(attribute, attrIndex, hasChanges);
+            }
+            
+            updateApproveButtonText();
+        }
+
+        function addCustomValue(attrIndex) {
+            const input = document.getElementById(`custom-input-${attrIndex}`);
+            if (!input) return;
+            
+            const value = input.value.trim();
+            
+            if (value) {
+                const currentProduct = groupedProducts[currentProductIndex];
+                if (!currentProduct || !currentProduct.attributes[attrIndex]) return;
+                
+                const attribute = currentProduct.attributes[attrIndex];
+                
+                if (!attribute.current_selected_values) {
+                    attribute.current_selected_values = [];
+                }
+                
+                if (!attribute.current_selected_values.includes(value)) {
+                    attribute.current_selected_values.push(value);
+                    markProductAsChanged();
+                    
+                    // Update the display
+                    const valuesContainer = document.getElementById(`values-container-${attrIndex}`);
+                    if (valuesContainer) {
+                        const hasChanges = hasAttributeChanges(attribute);
+                        valuesContainer.innerHTML = renderAttributeValues(attribute, attrIndex, hasChanges);
+                    }
+                    
+                    updateApproveButtonText();
+                }
+                
+                input.value = '';
+            }
+        }
+
+        function clearAllValues(attrIndex) {
+            const currentProduct = groupedProducts[currentProductIndex];
+            if (!currentProduct || !currentProduct.attributes[attrIndex]) return;
+            
+            const attribute = currentProduct.attributes[attrIndex];
+            
+            attribute.current_selected_values = [];
+            markProductAsChanged();
+            
+            // Update checkboxes
+            const checkboxes = document.querySelectorAll(`input[data-attr-index="${attrIndex}"]`);
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = false;
+                const label = checkbox.closest('label');
+                if (label) {
+                    label.classList.remove('selected');
+                }
+            });
+            
+            // Update dropdown
+            const dropdown = document.querySelector(`select[data-attr-index="${attrIndex}"]`);
+            if (dropdown) {
+                dropdown.value = '';
+            }
+            
+            // Update the display
+            const valuesContainer = document.getElementById(`values-container-${attrIndex}`);
+            if (valuesContainer) {
+                const hasChanges = hasAttributeChanges(attribute);
+                valuesContainer.innerHTML = renderAttributeValues(attribute, attrIndex, hasChanges);
+            }
+            
+            updateApproveButtonText();
+        }
+
+        function hasAttributeChanges(attribute) {
+            if (!attribute) return false;
+            
+            const original = attribute.original_selected_value ? [attribute.original_selected_value] : [];
+            const current = attribute.current_selected_values || [];
+            
+            if (original.length !== current.length) return true;
+            
+            return !original.every(val => current.includes(val)) || !current.every(val => original.includes(val));
+        }
+
+        function markProductAsChanged() {
+            if (groupedProducts.length === 0 || currentProductIndex >= groupedProducts.length) return;
+            
+            const currentProduct = groupedProducts[currentProductIndex];
+            if (!currentProduct) return;
+            
+            productChanges[currentProduct.address] = true;
+            updateCardStyling();
         }
 
         function updateDecisionButtons() {
@@ -1271,20 +1901,50 @@
             
             const approveBtn = document.getElementById('approve-btn');
             const denyBtn = document.getElementById('deny-btn');
+            const flagBtn = document.getElementById('flag-btn');
             
             approveBtn.classList.toggle('active', currentDecision === 'approve');
             denyBtn.classList.toggle('active', currentDecision === 'deny');
+            flagBtn.classList.toggle('active', currentDecision === 'flag');
         }
 
         function updateCardStyling() {
-            const currentProduct = groupedProducts[currentProductIndex];
-            const currentDecision = decisions[currentProduct.address];
+            if (groupedProducts.length === 0 || currentProductIndex >= groupedProducts.length) return;
             
-            productCard.classList.remove('approved', 'denied');
-            if (currentDecision === 'approve') {
+            const currentProduct = groupedProducts[currentProductIndex];
+            if (!currentProduct || !productCard) return;
+            
+            const currentDecision = decisions[currentProduct.address];
+            const hasChanges = productChanges[currentProduct.address];
+            
+            productCard.classList.remove('approved', 'denied', 'flagged', 'modified');
+            
+            if (hasChanges) {
+                productCard.classList.add('modified');
+            } else if (currentDecision === 'approve') {
                 productCard.classList.add('approved');
             } else if (currentDecision === 'deny') {
                 productCard.classList.add('denied');
+            } else if (currentDecision === 'flag') {
+                productCard.classList.add('flagged');
+            }
+        }
+
+        function updateApproveButtonText() {
+            if (groupedProducts.length === 0 || currentProductIndex >= groupedProducts.length) return;
+            
+            const currentProduct = groupedProducts[currentProductIndex];
+            if (!currentProduct) return;
+            
+            const hasChanges = productChanges[currentProduct.address];
+            const approveText = document.getElementById('approve-text');
+            
+            if (approveText) {
+                if (hasChanges) {
+                    approveText.textContent = 'Save Changes and Approve';
+                } else {
+                    approveText.textContent = 'Approve Suggestions';
+                }
             }
         }
 
@@ -1297,13 +1957,11 @@
             document.getElementById('progress-fill').style.width = `${percentage}%`;
             document.getElementById('progress-percent').textContent = `${percentage}% complete`;
             
-            // Update summary
             if (reviewedCount > 0) {
                 updateSummary();
                 document.getElementById('summary-section').classList.remove('hidden');
             }
             
-            // Update export button
             if (reviewedCount > 0) {
                 exportBtn.classList.remove('hidden');
                 document.getElementById('export-count').textContent = reviewedCount;
@@ -1315,10 +1973,12 @@
         function updateSummary() {
             const approved = Object.values(decisions).filter(d => d === 'approve').length;
             const denied = Object.values(decisions).filter(d => d === 'deny').length;
+            const flagged = Object.values(decisions).filter(d => d === 'flag').length;
             const pending = groupedProducts.length - Object.keys(decisions).length;
             
             document.getElementById('approved-count').textContent = approved;
             document.getElementById('denied-count').textContent = denied;
+            document.getElementById('flagged-count').textContent = flagged;
             document.getElementById('pending-count').textContent = pending;
         }
 
@@ -1328,7 +1988,6 @@
             
             updateDisplay();
             
-            // Auto-advance to next product
             if (currentProductIndex < groupedProducts.length - 1) {
                 setTimeout(() => {
                     currentProductIndex++;
@@ -1359,12 +2018,38 @@
         }
 
         function exportDecisions() {
-            // Create a new CSV with original data plus decision column
-            const csvHeader = Object.keys(csvData[0]).concat(['decision']);
+            // Create enhanced CSV with all tracking columns
+            const csvHeader = Object.keys(csvData[0]).concat([
+                'decision', 
+                'category_flagged', 
+                'changes_made', 
+                'final_selected_value'
+            ]);
             
             const enhancedData = csvData.map(row => {
                 const decision = decisions[row.address] || '';
-                return Object.values(row).concat([decision]);
+                const categoryFlagged = categoryFlags[row.address] ? 'true' : 'false';
+                const changesMade = productChanges[row.address] ? 'true' : 'false';
+                
+                // Find the final selected value for this specific attribute
+                let finalSelectedValue = '';
+                const product = groupedProducts.find(p => p.address === row.address);
+                if (product) {
+                    const attr = product.attributes.find(a => 
+                        a.attribute_name === row.attribute_name || 
+                        a.attribute_handle === row.attribute_handle
+                    );
+                    if (attr && attr.current_selected_values) {
+                        finalSelectedValue = attr.current_selected_values.join(', ');
+                    }
+                }
+                
+                return Object.values(row).concat([
+                    decision, 
+                    categoryFlagged, 
+                    changesMade, 
+                    finalSelectedValue
+                ]);
             });
             
             const csvContent = [
@@ -1377,11 +2062,11 @@
                 const link = document.createElement('a');
                 
                 if (navigator.msSaveBlob) {
-                    navigator.msSaveBlob(blob, 'ai_suggestions_with_decisions.csv');
+                    navigator.msSaveBlob(blob, 'enhanced_ai_suggestions_reviewed.csv');
                 } else {
                     const url = URL.createObjectURL(blob);
                     link.href = url;
-                    link.download = 'ai_suggestions_with_decisions.csv';
+                    link.download = 'enhanced_ai_suggestions_reviewed.csv';
                     link.style.visibility = 'hidden';
                     document.body.appendChild(link);
                     link.click();
@@ -1390,7 +2075,14 @@
                 }
                 
                 const reviewedCount = Object.keys(decisions).length;
-                console.log('Export successful:', reviewedCount, 'decisions exported with original CSV data');
+                const changesCount = Object.keys(productChanges).length;
+                const flagsCount = Object.keys(categoryFlags).length;
+                
+                console.log('Export successful:', {
+                    reviewedCount,
+                    changesCount,
+                    flagsCount
+                });
             } catch (error) {
                 console.error('Export failed:', error);
                 
@@ -1401,6 +2093,14 @@
                 });
             }
         }
+
+        // Global functions for onclick handlers
+        window.addCustomValue = addCustomValue;
+        window.clearAllValues = clearAllValues;
+        window.toggleAttributeEditMode = toggleAttributeEditMode;
+        window.handleEditModeChange = handleEditModeChange;
+        window.safeAddCustomValue = safeAddCustomValue;
+        window.safeClearAllValues = safeClearAllValues;
     </script>
 </body>
 </html>

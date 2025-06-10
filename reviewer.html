@@ -2018,43 +2018,78 @@
         }
 
         function exportDecisions() {
-            // Create enhanced CSV with all tracking columns
-            const csvHeader = Object.keys(csvData[0]).concat([
-                'decision', 
-                'category_flagged', 
-                'changes_made', 
-                'final_selected_value'
-            ]);
+            // Get original headers and check if tracking columns already exist
+            const originalHeaders = Object.keys(csvData[0]);
+            const trackingColumns = ['decision', 'category_flagged', 'changes_made', 'final_selected_value'];
+            
+            // Only add tracking columns if they don't already exist
+            const newColumns = trackingColumns.filter(col => !originalHeaders.includes(col));
+            const csvHeader = originalHeaders.concat(newColumns);
             
             const enhancedData = csvData.map(row => {
-                const decision = decisions[row.address] || '';
-                const categoryFlagged = categoryFlags[row.address] ? 'true' : 'false';
-                const changesMade = productChanges[row.address] ? 'true' : 'false';
+                const decision = decisions[row.address] || row.decision || '';
+                const categoryFlagged = categoryFlags[row.address] ? 'true' : (row.category_flagged || 'false');
+                const changesMade = productChanges[row.address] ? 'true' : (row.changes_made || 'false');
                 
                 // Find the final selected value for this specific attribute
-                let finalSelectedValue = '';
+                let finalSelectedValue = row.final_selected_value || '';
                 const product = groupedProducts.find(p => p.address === row.address);
                 if (product) {
                     const attr = product.attributes.find(a => 
                         a.attribute_name === row.attribute_name || 
                         a.attribute_handle === row.attribute_handle
                     );
-                    if (attr && attr.current_selected_values) {
+                    if (attr && attr.current_selected_values && attr.current_selected_values.length > 0) {
                         finalSelectedValue = attr.current_selected_values.join(', ');
+                    } else if (!finalSelectedValue && attr && attr.original_selected_value) {
+                        finalSelectedValue = attr.original_selected_value;
                     }
                 }
                 
-                return Object.values(row).concat([
-                    decision, 
-                    categoryFlagged, 
-                    changesMade, 
-                    finalSelectedValue
-                ]);
+                // Create the row data starting with original values
+                const rowData = [...Object.values(row)];
+                
+                // Update existing tracking columns or add new ones
+                if (originalHeaders.includes('decision')) {
+                    rowData[originalHeaders.indexOf('decision')] = decision;
+                } else if (newColumns.includes('decision')) {
+                    rowData.push(decision);
+                }
+                
+                if (originalHeaders.includes('category_flagged')) {
+                    rowData[originalHeaders.indexOf('category_flagged')] = categoryFlagged;
+                } else if (newColumns.includes('category_flagged')) {
+                    rowData.push(categoryFlagged);
+                }
+                
+                if (originalHeaders.includes('changes_made')) {
+                    rowData[originalHeaders.indexOf('changes_made')] = changesMade;
+                } else if (newColumns.includes('changes_made')) {
+                    rowData.push(changesMade);
+                }
+                
+                if (originalHeaders.includes('final_selected_value')) {
+                    rowData[originalHeaders.indexOf('final_selected_value')] = finalSelectedValue;
+                } else if (newColumns.includes('final_selected_value')) {
+                    rowData.push(finalSelectedValue);
+                }
+                
+                return rowData;
             });
             
+            // Escape CSV values properly
+            const escapeValue = (value) => {
+                if (value === null || value === undefined) return '';
+                const str = String(value);
+                if (str.includes('"') || str.includes(',') || str.includes('\n') || str.includes('\r')) {
+                    return `"${str.replace(/"/g, '""')}"`;
+                }
+                return str;
+            };
+            
             const csvContent = [
-                csvHeader.map(header => `"${header}"`).join(','),
-                ...enhancedData.map(row => row.map(cell => `"${cell}"`).join(','))
+                csvHeader.map(escapeValue).join(','),
+                ...enhancedData.map(row => row.map(escapeValue).join(','))
             ].join('\n');
             
             try {
@@ -2081,8 +2116,13 @@
                 console.log('Export successful:', {
                     reviewedCount,
                     changesCount,
-                    flagsCount
+                    flagsCount,
+                    totalRows: enhancedData.length,
+                    columnsAdded: newColumns
                 });
+                
+                alert(`Export successful!\n\nRows exported: ${enhancedData.length}\nReviewed products: ${reviewedCount}\nProducts with changes: ${changesCount}\nCategory flags: ${flagsCount}`);
+                
             } catch (error) {
                 console.error('Export failed:', error);
                 
@@ -2092,7 +2132,7 @@
                     alert('Export failed. Please check browser console.');
                 });
             }
-        }
+        }    
 
         // Global functions for onclick handlers
         window.addCustomValue = addCustomValue;

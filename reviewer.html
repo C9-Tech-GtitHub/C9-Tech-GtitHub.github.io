@@ -163,6 +163,24 @@
             box-shadow: 0 10px 15px rgba(0,0,0,0.1);
         }
 
+        .btn-metafield {
+            background: #f0f9ff;
+            color: #0369a1;
+            border: 2px solid #bae6fd;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            transition: all 0.2s;
+        }
+
+        .btn-metafield:hover {
+            background: #e0f2fe;
+            border-color: #7dd3fc;
+            transform: translateY(-1px);
+        }
+
         .upload-area {
             background: white;
             border: 2px dashed #d1d5db;
@@ -492,6 +510,12 @@
             background: #dbeafe;
             color: #1d4ed8;
             border: 2px solid #3b82f6;
+        }
+
+        .attribute-value.custom-metafield {
+            background: #f0f9ff;
+            color: #0369a1;
+            border: 2px solid #0ea5e9;
         }
 
         .attribute-values-container {
@@ -885,6 +909,139 @@
             margin-right: 0.25rem;
         }
 
+        /* Metafield Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 20px 25px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.visible .modal {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #111827;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #6b7280;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 0.375rem;
+            transition: all 0.2s;
+        }
+
+        .modal-close:hover {
+            background: #f3f4f6;
+            color: #111827;
+        }
+
+        .modal-content {
+            padding: 1.5rem;
+        }
+
+        .metafield-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: #374151;
+            font-size: 0.875rem;
+        }
+
+        .form-input, .form-select {
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .metafield-values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 0.75rem;
+            margin-top: 0.5rem;
+        }
+
+        .metafield-value-input {
+            padding: 0.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+
+        .metafield-value-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .modal-footer {
+            padding: 1.5rem;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+
         @media (max-width: 1024px) {
             .product-grid {
                 grid-template-columns: 1fr;
@@ -900,12 +1057,82 @@
                 flex-direction: column;
                 gap: 0.75rem;
             }
+
+            .metafield-values-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
     <!-- Tooltip for attribute descriptions -->
     <div id="tooltip" class="tooltip"></div>
+
+    <!-- Metafield Modal -->
+    <div id="metafield-modal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Add Custom Metafield</h3>
+                <button class="modal-close" onclick="closeMetafieldModal()">&times;</button>
+            </div>
+            <div class="modal-content">
+                <form class="metafield-form" onsubmit="addCustomMetafield(event)">
+                    <div class="form-group">
+                        <label class="form-label">Metafield Type</label>
+                        <select id="metafield-type" class="form-select" onchange="updateMetafieldValues()" required>
+                            <option value="">Select metafield type...</option>
+                            <option value="Volume">Volume</option>
+                            <option value="Weight">Weight</option>
+                            <option value="Occasion">Occasion</option>
+                            <option value="Contents">Contents</option>
+                            <option value="Receiver Features">Receiver Features</option>
+                            <option value="Seasonal">Seasonal</option>
+                            <option value="Gender Department">Gender Department</option>
+                            <option value="Quality Tier">Quality Tier</option>
+                            <option value="Plant Format">Plant Format</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Metafield Name</label>
+                        <input type="text" id="metafield-name" class="form-input" placeholder="Enter custom metafield name..." required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Description (Optional)</label>
+                        <input type="text" id="metafield-description" class="form-input" placeholder="Describe this metafield...">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Possible Values</label>
+                        <div id="metafield-values-container">
+                            <!-- Predefined values will be populated here -->
+                        </div>
+                        <button type="button" class="btn btn-secondary btn-small" onclick="addValueInput()" style="margin-top: 0.5rem;">
+                            <svg class="icon-small" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
+                            Add Value
+                        </button>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Initial Selected Value (Optional)</label>
+                        <input type="text" id="metafield-initial-value" class="form-input" placeholder="Set initial value...">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeMetafieldModal()">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="addCustomMetafield()">
+                    <svg class="icon-small" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    </svg>
+                    Add Metafield
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- Header -->
     <div class="header">
@@ -1037,6 +1264,12 @@
                         <div class="attributes-section">
                             <h3>
                                 AI Suggested Attributes
+                                <button id="add-metafield-btn" class="btn-metafield" onclick="openMetafieldModal()">
+                                    <svg class="icon-small" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                    </svg>
+                                    Add Custom Metafield
+                                </button>
                                 <button id="edit-mode-toggle" class="edit-mode-toggle">
                                     <svg class="icon-small" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
@@ -1134,6 +1367,20 @@
         let imagePreloadCache = {};
         let categoryExpanded = false;
         let editMode = false;
+        let customMetafields = {}; // Track custom metafields per product
+
+        // Predefined metafield types and their possible values
+        const metafieldTypes = {
+            'Volume': ['Small (0-50ml)', 'Medium (50-200ml)', 'Large (200-500ml)', 'Extra Large (500ml+)', 'Mini (Under 30ml)', 'Travel Size (30-100ml)'],
+            'Weight': ['Light (Under 100g)', 'Medium (100-500g)', 'Heavy (500g-1kg)', 'Extra Heavy (1kg+)', 'Featherweight (Under 50g)'],
+            'Occasion': ['Birthday', 'Anniversary', 'Wedding', 'Christmas', 'Valentine\'s Day', 'Mother\'s Day', 'Father\'s Day', 'Graduation', 'Thank You', 'Sympathy', 'Housewarming', 'New Baby', 'Get Well Soon'],
+            'Contents': ['Flowers Only', 'Flowers + Vase', 'Flowers + Chocolates', 'Flowers + Wine', 'Flowers + Card', 'Flowers + Balloon', 'Flowers + Teddy Bear', 'Mixed Bundle'],
+            'Receiver Features': ['For Her', 'For Him', 'For Couple', 'For Family', 'For Pet Lover', 'For Gardener', 'For Elderly', 'For Teen', 'For Child', 'Unisex'],
+            'Seasonal': ['Spring', 'Summer', 'Autumn', 'Winter', 'All Season', 'Holiday Specific', 'Seasonal Transition'],
+            'Gender Department': ['Women', 'Men', 'Unisex', 'Children', 'Teen Girls', 'Teen Boys', 'Baby Girls', 'Baby Boys'],
+            'Quality Tier': ['Premium', 'Standard', 'Budget', 'Luxury', 'Economy', 'Professional Grade', 'Commercial Grade'],
+            'Plant Format': ['Fresh Cut Flowers', 'Potted Plants', 'Dried Flowers', 'Artificial', 'Seeds', 'Bulbs', 'Succulents', 'Herbs', 'Vegetables', 'Trees/Shrubs']
+        };
 
         // DOM elements
         const uploadSection = document.getElementById('upload-section');
@@ -1167,6 +1414,113 @@
             // Tooltip event listeners
             document.addEventListener('mouseover', handleTooltip);
             document.addEventListener('mouseout', hideTooltip);
+        }
+
+        // Metafield Modal Functions
+        function openMetafieldModal() {
+            const modal = document.getElementById('metafield-modal');
+            modal.classList.add('visible');
+            
+            // Reset form
+            document.getElementById('metafield-type').value = '';
+            document.getElementById('metafield-name').value = '';
+            document.getElementById('metafield-description').value = '';
+            document.getElementById('metafield-initial-value').value = '';
+            document.getElementById('metafield-values-container').innerHTML = '';
+        }
+
+        function closeMetafieldModal() {
+            const modal = document.getElementById('metafield-modal');
+            modal.classList.remove('visible');
+        }
+
+        function updateMetafieldValues() {
+            const type = document.getElementById('metafield-type').value;
+            const container = document.getElementById('metafield-values-container');
+            
+            if (!type || !metafieldTypes[type]) {
+                container.innerHTML = '<input type="text" class="metafield-value-input" placeholder="Enter possible value...">';
+                return;
+            }
+            
+            const values = metafieldTypes[type];
+            container.innerHTML = `
+                <div class="metafield-values-grid">
+                    ${values.map(value => 
+                        `<input type="text" class="metafield-value-input" value="${value}">`
+                    ).join('')}
+                </div>
+            `;
+        }
+
+        function addValueInput() {
+            const container = document.getElementById('metafield-values-container');
+            const newInput = document.createElement('input');
+            newInput.type = 'text';
+            newInput.className = 'metafield-value-input';
+            newInput.placeholder = 'Enter possible value...';
+            newInput.style.marginTop = '0.5rem';
+            container.appendChild(newInput);
+        }
+
+        function addCustomMetafield() {
+            const type = document.getElementById('metafield-type').value;
+            const name = document.getElementById('metafield-name').value.trim();
+            const description = document.getElementById('metafield-description').value.trim();
+            const initialValue = document.getElementById('metafield-initial-value').value.trim();
+            
+            if (!type || !name) {
+                alert('Please select a metafield type and enter a name.');
+                return;
+            }
+            
+            // Collect possible values
+            const valueInputs = document.querySelectorAll('.metafield-value-input');
+            const possibleValues = Array.from(valueInputs)
+                .map(input => input.value.trim())
+                .filter(value => value.length > 0);
+            
+            if (possibleValues.length === 0) {
+                alert('Please add at least one possible value.');
+                return;
+            }
+            
+            // Create new metafield attribute
+            const currentProduct = groupedProducts[currentProductIndex];
+            const newAttribute = {
+                attribute_name: name,
+                attribute_handle: name.toLowerCase().replace(/\s+/g, '_'),
+                attribute_description: description || `Custom ${type} metafield: ${name}`,
+                possible_values: possibleValues.join(', '),
+                selected_value: initialValue,
+                ai_provider: 'Custom Metafield',
+                processing_date: new Date().toISOString().split('T')[0],
+                original_selected_value: initialValue,
+                current_selected_values: initialValue ? [initialValue] : [],
+                is_custom_metafield: true
+            };
+            
+            // Add to current product
+            currentProduct.attributes.push(newAttribute);
+            
+            // Track as custom metafield
+            if (!customMetafields[currentProduct.address]) {
+                customMetafields[currentProduct.address] = [];
+            }
+            customMetafields[currentProduct.address].push(newAttribute);
+            
+            // Mark product as changed
+            markProductAsChanged();
+            
+            // Update display
+            updateAttributesTable(currentProduct.attributes);
+            updateApproveButtonText();
+            
+            // Close modal
+            closeMetafieldModal();
+            
+            // Show success message
+            alert(`Custom metafield "${name}" added successfully!`);
         }
 
         async function handleFileUpload(event) {
@@ -1249,7 +1603,8 @@
                     ai_provider: row.ai_provider || '',
                     processing_date: row.processing_date || '',
                     original_selected_value: row.selected_value || '', // Keep original
-                    current_selected_values: row.selected_value ? [row.selected_value] : [] // Support multiple
+                    current_selected_values: row.selected_value ? [row.selected_value] : [], // Support multiple
+                    is_custom_metafield: false
                 });
             });
             
@@ -1260,6 +1615,7 @@
             decisions = {};
             productChanges = {};
             categoryFlags = {};
+            customMetafields = {};
             
             console.log('Loaded', groupedProducts.length, 'products with', Object.keys(images).length, 'images');
             
@@ -1506,7 +1862,10 @@
                 
                 row.innerHTML = `
                     <td>
-                        <span class="attribute-name" data-attr-index="${index}">${attr.attribute_name}</span>
+                        <span class="attribute-name" data-attr-index="${index}">
+                            ${attr.attribute_name}
+                            ${attr.is_custom_metafield ? '<span class="attribute-value custom-metafield" style="margin-left: 0.5rem; font-size: 0.7rem;">CUSTOM</span>' : ''}
+                        </span>
                     </td>
                     <td>
                         <div class="attribute-values-container" id="values-container-${index}">
@@ -1530,6 +1889,10 @@
                             <div class="detail-row">
                                 <span class="detail-label">Description:</span>
                                 <span class="detail-value">${attr.attribute_description || 'No description available'}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Source:</span>
+                                <span class="detail-value">${attr.is_custom_metafield ? 'Custom Metafield' : (attr.ai_provider || 'AI Generated')}</span>
                             </div>
                             <div class="detail-row">
                                 <span class="detail-label">Possible Values:</span>
@@ -1581,8 +1944,10 @@
                 return `<span class="attribute-value na">N/A</span>`;
             }
             
+            const baseClass = attr.is_custom_metafield ? 'custom-metafield' : (hasChanges ? 'modified' : 'selected');
+            
             return values.map(value => 
-                `<span class="attribute-value ${hasChanges ? 'modified' : 'selected'}">${value}</span>`
+                `<span class="attribute-value ${baseClass}">${value}</span>`
             ).join('');
         }
 
@@ -1880,6 +2245,11 @@
             const original = attribute.original_selected_value ? [attribute.original_selected_value] : [];
             const current = attribute.current_selected_values || [];
             
+            // Custom metafields are always considered "changed" if they have values
+            if (attribute.is_custom_metafield) {
+                return current.length > 0;
+            }
+            
             if (original.length !== current.length) return true;
             
             return !original.every(val => current.includes(val)) || !current.every(val => original.includes(val));
@@ -2020,7 +2390,7 @@
         function exportDecisions() {
             // Get original headers and check if tracking columns already exist
             const originalHeaders = Object.keys(csvData[0]);
-            const trackingColumns = ['decision', 'category_flagged', 'changes_made', 'final_selected_value'];
+            const trackingColumns = ['decision', 'category_flagged', 'changes_made', 'final_selected_value', 'custom_metafields'];
             
             // Only add tracking columns if they don't already exist
             const newColumns = trackingColumns.filter(col => !originalHeaders.includes(col));
@@ -2044,6 +2414,15 @@
                     } else if (!finalSelectedValue && attr && attr.original_selected_value) {
                         finalSelectedValue = attr.original_selected_value;
                     }
+                }
+                
+                // Track custom metafields for this product
+                let customMetafieldsInfo = row.custom_metafields || '';
+                if (customMetafields[row.address] && customMetafields[row.address].length > 0) {
+                    const customInfo = customMetafields[row.address].map(cf => 
+                        `${cf.attribute_name}: ${cf.current_selected_values.join(', ')}`
+                    ).join(' | ');
+                    customMetafieldsInfo = customInfo;
                 }
                 
                 // Create the row data starting with original values
@@ -2074,7 +2453,97 @@
                     rowData.push(finalSelectedValue);
                 }
                 
+                if (originalHeaders.includes('custom_metafields')) {
+                    rowData[originalHeaders.indexOf('custom_metafields')] = customMetafieldsInfo;
+                } else if (newColumns.includes('custom_metafields')) {
+                    rowData.push(customMetafieldsInfo);
+                }
+                
                 return rowData;
+            });
+            
+            // Add rows for custom metafields that don't exist in original CSV
+            Object.keys(customMetafields).forEach(productAddress => {
+                const product = groupedProducts.find(p => p.address === productAddress);
+                if (!product) return;
+                
+                customMetafields[productAddress].forEach(customAttr => {
+                    // Check if this custom metafield already exists as a row in the original data
+                    const existingRow = csvData.find(row => 
+                        row.address === productAddress && 
+                        (row.attribute_name === customAttr.attribute_name || 
+                         row.attribute_handle === customAttr.attribute_handle)
+                    );
+                    
+                    if (!existingRow) {
+                        // Create a new row for this custom metafield
+                        const newRow = new Array(csvHeader.length).fill('');
+                        
+                        // Fill in known values
+                        const addressIndex = originalHeaders.indexOf('address');
+                        const titleIndex = originalHeaders.indexOf('title');
+                        const handleIndex = originalHeaders.indexOf('handle');
+                        const categoryIndex = originalHeaders.indexOf('shopify_category');
+                        const attrNameIndex = originalHeaders.indexOf('attribute_name');
+                        const attrHandleIndex = originalHeaders.indexOf('attribute_handle');
+                        const attrDescIndex = originalHeaders.indexOf('attribute_description');
+                        const possibleValuesIndex = originalHeaders.indexOf('possible_values');
+                        const selectedValueIndex = originalHeaders.indexOf('selected_value');
+                        const aiProviderIndex = originalHeaders.indexOf('ai_provider');
+                        const processingDateIndex = originalHeaders.indexOf('processing_date');
+                        
+                        if (addressIndex !== -1) newRow[addressIndex] = productAddress;
+                        if (titleIndex !== -1) newRow[titleIndex] = product.title;
+                        if (handleIndex !== -1) newRow[handleIndex] = product.handle;
+                        if (categoryIndex !== -1) newRow[categoryIndex] = product.shopify_category;
+                        if (attrNameIndex !== -1) newRow[attrNameIndex] = customAttr.attribute_name;
+                        if (attrHandleIndex !== -1) newRow[attrHandleIndex] = customAttr.attribute_handle;
+                        if (attrDescIndex !== -1) newRow[attrDescIndex] = customAttr.attribute_description;
+                        if (possibleValuesIndex !== -1) newRow[possibleValuesIndex] = customAttr.possible_values;
+                        if (selectedValueIndex !== -1) newRow[selectedValueIndex] = customAttr.current_selected_values.join(', ');
+                        if (aiProviderIndex !== -1) newRow[aiProviderIndex] = 'Custom Metafield';
+                        if (processingDateIndex !== -1) newRow[processingDateIndex] = customAttr.processing_date;
+                        
+                        // Add tracking columns
+                        const decision = decisions[productAddress] || '';
+                        const categoryFlagged = categoryFlags[productAddress] ? 'true' : 'false';
+                        const changesMade = 'true'; // Custom metafields are always changes
+                        const finalSelectedValue = customAttr.current_selected_values.join(', ');
+                        const customMetafieldsInfo = `${customAttr.attribute_name}: ${customAttr.current_selected_values.join(', ')}`;
+                        
+                        if (originalHeaders.includes('decision')) {
+                            newRow[originalHeaders.indexOf('decision')] = decision;
+                        } else if (newColumns.includes('decision')) {
+                            newRow[originalHeaders.length + newColumns.indexOf('decision')] = decision;
+                        }
+                        
+                        if (originalHeaders.includes('category_flagged')) {
+                            newRow[originalHeaders.indexOf('category_flagged')] = categoryFlagged;
+                        } else if (newColumns.includes('category_flagged')) {
+                            newRow[originalHeaders.length + newColumns.indexOf('category_flagged')] = categoryFlagged;
+                        }
+                        
+                        if (originalHeaders.includes('changes_made')) {
+                            newRow[originalHeaders.indexOf('changes_made')] = changesMade;
+                        } else if (newColumns.includes('changes_made')) {
+                            newRow[originalHeaders.length + newColumns.indexOf('changes_made')] = changesMade;
+                        }
+                        
+                        if (originalHeaders.includes('final_selected_value')) {
+                            newRow[originalHeaders.indexOf('final_selected_value')] = finalSelectedValue;
+                        } else if (newColumns.includes('final_selected_value')) {
+                            newRow[originalHeaders.length + newColumns.indexOf('final_selected_value')] = finalSelectedValue;
+                        }
+                        
+                        if (originalHeaders.includes('custom_metafields')) {
+                            newRow[originalHeaders.indexOf('custom_metafields')] = customMetafieldsInfo;
+                        } else if (newColumns.includes('custom_metafields')) {
+                            newRow[originalHeaders.length + newColumns.indexOf('custom_metafields')] = customMetafieldsInfo;
+                        }
+                        
+                        enhancedData.push(newRow);
+                    }
+                });
             });
             
             // Escape CSV values properly
@@ -2112,16 +2581,18 @@
                 const reviewedCount = Object.keys(decisions).length;
                 const changesCount = Object.keys(productChanges).length;
                 const flagsCount = Object.keys(categoryFlags).length;
+                const customCount = Object.keys(customMetafields).reduce((total, key) => total + customMetafields[key].length, 0);
                 
                 console.log('Export successful:', {
                     reviewedCount,
                     changesCount,
                     flagsCount,
+                    customMetafieldsCount: customCount,
                     totalRows: enhancedData.length,
                     columnsAdded: newColumns
                 });
                 
-                alert(`Export successful!\n\nRows exported: ${enhancedData.length}\nReviewed products: ${reviewedCount}\nProducts with changes: ${changesCount}\nCategory flags: ${flagsCount}`);
+                alert(`Export successful!\n\nRows exported: ${enhancedData.length}\nReviewed products: ${reviewedCount}\nProducts with changes: ${changesCount}\nCategory flags: ${flagsCount}\nCustom metafields added: ${customCount}`);
                 
             } catch (error) {
                 console.error('Export failed:', error);
@@ -2141,6 +2612,11 @@
         window.handleEditModeChange = handleEditModeChange;
         window.safeAddCustomValue = safeAddCustomValue;
         window.safeClearAllValues = safeClearAllValues;
+        window.openMetafieldModal = openMetafieldModal;
+        window.closeMetafieldModal = closeMetafieldModal;
+        window.updateMetafieldValues = updateMetafieldValues;
+        window.addValueInput = addValueInput;
+        window.addCustomMetafield = addCustomMetafield;
     </script>
 </body>
 </html>

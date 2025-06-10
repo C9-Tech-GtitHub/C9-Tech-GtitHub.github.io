@@ -1867,8 +1867,15 @@
             document.getElementById('product-description').textContent = currentProduct.description;
             
             const productUrl = document.getElementById('product-url');
-            productUrl.href = currentProduct.address;
-            productUrl.textContent = currentProduct.address.replace('https://www.wildpoppies.co.nz/products/', '');
+            
+            // Handle URL display - use wildpoppies base if needed
+            let displayUrl = currentProduct.address;
+            if (!displayUrl.startsWith('http')) {
+                displayUrl = `https://www.wildpoppies.co.nz/products/${displayUrl}`;
+            }
+            
+            productUrl.href = displayUrl;
+            productUrl.textContent = displayUrl.replace('https://www.wildpoppies.co.nz/products/', '');
             
             document.getElementById('product-category').textContent = 
                 currentProduct.shopify_category.split(' > ').pop();
@@ -1913,7 +1920,7 @@
                 row.innerHTML = `
                     <td>
                         <span class="attribute-name" data-attr-index="${index}">
-                            ${isCustomPrefixed ? '<span class="custom-prefix">CUSTOM_</span>' : ''}${displayName}
+                            ${isCustomPrefixed ? '<span class="custom-prefix">CUSTOM</span>' : ''}${displayName}
                             ${attr.is_custom_metafield ? '<span class="attribute-value custom-metafield" style="margin-left: 0.5rem; font-size: 0.7rem;">CUSTOM</span>' : ''}
                         </span>
                     </td>

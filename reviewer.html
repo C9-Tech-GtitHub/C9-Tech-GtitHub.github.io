@@ -543,7 +543,7 @@
             border: 1px solid #e2e8f0;
             border-radius: 0.375rem;
             padding: 1rem;
-            margin-top: 0.5rem;
+            margin-top: 1rem;
         }
 
         .edit-mode-selector {
@@ -654,13 +654,12 @@
             border-radius: 0.375rem;
         }
 
-        /* Fixed styling for Mark N/A and Restore buttons */
         .remove-attribute-btn, .restore-attribute-btn {
             background: #fef2f2;
             color: #dc2626;
             border: 1px solid #fecaca;
             border-radius: 0.375rem;
-            padding: 0.375rem 0.75rem;
+            padding: 0.25rem 0.5rem;
             font-size: 0.75rem;
             font-weight: 500;
             cursor: pointer;
@@ -668,15 +667,12 @@
             transition: all 0.2s;
             display: inline-flex;
             align-items: center;
-            gap: 0.375rem;
-            text-decoration: none;
+            gap: 0.25rem;
         }
 
         .remove-attribute-btn:hover, .restore-attribute-btn:hover {
             background: #fecaca;
             border-color: #fca5a5;
-            transform: translateY(-1px);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         .restore-attribute-btn {
@@ -2009,9 +2005,9 @@
                     displayName = attr.attribute_name;
                 }
 
-                // Add class for removed attributes
+                // Hide removed attributes completely
                 if (isRemoved) {
-                    row.classList.add('not-applicable');
+                    row.style.display = 'none';
                 }
                 row.classList.add('attribute-row');
                 
@@ -2038,9 +2034,8 @@
                     </td>
                     <td>
                         <div class="attribute-values-container" id="values-container-${index}">
-                            ${isRemoved ? '<span class="attribute-value not-applicable">Not Applicable</span>' : renderAttributeValues(attr, index, hasChanges)}
+                            ${renderAttributeValues(attr, index, hasChanges)}
                         </div>
-                        ${editMode && !isRemoved ? renderEditContainer(attr, index) : ''}
                     </td>
                     <td>
                         <span class="view-options" data-index="${index}">View Details ↓</span>
@@ -2053,8 +2048,13 @@
                 const detailRow = document.createElement('tr');
                 detailRow.className = 'detail-row-container';
                 
-                // FIXED: In edit mode, hide all details by default to save space
-                const shouldShowDetails = false;
+                // Hide detail row if attribute is removed
+                if (isRemoved) {
+                    detailRow.style.display = 'none';
+                }
+                
+                // In edit mode, show first non-removed attribute details by default, hide others
+                const shouldShowDetails = editMode ? (index === 0 && !isRemoved) : false;
                 
                 detailRow.innerHTML = `
                     <td colspan="3" style="padding: 0; border: none;">
@@ -2083,6 +2083,11 @@
                                     </div>
                                 </div>
                             </div>
+                            ${editMode && !isRemoved ? `
+                                <div class="edit-container" id="edit-container-${index}">
+                                    ${renderEditContainer(attr, index)}
+                                </div>
+                            ` : ''}
                         </div>
                     </td>
                 `;
@@ -2147,7 +2152,6 @@
                 const currentValues = attr.current_selected_values || [];
                 
                 return `
-                    <div class="edit-container" id="edit-container-${index}">
                         <div class="edit-mode-selector" style="margin-bottom: 1rem;">
                             <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; color: #4b5563;">
                                 <input type="radio" name="edit-mode-${index}" value="checkboxes" checked onchange="handleEditModeChange(${index}, 'checkboxes')">
@@ -2204,11 +2208,10 @@
                                 </button>
                             </div>
                         </div>
-                    </div>
                 `;
             } catch (error) {
                 console.error('Error in renderEditContainer:', error);
-                return '<div class="edit-container">Error rendering edit controls</div>';
+                return '<div>Error rendering edit controls</div>';
             }
         }
 

@@ -1383,6 +1383,7 @@
         let decisions = {};
         let productChanges = {}; // Track changes per product
         let categoryFlags = {}; // Track category flags
+        let removedAttributes = {}; // Track removed/N/A attributes per product
         let imagePreloadCache = {};
         let categoryExpanded = false;
         let editMode = false;
@@ -1560,6 +1561,46 @@
             alert(`Metafield "${name}" added successfully!`);
         }
 
+        function removeAttribute(attrIndex) {
+            const currentProduct = groupedProducts[currentProductIndex];
+            if (!currentProduct || !currentProduct.attributes[attrIndex]) return;
+            
+            const attribute = currentProduct.attributes[attrIndex];
+            const attrKey = attribute.attribute_handle || attribute.attribute_name;
+            
+            if (!removedAttributes[currentProduct.address]) {
+                removedAttributes[currentProduct.address] = [];
+            }
+            
+            if (!removedAttributes[currentProduct.address].includes(attrKey)) {
+                removedAttributes[currentProduct.address].push(attrKey);
+                markProductAsChanged();
+                updateAttributesTable(currentProduct.attributes);
+                updateApproveButtonText();
+            }
+        }
+
+        function restoreAttribute(attrIndex) {
+            const currentProduct = groupedProducts[currentProductIndex];
+            if (!currentProduct || !currentProduct.attributes[attrIndex]) return;
+            
+            const attribute = currentProduct.attributes[attrIndex];
+            const attrKey = attribute.attribute_handle || attribute.attribute_name;
+            
+            if (removedAttributes[currentProduct.address]) {
+                removedAttributes[currentProduct.address] = removedAttributes[currentProduct.address].filter(key => key !== attrKey);
+                
+                // If no more removed attributes for this product, clean up
+                if (removedAttributes[currentProduct.address].length === 0) {
+                    delete removedAttributes[currentProduct.address];
+                }
+                
+                markProductAsChanged();
+                updateAttributesTable(currentProduct.attributes);
+                updateApproveButtonText();
+            }
+        }
+
         async function handleFileUpload(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -1653,6 +1694,7 @@
             productChanges = {};
             categoryFlags = {};
             customMetafields = {};
+            removedAttributes = {};
             
             console.log('Loaded', groupedProducts.length, 'products with', Object.keys(images).length, 'images');
             
@@ -1903,6 +1945,9 @@
             attributes.forEach((attr, index) => {
                 const row = document.createElement('tr');
                 const hasChanges = hasAttributeChanges(attr);
+                const currentProduct = groupedProducts[currentProductIndex];
+                const isRemoved = removedAttributes[currentProduct.address] && 
+                                removedAttributes[currentProduct.address].includes(attr.attribute_handle || attr.attribute_name);
                 
                 // Check if this is a CUSTOM_ prefixed attribute (in handle or name)
                 const isCustomPrefixed = (attr.attribute_handle && attr.attribute_handle.startsWith('CUSTOM_')) || 
@@ -1916,19 +1961,38 @@
                 } else {
                     displayName = attr.attribute_name;
                 }
+
+                // Add class for removed attributes
+                if (isRemoved) {
+                    row.classList.add('not-applicable');
+                }
                 
                 row.innerHTML = `
                     <td>
                         <span class="attribute-name" data-attr-index="${index}">
                             ${isCustomPrefixed ? '<span class="custom-prefix">CUSTOM</span>' : ''}${displayName}
                             ${attr.is_custom_metafield ? '<span class="attribute-value custom-metafield" style="margin-left: 0.5rem; font-size: 0.7rem;">CUSTOM</span>' : ''}
+                            ${editMode ? (isRemoved ? 
+                                `<button class="restore-attribute-btn" onclick="restoreAttribute(${index})">
+                                    <svg style="width: 0.75rem; height: 0.75rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                                    </svg>
+                                    Restore
+                                </button>` :
+                                `<button class="remove-attribute-btn" onclick="removeAttribute(${index})">
+                                    <svg style="width: 0.75rem; height: 0.75rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                    </svg>
+                                    Mark N/A
+                                </button>`
+                            ) : ''}
                         </span>
                     </td>
                     <td>
                         <div class="attribute-values-container" id="values-container-${index}">
-                            ${renderAttributeValues(attr, index, hasChanges)}
+                            ${isRemoved ? '<span class="attribute-value not-applicable">Not Applicable</span>' : renderAttributeValues(attr, index, hasChanges)}
                         </div>
-                        ${editMode ? renderEditContainer(attr, index) : ''}
+                        ${editMode && !isRemoved ? renderEditContainer(attr, index) : ''}
                     </td>
                     <td>
                         <span class="view-options" data-index="${index}">View Details ↓</span>
@@ -2447,7 +2511,7 @@
         function exportDecisions() {
             // Get original headers and check if tracking columns already exist
             const originalHeaders = Object.keys(csvData[0]);
-            const trackingColumns = ['decision', 'category_flagged', 'changes_made', 'final_selected_value', 'custom_metafields'];
+            const trackingColumns = ['decision', 'category_flagged', 'changes_made', 'final_selected_value', 'custom_metafields', 'marked_not_applicable'];
             
             // Only add tracking columns if they don't already exist
             const newColumns = trackingColumns.filter(col => !originalHeaders.includes(col));
@@ -2457,6 +2521,10 @@
                 const decision = decisions[row.address] || row.decision || '';
                 const categoryFlagged = categoryFlags[row.address] ? 'true' : (row.category_flagged || 'false');
                 const changesMade = productChanges[row.address] ? 'true' : (row.changes_made || 'false');
+                
+                // Check if this specific attribute is marked as not applicable
+                const attrKey = row.attribute_handle || row.attribute_name;
+                const markedNotApplicable = (removedAttributes[row.address] && removedAttributes[row.address].includes(attrKey)) ? 'true' : (row.marked_not_applicable || 'false');
                 
                 // Find the final selected value for this specific attribute
                 let finalSelectedValue = row.final_selected_value || '';
@@ -2471,6 +2539,11 @@
                     } else if (!finalSelectedValue && attr && attr.original_selected_value) {
                         finalSelectedValue = attr.original_selected_value;
                     }
+                }
+                
+                // If marked as not applicable, override final value
+                if (markedNotApplicable === 'true') {
+                    finalSelectedValue = 'Not Applicable';
                 }
                 
                 // Track custom metafields for this product
@@ -2514,6 +2587,12 @@
                     rowData[originalHeaders.indexOf('custom_metafields')] = customMetafieldsInfo;
                 } else if (newColumns.includes('custom_metafields')) {
                     rowData.push(customMetafieldsInfo);
+                }
+                
+                if (originalHeaders.includes('marked_not_applicable')) {
+                    rowData[originalHeaders.indexOf('marked_not_applicable')] = markedNotApplicable;
+                } else if (newColumns.includes('marked_not_applicable')) {
+                    rowData.push(markedNotApplicable);
                 }
                 
                 return rowData;

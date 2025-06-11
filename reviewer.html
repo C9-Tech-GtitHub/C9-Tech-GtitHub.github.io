@@ -1602,16 +1602,25 @@
             const attribute = currentProduct.attributes[attrIndex];
             const attrKey = attribute.attribute_handle || attribute.attribute_name;
             
+            // Track the removed attribute for CSV export
             if (!removedAttributes[currentProduct.address]) {
                 removedAttributes[currentProduct.address] = [];
             }
             
-            if (!removedAttributes[currentProduct.address].includes(attrKey)) {
-                removedAttributes[currentProduct.address].push(attrKey);
-                markProductAsChanged();
-                updateAttributesTable(currentProduct.attributes);
-                updateApproveButtonText();
-            }
+            // Store the removed attribute info for export
+            removedAttributes[currentProduct.address].push({
+                key: attrKey,
+                name: attribute.attribute_name,
+                handle: attribute.attribute_handle,
+                original_value: attribute.original_selected_value
+            });
+            
+            // Actually remove the attribute from the array
+            currentProduct.attributes.splice(attrIndex, 1);
+            
+            markProductAsChanged();
+            updateAttributesTable(currentProduct.attributes);
+            updateApproveButtonText();
         }
 
         function restoreAttribute(attrIndex) {
@@ -1988,9 +1997,6 @@
             attributes.forEach((attr, index) => {
                 const row = document.createElement('tr');
                 const hasChanges = hasAttributeChanges(attr);
-                const currentProduct = groupedProducts[currentProductIndex];
-                const isRemoved = removedAttributes[currentProduct.address] && 
-                                removedAttributes[currentProduct.address].includes(attr.attribute_handle || attr.attribute_name);
                 
                 // Check if this is a CUSTOM_ prefixed attribute (in handle or name)
                 const isCustomPrefixed = (attr.attribute_handle && attr.attribute_handle.startsWith('CUSTOM_')) || 
@@ -2005,10 +2011,6 @@
                     displayName = attr.attribute_name;
                 }
 
-                // Hide removed attributes completely
-                if (isRemoved) {
-                    row.style.display = 'none';
-                }
                 row.classList.add('attribute-row');
                 
                 row.innerHTML = `
@@ -2016,20 +2018,14 @@
                         <span class="attribute-name" data-attr-index="${index}">
                             ${isCustomPrefixed ? '<span class="custom-prefix">CUSTOM</span>' : ''}${displayName}
                             ${attr.is_custom_metafield ? '<span class="attribute-value custom-metafield" style="margin-left: 0.5rem; font-size: 0.7rem;">CUSTOM</span>' : ''}
-                            ${editMode ? (isRemoved ? 
-                                `<button class="restore-attribute-btn" onclick="restoreAttribute(${index})">
-                                    <svg style="width: 0.75rem; height: 0.75rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-                                    </svg>
-                                    Restore
-                                </button>` :
+                            ${editMode ? 
                                 `<button class="remove-attribute-btn" onclick="removeAttribute(${index})">
                                     <svg style="width: 0.75rem; height: 0.75rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                     </svg>
                                     Mark N/A
-                                </button>`
-                            ) : ''}
+                                </button>` : ''
+                            }
                         </span>
                     </td>
                     <td>
@@ -2048,13 +2044,8 @@
                 const detailRow = document.createElement('tr');
                 detailRow.className = 'detail-row-container';
                 
-                // Hide detail row if attribute is removed
-                if (isRemoved) {
-                    detailRow.style.display = 'none';
-                }
-                
-                // In edit mode, show first non-removed attribute details by default, hide others
-                const shouldShowDetails = editMode ? (index === 0 && !isRemoved) : false;
+                // In edit mode, show first attribute details by default, hide others
+                const shouldShowDetails = editMode ? (index === 0) : false;
                 
                 detailRow.innerHTML = `
                     <td colspan="3" style="padding: 0; border: none;">
@@ -2083,7 +2074,7 @@
                                     </div>
                                 </div>
                             </div>
-                            ${editMode && !isRemoved ? `
+                            ${editMode ? `
                                 <div class="edit-container" id="edit-container-${index}">
                                     ${renderEditContainer(attr, index)}
                                 </div>
@@ -2851,7 +2842,6 @@
         window.addValueInput = addValueInput;
         window.addCustomMetafield = addCustomMetafield;
         window.removeAttribute = removeAttribute;
-        window.restoreAttribute = restoreAttribute;
     </script>
 </body>
 </html>

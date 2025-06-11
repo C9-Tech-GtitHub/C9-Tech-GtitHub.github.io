@@ -1383,6 +1383,8 @@
         let decisions = {};
         let productChanges = {}; // Track changes per product
         let categoryFlags = {}; // Track category flags
+        let categoryNotes = {}; // Track category flag notes
+        let enhancementNotes = {}; // Track enhancement flag notes
         let removedAttributes = {}; // Track removed/N/A attributes per product
         let imagePreloadCache = {};
         let categoryExpanded = false;
@@ -1693,6 +1695,8 @@
             decisions = {};
             productChanges = {};
             categoryFlags = {};
+            categoryNotes = {};
+            enhancementNotes = {};
             customMetafields = {};
             removedAttributes = {};
             
@@ -1812,11 +1816,18 @@
             const flagBtn = document.getElementById('category-flag-btn');
             
             if (categoryFlags[currentProduct.address]) {
+                // Remove flag and notes
                 delete categoryFlags[currentProduct.address];
+                delete categoryNotes[currentProduct.address];
                 flagBtn.classList.remove('active');
             } else {
-                categoryFlags[currentProduct.address] = true;
-                flagBtn.classList.add('active');
+                // Prompt for notes about the correct category
+                const notes = prompt('Why is this category wrong? What should it be?\n\nExample: "Should be Home & Garden > Plants instead of Gifts"');
+                if (notes !== null) { // User didn't cancel
+                    categoryFlags[currentProduct.address] = true;
+                    categoryNotes[currentProduct.address] = notes.trim();
+                    flagBtn.classList.add('active');
+                }
             }
             
             updateCardStyling();
@@ -2475,7 +2486,21 @@
 
         function handleDecision(decision) {
             const currentProduct = groupedProducts[currentProductIndex];
-            decisions[currentProduct.address] = decision;
+            
+            if (decision === 'flag') {
+                // Prompt for enhancement notes
+                const notes = prompt('Add notes for manual enhancement:\n\nWhat needs to be improved or corrected?');
+                if (notes !== null) { // User didn't cancel
+                    decisions[currentProduct.address] = decision;
+                    enhancementNotes[currentProduct.address] = notes.trim();
+                } else {
+                    return; // User cancelled, don't set decision
+                }
+            } else {
+                decisions[currentProduct.address] = decision;
+                // Clear enhancement notes if not flagged
+                delete enhancementNotes[currentProduct.address];
+            }
             
             updateDisplay();
             
@@ -2511,7 +2536,7 @@
         function exportDecisions() {
             // Get original headers and check if tracking columns already exist
             const originalHeaders = Object.keys(csvData[0]);
-            const trackingColumns = ['decision', 'category_flagged', 'changes_made', 'final_selected_value', 'custom_metafields', 'marked_not_applicable'];
+            const trackingColumns = ['decision', 'category_flagged', 'category_notes', 'enhancement_notes', 'changes_made', 'final_selected_value', 'custom_metafields', 'marked_not_applicable'];
             
             // Only add tracking columns if they don't already exist
             const newColumns = trackingColumns.filter(col => !originalHeaders.includes(col));
@@ -2520,6 +2545,8 @@
             const enhancedData = csvData.map(row => {
                 const decision = decisions[row.address] || row.decision || '';
                 const categoryFlagged = categoryFlags[row.address] ? 'true' : (row.category_flagged || 'false');
+                const categoryNotesText = categoryNotes[row.address] || row.category_notes || '';
+                const enhancementNotesText = enhancementNotes[row.address] || row.enhancement_notes || '';
                 const changesMade = productChanges[row.address] ? 'true' : (row.changes_made || 'false');
                 
                 // Check if this specific attribute is marked as not applicable
@@ -2569,6 +2596,18 @@
                     rowData[originalHeaders.indexOf('category_flagged')] = categoryFlagged;
                 } else if (newColumns.includes('category_flagged')) {
                     rowData.push(categoryFlagged);
+                }
+                
+                if (originalHeaders.includes('category_notes')) {
+                    rowData[originalHeaders.indexOf('category_notes')] = categoryNotesText;
+                } else if (newColumns.includes('category_notes')) {
+                    rowData.push(categoryNotesText);
+                }
+                
+                if (originalHeaders.includes('enhancement_notes')) {
+                    rowData[originalHeaders.indexOf('enhancement_notes')] = enhancementNotesText;
+                } else if (newColumns.includes('enhancement_notes')) {
+                    rowData.push(enhancementNotesText);
                 }
                 
                 if (originalHeaders.includes('changes_made')) {
@@ -2720,17 +2759,21 @@
                 const changesCount = Object.keys(productChanges).length;
                 const flagsCount = Object.keys(categoryFlags).length;
                 const customCount = Object.keys(customMetafields).reduce((total, key) => total + customMetafields[key].length, 0);
+                const removedCount = Object.keys(removedAttributes).reduce((total, key) => total + removedAttributes[key].length, 0);
+                const enhancementFlagsCount = Object.keys(enhancementNotes).length;
                 
                 console.log('Export successful:', {
                     reviewedCount,
                     changesCount,
                     flagsCount,
+                    enhancementFlagsCount,
                     customMetafieldsCount: customCount,
+                    removedAttributesCount: removedCount,
                     totalRows: enhancedData.length,
                     columnsAdded: newColumns
                 });
                 
-                alert(`Export successful!\n\nRows exported: ${enhancedData.length}\nReviewed products: ${reviewedCount}\nProducts with changes: ${changesCount}\nCategory flags: ${flagsCount}\nCustom metafields added: ${customCount}`);
+                alert(`Export successful!\n\nRows exported: ${enhancedData.length}\nReviewed products: ${reviewedCount}\nProducts with changes: ${changesCount}\nCategory flags: ${flagsCount}\nEnhancement flags: ${enhancementFlagsCount}\nCustom metafields added: ${customCount}\nAttributes marked N/A: ${removedCount}`);
                 
             } catch (error) {
                 console.error('Export failed:', error);
@@ -2755,6 +2798,8 @@
         window.handleMetafieldTypeChange = handleMetafieldTypeChange;
         window.addValueInput = addValueInput;
         window.addCustomMetafield = addCustomMetafield;
+        window.removeAttribute = removeAttribute;
+        window.restoreAttribute = restoreAttribute;
     </script>
 </body>
 </html>

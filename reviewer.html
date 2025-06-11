@@ -1596,11 +1596,18 @@
         }
 
         function removeAttribute(attrIndex) {
+            console.log('removeAttribute called with index:', attrIndex);
+            
             const currentProduct = groupedProducts[currentProductIndex];
-            if (!currentProduct || !currentProduct.attributes[attrIndex]) return;
+            if (!currentProduct || !currentProduct.attributes[attrIndex]) {
+                console.error('Invalid product or attribute index:', currentProductIndex, attrIndex);
+                return;
+            }
             
             const attribute = currentProduct.attributes[attrIndex];
             const attrKey = attribute.attribute_handle || attribute.attribute_name;
+            
+            console.log('Removing attribute:', attribute.attribute_name, 'from product:', currentProduct.address);
             
             // Track the removed attribute for CSV export
             if (!removedAttributes[currentProduct.address]) {
@@ -1612,15 +1619,25 @@
                 key: attrKey,
                 name: attribute.attribute_name,
                 handle: attribute.attribute_handle,
-                original_value: attribute.original_selected_value
+                original_value: attribute.original_selected_value,
+                attribute_description: attribute.attribute_description,
+                possible_values: attribute.possible_values,
+                ai_provider: attribute.ai_provider
             });
+            
+            console.log('Tracked removed attributes:', removedAttributes[currentProduct.address]);
             
             // Actually remove the attribute from the array
             currentProduct.attributes.splice(attrIndex, 1);
             
+            console.log('Remaining attributes:', currentProduct.attributes.length);
+            
             markProductAsChanged();
             updateAttributesTable(currentProduct.attributes);
             updateApproveButtonText();
+            
+            // Show confirmation
+            alert(`Attribute "${attribute.attribute_name}" has been marked as Not Applicable and removed.`);
         }
 
         function restoreAttribute(attrIndex) {
@@ -2019,7 +2036,7 @@
                             ${isCustomPrefixed ? '<span class="custom-prefix">CUSTOM</span>' : ''}${displayName}
                             ${attr.is_custom_metafield ? '<span class="attribute-value custom-metafield" style="margin-left: 0.5rem; font-size: 0.7rem;">CUSTOM</span>' : ''}
                             ${editMode ? 
-                                `<button class="remove-attribute-btn" onclick="removeAttribute(${index})">
+                                `<button class="remove-attribute-btn" onclick="window.removeAttribute(${index})" type="button">
                                     <svg style="width: 0.75rem; height: 0.75rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                     </svg>

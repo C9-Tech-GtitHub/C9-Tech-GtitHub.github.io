@@ -1313,7 +1313,14 @@
                         <div class="attributes-section">
                             <h3>
                                 AI Suggested Attributes
-                                <div style="margin-left: auto; display: flex; align-items: center;">
+                                <div style="margin-left: auto; display: flex; align-items: center; gap: 0.5rem;">
+                                    <button id="preview-csv-btn" class="btn-metafield" onclick="previewCSVChanges()" style="background: #fef3c7; color: #92400e; border-color: #fde68a;">
+                                        <svg class="icon-small" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                        </svg>
+                                        Preview CSV
+                                    </button>
                                     <button id="add-metafield-btn" class="btn-metafield" onclick="openMetafieldModal()">
                                         <svg class="icon-small" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
@@ -1608,6 +1615,11 @@
             const attrKey = attribute.attribute_handle || attribute.attribute_name;
             
             console.log('Removing attribute:', attribute.attribute_name, 'from product:', currentProduct.address);
+            console.log('Attribute details:', {
+                name: attribute.attribute_name,
+                handle: attribute.attribute_handle,
+                key: attrKey
+            });
             
             // Track the removed attribute for CSV export
             if (!removedAttributes[currentProduct.address]) {
@@ -1625,7 +1637,7 @@
                 ai_provider: attribute.ai_provider
             });
             
-            console.log('Tracked removed attributes:', removedAttributes[currentProduct.address]);
+            console.log('Tracked removed attributes for', currentProduct.address, ':', removedAttributes[currentProduct.address]);
             
             // Actually remove the attribute from the array
             currentProduct.attributes.splice(attrIndex, 1);
@@ -1636,8 +1648,46 @@
             updateAttributesTable(currentProduct.attributes);
             updateApproveButtonText();
             
-            // Show confirmation
-            alert(`Attribute "${attribute.attribute_name}" has been marked as Not Applicable and removed.`);
+            // Show confirmation with debug info
+            alert(`Attribute "${attribute.attribute_name}" has been marked as Not Applicable and removed.\n\nDebug: ${removedAttributes[currentProduct.address].length} total removed attributes for this product.`);
+        }
+
+        // Add a function to preview CSV changes before export
+        function previewCSVChanges() {
+            console.log('=== CSV EXPORT PREVIEW ===');
+            console.log('Removed attributes by product:');
+            Object.keys(removedAttributes).forEach(address => {
+                console.log(`Product ${address}:`, removedAttributes[address]);
+            });
+            
+            // Test CSV mapping for current product
+            const currentProduct = groupedProducts[currentProductIndex];
+            const testRows = csvData.filter(row => row.address === currentProduct.address);
+            
+            console.log(`\nCSV rows for current product (${currentProduct.address}):`, testRows.length);
+            
+            testRows.forEach(row => {
+                const attrKey = row.attribute_handle || row.attribute_name;
+                let markedNotApplicable = 'false';
+                
+                if (removedAttributes[row.address]) {
+                    const wasRemoved = removedAttributes[row.address].some(removed => {
+                        const match = removed.key === attrKey || 
+                               removed.name === row.attribute_name || 
+                               removed.handle === row.attribute_handle ||
+                               (removed.name === row.attribute_name && removed.handle === row.attribute_handle);
+                        if (match) {
+                            console.log(`✓ Match found for ${row.attribute_name}:`, removed);
+                        }
+                        return match;
+                    });
+                    if (wasRemoved) {
+                        markedNotApplicable = 'true';
+                    }
+                }
+                
+                console.log(`Row: ${row.attribute_name} -> marked_not_applicable: ${markedNotApplicable}`);
+            });
         }
 
         function restoreAttribute(attrIndex) {
@@ -2859,6 +2909,7 @@
         window.addValueInput = addValueInput;
         window.addCustomMetafield = addCustomMetafield;
         window.removeAttribute = removeAttribute;
+        window.previewCSVChanges = previewCSVChanges;
     </script>
 </body>
 </html>

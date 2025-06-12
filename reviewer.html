@@ -1698,7 +1698,7 @@
             const attrKey = attribute.attribute_handle || attribute.attribute_name;
             
             if (removedAttributes[currentProduct.address]) {
-                removedAttributes[currentProduct.address] = removedAttributes[currentProduct.address].filter(key => key !== attrKey);
+                removedAttributes[currentProduct.address] = removedAttributes[currentProduct.address].filter(obj => obj.key !== attrKey);
                 
                 // If no more removed attributes for this product, clean up
                 if (removedAttributes[currentProduct.address].length === 0) {

@@ -361,22 +361,6 @@
             line-height: 1.4;
         }
 
-        .shared-part {
-            color: #6b7280;
-            background: #f1f5f9;
-            padding: 0.125rem 0.25rem;
-            border-radius: 0.25rem;
-        }
-
-        .unique-part {
-            color: #0f172a;
-            font-weight: 600;
-            background: #fef3c7;
-            padding: 0.125rem 0.25rem;
-            border-radius: 0.25rem;
-            margin-left: 0.25rem;
-        }
-
         .categories-section {
             background: white;
             border-radius: 1rem;
@@ -738,6 +722,58 @@
             margin-bottom: 0.5rem;
         }
 
+        .relationship-display {
+            background: white;
+            border-radius: 0.75rem;
+            padding: 1rem;
+            margin: 1rem 0;
+            border: 2px solid #e2e8f0;
+        }
+
+        .relationship-header {
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .relationship-viz {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 0.75rem 0;
+        }
+
+        .path-node {
+            background: #f1f5f9;
+            border: 2px solid #cbd5e1;
+            border-radius: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            flex: 1;
+            text-align: center;
+        }
+
+        .path-node.gpt1 {
+            border-color: #3b82f6;
+            background: #dbeafe;
+        }
+
+        .path-node.gpt2 {
+            border-color: #8b5cf6;
+            background: #f3e8ff;
+        }
+
+        .relationship-arrow {
+            font-size: 1.25rem;
+            color: #6b7280;
+            font-weight: bold;
+        }
+
         @media (max-width: 1200px) {
             .product-grid {
                 grid-template-columns: 1fr;
@@ -845,7 +881,7 @@
                             <!-- Quality indicators will be populated here -->
                         </div>
 
-                        <div class="relationship-info" id="relationship-info">
+                        <div class="relationship-display" id="relationship-display">
                             <!-- Relationship analysis will be shown here -->
                         </div>
                     </div>
@@ -948,6 +984,20 @@
         let selectedCategories = {};
         let imagePreloadCache = {};
 
+        // Enhanced relationship mapping with your preferred names
+        const relationshipMapping = {
+            'parent_child': 'child/parent',
+            'child_parent': 'child/parent',
+            'siblings': 'siblings', 
+            'sibling': 'siblings',
+            'cousins': 'cousin',
+            'cousin': 'cousin',
+            'different_branches': 'different_branches',
+            'exact': 'exact',
+            'ancestor': 'ancestor/descendant',
+            'descendant': 'ancestor/descendant'
+        };
+
         // DOM elements
         const uploadSection = document.getElementById('upload-section');
         const loadingSection = document.getElementById('loading-section');
@@ -1021,7 +1071,7 @@
 
                 return {
                     index: index,
-                    handle: row['Product Handle'] || row.handle || '',
+                    handle: row['Product Handle'] || row.handle || `product_${index}`,
                     title: row['Title'] || row.title || '',
                     description: row['Desc'] || row.description || '',
                     imageUrl: row['ImageOG'] || row.image_url || '',
@@ -1230,53 +1280,111 @@
                 indicatorsContainer.innerHTML += '<span class="indicator warning">Medium Agreement</span>';
             }
             
-            // Update relationship info
-            const relationshipContainer = document.getElementById('relationship-info');
-            let relationshipText = '';
+            // Update relationship display with enhanced visualization
+            updateRelationshipDisplay(product);
+        }
+
+        function updateRelationshipDisplay(product) {
+            const relationshipContainer = document.getElementById('relationship-display');
             
-            if (product.relationship && product.sharedPath) {
-                relationshipText = `<strong>Taxonomy Relationship:</strong> <span style="color: #3b82f6; font-weight: 600;">${product.relationship}</span> categories<br>`;
-                relationshipText += `<strong>Shared Path:</strong> <span style="color: #6b7280;">${product.sharedPath}</span><br>`;
-                relationshipText += `<strong>Shared Depth:</strong> ${product.sharedDepth} levels<br>`;
-                
-                if (product.matchType && product.matchType !== product.relationship) {
-                    relationshipText += `<strong>Match Type:</strong> ${product.matchType}<br>`;
-                }
-                
-                // Add explanation of the relationship
-                let explanation = '';
-                switch(product.relationship.toLowerCase()) {
-                    case 'sibling':
-                        explanation = 'Both categories share the same parent path but branch into different subcategories.';
-                        break;
-                    case 'parent':
-                        explanation = 'One category is a parent of the other (more general → more specific).';
-                        break;
-                    case 'child':
-                        explanation = 'One category is a child of the other (more specific → more general).';
-                        break;
-                    case 'ancestor':
-                        explanation = 'One category is an ancestor of the other (general → specific, multiple levels).';
-                        break;
-                    case 'descendant':
-                        explanation = 'One category is a descendant of the other (specific → general, multiple levels).';
-                        break;
-                    case 'cousin':
-                        explanation = 'Categories share a common ancestor but are in different branches.';
-                        break;
-                    case 'exact':
-                        explanation = 'Both models suggested exactly the same category path.';
-                        break;
-                }
-                
-                if (explanation) {
-                    relationshipText += `<br><em style="color: #64748b; font-size: 0.9em;">${explanation}</em>`;
-                }
-            } else {
-                relationshipText = 'No detailed relationship analysis available';
+            if (!product.relationship || !product.gpt1Category || !product.gpt2Category || 
+                product.gpt1Category === 'None of these' || product.gpt2Category === 'None of these') {
+                relationshipContainer.innerHTML = '<div style="color: #64748b; font-style: italic;">No relationship analysis available</div>';
+                return;
             }
+
+            // Map the relationship to your preferred naming
+            const displayRelationship = relationshipMapping[product.relationship.toLowerCase()] || product.relationship;
             
-            relationshipContainer.innerHTML = relationshipText;
+            // Get relationship info and styling
+            const relationshipInfo = getRelationshipInfo(displayRelationship);
+            
+            let relationshipHTML = `
+                <div class="relationship-header">
+                    <span style="color: ${relationshipInfo.color};">●</span>
+                    <strong>Relationship:</strong> 
+                    <span style="color: ${relationshipInfo.color}; font-weight: 700;">${relationshipInfo.displayName}</span>
+                </div>
+            `;
+
+            // Add visual representation for applicable relationships
+            if (product.sharedPath && displayRelationship !== 'different_branches') {
+                relationshipHTML += `
+                    <div class="relationship-viz">
+                        <div class="path-node gpt1">GPT-1: ${getShortPath(product.gpt1Category)}</div>
+                        <div class="relationship-arrow">${relationshipInfo.arrow}</div>
+                        <div class="path-node gpt2">GPT-2: ${getShortPath(product.gpt2Category)}</div>
+                    </div>
+                `;
+                
+                if (product.sharedPath.trim()) {
+                    relationshipHTML += `
+                        <div style="font-size: 0.875rem; color: #6b7280; margin-top: 0.5rem;">
+                            <strong>Shared Path:</strong> ${product.sharedPath}<br>
+                            <strong>Depth:</strong> ${product.sharedDepth} levels
+                        </div>
+                    `;
+                }
+            }
+
+            relationshipHTML += `<div style="font-size: 0.8rem; color: #64748b; margin-top: 0.75rem; font-style: italic;">${relationshipInfo.explanation}</div>`;
+
+            relationshipContainer.innerHTML = relationshipHTML;
+        }
+
+        function getRelationshipInfo(relationship) {
+            const relationshipData = {
+                'child/parent': {
+                    displayName: 'Child/Parent',
+                    color: '#22c55e',
+                    arrow: '↔',
+                    explanation: 'One category is more specific than the other (parent-child hierarchy).'
+                },
+                'siblings': {
+                    displayName: 'Siblings',
+                    color: '#3b82f6',
+                    arrow: '↔',
+                    explanation: 'Both categories share the same parent but are different subcategories.'
+                },
+                'cousin': {
+                    displayName: 'Cousin',
+                    color: '#f59e0b',
+                    arrow: '⤴',
+                    explanation: 'Categories share a common ancestor but are in different branches (3+ levels shared).'
+                },
+                'different_branches': {
+                    displayName: 'Different Branches',
+                    color: '#ef4444',
+                    arrow: '✕',
+                    explanation: 'Categories are in completely different taxonomy branches with minimal overlap.'
+                },
+                'exact': {
+                    displayName: 'Exact Match',
+                    color: '#059669',
+                    arrow: '=',
+                    explanation: 'Both models suggested exactly the same category path.'
+                },
+                'ancestor/descendant': {
+                    displayName: 'Ancestor/Descendant',
+                    color: '#8b5cf6',
+                    arrow: '↕',
+                    explanation: 'One category is an ancestor/descendant of the other (multiple levels apart).'
+                }
+            };
+
+            return relationshipData[relationship] || {
+                displayName: relationship,
+                color: '#6b7280',
+                arrow: '?',
+                explanation: 'Relationship type analysis available.'
+            };
+        }
+
+        function getShortPath(path) {
+            if (!path) return '';
+            const parts = path.split('>').map(p => p.trim());
+            if (parts.length <= 2) return path;
+            return `${parts[0]} > ... > ${parts[parts.length - 1]}`;
         }
 
         function updatePriorityIndicator(product) {
@@ -1445,69 +1553,16 @@
                     metaInfo += `<span class="source-badge" style="background: #e0e7ff; color: #3730a3;">#${category.rank}</span>`;
                 }
                 
-                // Add relationship indicators for GPT models
+                // Add relationship indicators for GPT models with updated naming
                 if (category.source.startsWith('GPT') && category.relationship) {
-                    let relationshipBadge = '';
-                    let relationshipColor = '';
+                    const displayRelationship = relationshipMapping[category.relationship.toLowerCase()] || category.relationship;
+                    const relationshipInfo = getRelationshipInfo(displayRelationship);
                     
-                    switch(category.relationship.toLowerCase()) {
-                        case 'sibling':
-                            relationshipBadge = 'Sibling Categories';
-                            relationshipColor = 'background: #dbeafe; color: #1d4ed8;';
-                            break;
-                        case 'parent':
-                            relationshipBadge = 'Parent → Child';
-                            relationshipColor = 'background: #dcfce7; color: #166534;';
-                            break;
-                        case 'child':
-                            relationshipBadge = 'Child → Parent';
-                            relationshipColor = 'background: #f0fdf4; color: #15803d;';
-                            break;
-                        case 'ancestor':
-                            relationshipBadge = 'Ancestor → Descendant';
-                            relationshipColor = 'background: #f3e8ff; color: #7c3aed;';
-                            break;
-                        case 'descendant':
-                            relationshipBadge = 'Descendant → Ancestor';
-                            relationshipColor = 'background: #fdf4ff; color: #a855f7;';
-                            break;
-                        case 'cousin':
-                            relationshipBadge = 'Cousin Categories';
-                            relationshipColor = 'background: #fef3c7; color: #92400e;';
-                            break;
-                        default:
-                            if (product.exactMatch) {
-                                relationshipBadge = 'Exact Match';
-                                relationshipColor = 'background: #ecfdf5; color: #059669;';
-                            } else if (product.pathMatch) {
-                                relationshipBadge = 'Path Match';
-                                relationshipColor = 'background: #f0f9ff; color: #0284c7;';
-                            }
-                    }
-                    
-                    if (relationshipBadge) {
-                        metaInfo += `<span class="indicator" style="${relationshipColor}">${relationshipBadge}</span>`;
-                    }
-                }
-
-                // Create the main category display with path highlighting
-                let categoryDisplay = category.text;
-                
-                // For GPT categories, highlight the shared vs different parts
-                if (category.source.startsWith('GPT') && category.sharedPath && categories.length > 1) {
-                    const sharedPath = category.sharedPath;
-                    const fullPath = category.text;
-                    
-                    if (fullPath.startsWith(sharedPath)) {
-                        const remainingPath = fullPath.slice(sharedPath.length);
-                        categoryDisplay = `<span style="color: #6b7280; font-weight: 500;">${sharedPath}</span><span style="color: #0f172a; font-weight: 700;">${remainingPath}</span>`;
-                    } else {
-                        categoryDisplay = `<span style="color: #0f172a; font-weight: 700;">${fullPath}</span>`;
-                    }
+                    metaInfo += `<span class="indicator" style="background: ${relationshipInfo.color}22; color: ${relationshipInfo.color}; border: 1px solid ${relationshipInfo.color}44;">${relationshipInfo.displayName}</span>`;
                 }
 
                 div.innerHTML = `
-                    <div class="category-text" style="line-height: 1.5;">${categoryDisplay}</div>
+                    <div class="category-text" style="line-height: 1.5;">${category.text}</div>
                     <div class="category-meta">
                         ${metaInfo}
                     </div>
@@ -1681,7 +1736,8 @@
                 'category_changed', 
                 'reviewer_notes',
                 'agreement_quality_score',
-                'priority_level'
+                'priority_level',
+                'relationship_type'
             ];
             
             const newColumns = trackingColumns.filter(col => !originalHeaders.includes(col));
@@ -1757,6 +1813,10 @@
                             break;
                         case 'priority_level':
                             rowData.push(product.reviewPriority);
+                            break;
+                        case 'relationship_type':
+                            const displayRelationship = relationshipMapping[product.relationship?.toLowerCase()] || product.relationship || '';
+                            rowData.push(displayRelationship);
                             break;
                     }
                 });

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Category Reviewer</title>
+    <title>Enhanced Product Taxonomy Reviewer</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     <style>
         * {
@@ -14,27 +14,27 @@
 
         body {
             font-family: system-ui, -apple-system, sans-serif;
-            background-color: #f9fafb;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
             min-height: 100vh;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 1.5rem;
         }
 
         .header {
             background: white;
-            border-bottom: 1px solid #e5e7eb;
+            border-bottom: 1px solid #e2e8f0;
             position: sticky;
             top: 0;
             z-index: 10;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
         }
 
         .header-content {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 1rem 1.5rem;
             display: flex;
@@ -43,16 +43,16 @@
         }
 
         .title {
-            font-size: 2rem;
+            font-size: 2.25rem;
             font-weight: bold;
-            background: linear-gradient(to right, #2563eb, #7c3aed);
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6, #06b6d4);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
         .subtitle {
-            color: #6b7280;
+            color: #64748b;
             font-weight: 500;
             margin-top: 0.25rem;
         }
@@ -62,31 +62,33 @@
             align-items: center;
             padding: 0.75rem 1.5rem;
             border: none;
-            border-radius: 0.5rem;
-            font-weight: 500;
+            border-radius: 0.75rem;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s ease;
             text-decoration: none;
         }
 
         .btn-primary {
-            background: linear-gradient(to right, #2563eb, #1d4ed8);
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
             color: white;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 14px rgba(59, 130, 246, 0.3);
         }
 
         .btn-primary:hover {
-            background: linear-gradient(to right, #1d4ed8, #1e40af);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
         }
 
         .btn-secondary {
             background: white;
             color: #374151;
-            border: 1px solid #d1d5db;
+            border: 2px solid #e2e8f0;
         }
 
         .btn-secondary:hover {
-            background: #f9fafb;
+            background: #f8fafc;
+            border-color: #cbd5e1;
         }
 
         .btn-secondary:disabled {
@@ -96,56 +98,101 @@
 
         .upload-area {
             background: white;
-            border: 2px dashed #d1d5db;
-            border-radius: 0.5rem;
-            padding: 3rem;
+            border: 3px dashed #cbd5e1;
+            border-radius: 1rem;
+            padding: 4rem;
             text-align: center;
             margin: 2rem 0;
+            transition: all 0.3s ease;
+        }
+
+        .upload-area:hover {
+            border-color: #3b82f6;
+            background: #f8fafc;
         }
 
         .upload-icon {
-            width: 3rem;
-            height: 3rem;
-            color: #9ca3af;
-            margin: 0 auto 1rem;
+            width: 4rem;
+            height: 4rem;
+            color: #94a3b8;
+            margin: 0 auto 1.5rem;
         }
 
         .card {
             background: white;
-            border-radius: 0.75rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            border: 2px solid #e5e7eb;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            transition: all 0.3s;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border: 2px solid #e2e8f0;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .card.high-priority {
+            border-color: #ef4444;
+            background: linear-gradient(135deg, #fef2f2, #ffffff);
+        }
+
+        .card.medium-priority {
+            border-color: #f59e0b;
+            background: linear-gradient(135deg, #fefbf2, #ffffff);
         }
 
         .card.approved {
-            background: #f0fdf4;
-            border-color: #bbf7d0;
+            background: linear-gradient(135deg, #f0fdf4, #ffffff);
+            border-color: #22c55e;
         }
 
         .card.denied {
-            background: #fef2f2;
-            border-color: #fecaca;
+            background: linear-gradient(135deg, #fef2f2, #ffffff);
+            border-color: #ef4444;
         }
 
         .card.changed {
-            background: #f0f9ff;
-            border-color: #bae6fd;
+            background: linear-gradient(135deg, #f0f9ff, #ffffff);
+            border-color: #3b82f6;
+        }
+
+        .priority-indicator {
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .priority-high {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            animation: pulse 2s infinite;
+        }
+
+        .priority-medium {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+
+        .priority-low {
+            background: linear-gradient(135deg, #6b7280, #4b5563);
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
         }
 
         .product-grid {
             display: grid;
-            grid-template-columns: 1fr 2fr;
+            grid-template-columns: 300px 1fr 400px;
             gap: 2rem;
             margin-bottom: 2rem;
         }
 
         .image-container {
             aspect-ratio: 1;
-            border-radius: 0.75rem;
-            background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+            border-radius: 1rem;
+            background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -154,14 +201,14 @@
             text-align: center;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 15px rgba(0,0,0,0.1);
         }
 
         .product-image {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            border-radius: 0.5rem;
+            border-radius: 0.75rem;
         }
 
         .image-placeholder {
@@ -174,9 +221,9 @@
         }
 
         .image-icon {
-            width: 4rem;
-            height: 4rem;
-            background: #dbeafe;
+            width: 5rem;
+            height: 5rem;
+            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -187,179 +234,323 @@
         .product-details h1 {
             font-size: 2rem;
             font-weight: bold;
-            margin-bottom: 0.75rem;
-            color: #111827;
+            margin-bottom: 1rem;
+            color: #0f172a;
         }
 
         .product-details p {
-            color: #374151;
-            line-height: 1.6;
+            color: #475569;
+            line-height: 1.7;
             margin-bottom: 1.5rem;
+        }
+
+        .analysis-panel {
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            border: 2px solid #e2e8f0;
+        }
+
+        .analysis-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .analysis-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .quality-score {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            font-weight: bold;
+            font-size: 0.875rem;
+        }
+
+        .quality-indicators {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .indicator {
+            padding: 0.25rem 0.75rem;
+            border-radius: 2rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .indicator.high-quality {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .indicator.models-agree {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .indicator.path-match {
+            background: #f3e8ff;
+            color: #7c3aed;
+        }
+
+        .indicator.exact-match {
+            background: #ecfdf5;
+            color: #059669;
+        }
+
+        .indicator.warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .indicator.error {
+            background: #fecaca;
+            color: #991b1b;
+        }
+
+        .path-comparison {
+            background: #f8fafc;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border: 2px solid #e2e8f0;
+        }
+
+        .path-comparison h4 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 1rem;
+        }
+
+        .path-item {
+            background: white;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            border-left: 4px solid #e2e8f0;
+        }
+
+        .path-item.gpt1 {
+            border-left-color: #3b82f6;
+        }
+
+        .path-item.gpt2 {
+            border-left-color: #8b5cf6;
+        }
+
+        .path-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #6b7280;
+            margin-bottom: 0.25rem;
+        }
+
+        .path-text {
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+            line-height: 1.4;
+        }
+
+        .shared-part {
+            color: #6b7280;
+            background: #f1f5f9;
+            padding: 0.125rem 0.25rem;
+            border-radius: 0.25rem;
+        }
+
+        .unique-part {
+            color: #0f172a;
+            font-weight: 600;
+            background: #fef3c7;
+            padding: 0.125rem 0.25rem;
+            border-radius: 0.25rem;
+            margin-left: 0.25rem;
         }
 
         .categories-section {
             background: white;
-            border-radius: 0.75rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            border: 1px solid #e5e7eb;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border: 2px solid #e2e8f0;
+            padding: 2rem;
+            margin-bottom: 2rem;
         }
 
-        .categories-section h3 {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            color: #111827;
-        }
-
-        .category-option {
-            background: #f9fafb;
-            border: 2px solid #e5e7eb;
-            border-radius: 0.5rem;
-            padding: 1rem;
-            margin-bottom: 0.75rem;
-            cursor: pointer;
-            transition: all 0.2s;
+        .categories-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .categories-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .category-count {
+            background: #f1f5f9;
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            font-weight: 600;
+            color: #475569;
+        }
+
+        .category-option {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
         }
 
         .category-option:hover {
-            background: #f3f4f6;
-            border-color: #9ca3af;
+            background: #f1f5f9;
+            border-color: #94a3b8;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
         }
 
         .category-option.selected {
-            background: #dbeafe;
+            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
             border-color: #3b82f6;
-            color: #1d4ed8;
+            color: #1e40af;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.2);
         }
 
         .category-option.current {
-            background: #fef3c7;
-            border-color: #fbbf24;
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border-color: #f59e0b;
             color: #92400e;
         }
 
         .category-text {
-            font-weight: 500;
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 0.75rem;
+            line-height: 1.4;
         }
 
         .category-meta {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.75rem;
             font-size: 0.875rem;
+            flex-wrap: wrap;
         }
 
         .confidence-badge {
             background: #e0e7ff;
             color: #3730a3;
-            padding: 0.25rem 0.5rem;
-            border-radius: 9999px;
+            padding: 0.375rem 0.75rem;
+            border-radius: 2rem;
             font-size: 0.75rem;
-            font-weight: 500;
+            font-weight: 700;
         }
 
-        .confidence-badge.high-conf {
+        .confidence-badge.very-high {
             background: #dcfce7;
             color: #166534;
         }
 
-        .confidence-badge.med-conf {
+        .confidence-badge.high {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .confidence-badge.medium {
             background: #fef3c7;
             color: #92400e;
         }
 
-        .confidence-badge.low-conf {
-            background: #fef2f2;
+        .confidence-badge.low {
+            background: #fecaca;
             color: #991b1b;
         }
 
         .source-badge {
-            background: #f3e8ff;
+            background: linear-gradient(135deg, #f3e8ff, #e9d5ff);
             color: #7c3aed;
-            padding: 0.25rem 0.5rem;
-            border-radius: 9999px;
+            padding: 0.375rem 0.75rem;
+            border-radius: 2rem;
             font-size: 0.75rem;
-            font-weight: 500;
-        }
-
-        .agreement-badge {
-            background: #dcfce7;
-            color: #166534;
-            padding: 0.25rem 0.5rem;
-            border-radius: 9999px;
-            font-size: 0.75rem;
-            font-weight: 500;
-        }
-
-        .disagreement-badge {
-            background: #fef2f2;
-            color: #991b1b;
-            padding: 0.25rem 0.5rem;
-            border-radius: 9999px;
-            font-size: 0.75rem;
-            font-weight: 500;
+            font-weight: 700;
         }
 
         .decisions-section {
             display: flex;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-            padding: 1rem;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            padding: 2rem;
             background: white;
-            border-radius: 0.5rem;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            border: 1px solid #e5e7eb;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border: 2px solid #e2e8f0;
         }
 
         .btn-approve {
-            background: #dcfce7;
+            background: linear-gradient(135deg, #dcfce7, #bbf7d0);
             color: #166534;
-            border: 2px solid #bbf7d0;
+            border: 3px solid #22c55e;
             flex: 1;
-            padding: 1rem 1.5rem;
-            border-radius: 0.75rem;
-            font-size: 1rem;
+            padding: 1.5rem 2rem;
+            border-radius: 1rem;
+            font-size: 1.125rem;
             font-weight: bold;
+            transition: all 0.3s ease;
         }
 
         .btn-approve:hover {
-            background: #bbf7d0;
-            border-color: #86efac;
+            background: linear-gradient(135deg, #bbf7d0, #86efac);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(34, 197, 94, 0.3);
         }
 
         .btn-approve.active {
-            background: linear-gradient(to right, #22c55e, #16a34a);
+            background: linear-gradient(135deg, #22c55e, #16a34a);
             color: white;
             transform: scale(1.05);
-            box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 15px 30px rgba(34, 197, 94, 0.4);
         }
 
         .btn-deny {
-            background: #fef2f2;
+            background: linear-gradient(135deg, #fef2f2, #fecaca);
             color: #991b1b;
-            border: 2px solid #fecaca;
+            border: 3px solid #ef4444;
             flex: 1;
-            padding: 1rem 1.5rem;
-            border-radius: 0.75rem;
-            font-size: 1rem;
+            padding: 1.5rem 2rem;
+            border-radius: 1rem;
+            font-size: 1.125rem;
             font-weight: bold;
+            transition: all 0.3s ease;
         }
 
         .btn-deny:hover {
-            background: #fecaca;
-            border-color: #fca5a5;
+            background: linear-gradient(135deg, #fecaca, #fca5a5);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(239, 68, 68, 0.3);
         }
 
         .btn-deny.active {
-            background: linear-gradient(to right, #ef4444, #dc2626);
+            background: linear-gradient(135deg, #ef4444, #dc2626);
             color: white;
             transform: scale(1.05);
-            box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 15px 30px rgba(239, 68, 68, 0.4);
         }
 
         .navigation {
@@ -367,11 +558,11 @@
             justify-content: space-between;
             align-items: center;
             background: white;
-            border-radius: 0.5rem;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            border: 1px solid #e5e7eb;
-            padding: 1rem;
-            margin-bottom: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border: 2px solid #e2e8f0;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
         }
 
         .nav-counter {
@@ -379,139 +570,141 @@
         }
 
         .nav-counter .number {
-            font-size: 1.5rem;
+            font-size: 2rem;
             font-weight: bold;
-            color: #111827;
+            color: #0f172a;
         }
 
         .nav-counter .total {
-            font-size: 0.75rem;
-            color: #6b7280;
+            font-size: 0.875rem;
+            color: #64748b;
         }
 
         .progress-bar {
             background: white;
-            border-radius: 0.5rem;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            border: 1px solid #e5e7eb;
-            padding: 1.5rem;
-            margin: 1.5rem 0;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border: 2px solid #e2e8f0;
+            padding: 2rem;
+            margin: 2rem 0;
         }
 
         .progress-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 0.75rem;
+            margin-bottom: 1rem;
         }
 
         .progress-title {
-            font-size: 1.125rem;
-            font-weight: 600;
-            color: #111827;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #0f172a;
         }
 
         .progress-count {
             font-size: 0.875rem;
-            font-weight: 500;
-            color: #4b5563;
-            background: #f3f4f6;
-            padding: 0.25rem 0.75rem;
-            border-radius: 9999px;
+            font-weight: 600;
+            color: #475569;
+            background: #f1f5f9;
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
         }
 
         .progress-track {
             width: 100%;
-            background: #e5e7eb;
-            border-radius: 9999px;
-            height: 0.75rem;
+            background: #e2e8f0;
+            border-radius: 2rem;
+            height: 1rem;
             overflow: hidden;
         }
 
         .progress-fill {
             height: 100%;
-            background: linear-gradient(to right, #3b82f6, #7c3aed);
-            border-radius: 9999px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border-radius: 2rem;
             transition: width 0.5s ease-out;
         }
 
         .progress-percent {
             text-align: right;
-            margin-top: 0.5rem;
-            font-size: 0.75rem;
-            color: #6b7280;
+            margin-top: 0.75rem;
+            font-size: 0.875rem;
+            color: #64748b;
+            font-weight: 600;
         }
 
         .summary {
-            background: linear-gradient(to right, #f9fafb, #f3f4f6);
-            border-radius: 0.75rem;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            border: 1px solid #e5e7eb;
-            padding: 1.5rem;
-            margin: 1.5rem 0;
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border: 2px solid #e2e8f0;
+            padding: 2rem;
+            margin: 2rem 0;
         }
 
         .summary h3 {
-            font-size: 1.25rem;
+            font-size: 1.5rem;
             font-weight: bold;
-            color: #111827;
+            color: #0f172a;
             text-align: center;
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
         }
 
         .summary-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 1.5rem;
+            gap: 2rem;
         }
 
         .summary-item {
             background: white;
-            border-radius: 0.5rem;
-            padding: 1rem;
+            border-radius: 1rem;
+            padding: 2rem;
             text-align: center;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border: 2px solid #e2e8f0;
         }
 
         .summary-number {
-            font-size: 2.5rem;
+            font-size: 3rem;
             font-weight: bold;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.75rem;
         }
 
-        .summary-number.approved { color: #16a34a; }
-        .summary-number.denied { color: #dc2626; }
-        .summary-number.pending { color: #4b5563; }
+        .summary-number.approved { color: #22c55e; }
+        .summary-number.denied { color: #ef4444; }
+        .summary-number.pending { color: #64748b; }
 
         .summary-label {
-            font-size: 0.875rem;
-            font-weight: 500;
-            color: #4b5563;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #475569;
         }
 
         .summary-bar {
-            width: 2rem;
-            height: 0.25rem;
-            border-radius: 9999px;
-            margin: 0.5rem auto 0;
+            width: 3rem;
+            height: 0.5rem;
+            border-radius: 2rem;
+            margin: 1rem auto 0;
         }
 
-        .summary-bar.approved { background: #16a34a; }
-        .summary-bar.denied { background: #dc2626; }
-        .summary-bar.pending { background: #9ca3af; }
+        .summary-bar.approved { background: #22c55e; }
+        .summary-bar.denied { background: #ef4444; }
+        .summary-bar.pending { background: #94a3b8; }
 
         .loading {
             text-align: center;
-            padding: 2rem;
+            padding: 4rem;
         }
 
         .spinner {
-            width: 3rem;
-            height: 3rem;
-            border: 3px solid #e5e7eb;
-            border-top: 3px solid #2563eb;
+            width: 4rem;
+            height: 4rem;
+            border: 4px solid #e2e8f0;
+            border-top: 4px solid #3b82f6;
             border-radius: 50%;
-            margin: 0 auto 1rem;
+            margin: 0 auto 2rem;
             animation: spin 1s linear infinite;
         }
 
@@ -531,7 +724,21 @@
             vertical-align: middle;
         }
 
-        @media (max-width: 1024px) {
+        .failure-notice {
+            background: linear-gradient(135deg, #fef2f2, #fecaca);
+            border: 2px solid #ef4444;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            color: #991b1b;
+        }
+
+        .failure-notice h4 {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        @media (max-width: 1200px) {
             .product-grid {
                 grid-template-columns: 1fr;
                 gap: 1.5rem;
@@ -544,7 +751,7 @@
 
             .decisions-section {
                 flex-direction: column;
-                gap: 0.75rem;
+                gap: 1rem;
             }
         }
     </style>
@@ -554,8 +761,8 @@
     <div class="header">
         <div class="header-content">
             <div>
-                <h1 class="title">Product Category Reviewer</h1>
-                <p class="subtitle" id="product-counter">Review and approve product categories</p>
+                <h1 class="title">Enhanced Taxonomy Reviewer</h1>
+                <p class="subtitle" id="product-counter">Review and approve AI-generated product categories</p>
             </div>
             <div style="display: flex; gap: 1rem; align-items: center;">
                 <button id="export-btn" class="btn btn-primary hidden">
@@ -574,8 +781,8 @@
             <svg class="upload-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
             </svg>
-            <h3 style="font-size: 1.125rem; font-weight: 500; color: #111827; margin-bottom: 0.5rem;">Upload CSV File</h3>
-            <p style="color: #6b7280; margin-bottom: 1rem;">Select your product category CSV file to begin reviewing</p>
+            <h3 style="font-size: 1.25rem; font-weight: 600; color: #0f172a; margin-bottom: 0.75rem;">Upload Enhanced CSV File</h3>
+            <p style="color: #64748b; margin-bottom: 1.5rem;">Select your product taxonomy analysis CSV file to begin reviewing</p>
             <input type="file" accept=".csv" id="csv-upload" style="display: none;">
             <label for="csv-upload" class="btn btn-primary" style="cursor: pointer;">Choose File</label>
         </div>
@@ -583,7 +790,7 @@
         <!-- Loading -->
         <div id="loading-section" class="loading hidden">
             <div class="spinner"></div>
-            <p style="color: #4b5563;">Processing CSV...</p>
+            <p style="color: #64748b; font-size: 1.125rem;">Processing enhanced taxonomy data...</p>
         </div>
 
         <!-- Product Review -->
@@ -601,7 +808,9 @@
             </div>
 
             <!-- Product Card -->
-            <div id="product-card" class="card">
+            <div id="product-card" class="card" style="position: relative;">
+                <div id="priority-indicator" class="priority-indicator hidden"></div>
+                
                 <div class="product-grid">
                     <!-- Product Image -->
                     <div>
@@ -609,12 +818,12 @@
                             <img id="product-image" class="product-image hidden" alt="Product Image">
                             <div id="image-placeholder" class="image-placeholder">
                                 <div class="image-icon">
-                                    <svg style="width: 2rem; height: 2rem; color: #2563eb;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg style="width: 2.5rem; height: 2.5rem; color: #3b82f6;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                                     </svg>
                                 </div>
-                                <h3 id="image-status" style="font-weight: 600; color: #111827; margin-bottom: 0.5rem;">Loading Image...</h3>
-                                <p id="image-description" style="font-size: 0.875rem; color: #4b5563;">Please wait while we load the product image</p>
+                                <h3 id="image-status" style="font-weight: 600; color: #0f172a; margin-bottom: 0.5rem;">Loading Image...</h3>
+                                <p id="image-description" style="font-size: 0.875rem; color: #64748b;">Please wait while we load the product image</p>
                             </div>
                         </div>
                     </div>
@@ -624,12 +833,37 @@
                         <h1 id="product-title">Product Title</h1>
                         <p id="product-description">Product description...</p>
                     </div>
+
+                    <!-- Analysis Panel -->
+                    <div class="analysis-panel">
+                        <div class="analysis-header">
+                            <span class="analysis-title">AI Analysis</span>
+                            <span class="quality-score" id="quality-score">Quality: 0%</span>
+                        </div>
+                        
+                        <div class="quality-indicators" id="quality-indicators">
+                            <!-- Quality indicators will be populated here -->
+                        </div>
+
+                        <div class="relationship-info" id="relationship-info">
+                            <!-- Relationship analysis will be shown here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Failure Notice -->
+                <div id="failure-notice" class="failure-notice hidden">
+                    <h4>⚠️ Classification Issues Detected</h4>
+                    <p id="failure-details">Details about classification failures...</p>
                 </div>
             </div>
 
             <!-- Categories Section -->
             <div class="categories-section">
-                <h3>Category Options</h3>
+                <div class="categories-header">
+                    <h3 class="categories-title">Available Categories</h3>
+                    <span class="category-count" id="category-count">0 options</span>
+                </div>
                 <div id="categories-container">
                     <!-- Category options will be populated here -->
                 </div>
@@ -687,7 +921,7 @@
                     <div class="total" id="total-count">of 0</div>
                 </div>
                 
-                <div style="display: flex; gap: 0.5rem;">
+                <div style="display: flex; gap: 0.75rem;">
                     <button id="skip-btn" class="btn btn-secondary">
                         <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 9l3 3-3 3m-4-6l3 3-3 3"></path>
@@ -750,8 +984,9 @@
                 Papa.parse(text, {
                     header: true,
                     skipEmptyLines: true,
+                    dynamicTyping: true,
                     transformHeader: (header) => header.trim(),
-                    transform: (value) => value.trim(),
+                    transform: (value) => value ? value.toString().trim() : '',
                     complete: function(parsed) {
                         if (parsed.errors.length > 0) {
                             console.error('CSV parsing errors:', parsed.errors);
@@ -773,13 +1008,11 @@
         function processData(data) {
             csvData = data;
             
-            // Process each row as a product
+            // Process each row as a product with enhanced taxonomy data
             products = data.map((row, index) => {
-                // Clean GPT categories by removing "Category: " prefix (in case any remain)
-                const cleanGptCategory = (cat) => {
+                const cleanCategory = (cat) => {
                     if (!cat) return '';
                     let cleaned = cat.replace(/^Category:\s*/i, '').trim();
-                    // Handle "None of these" responses
                     if (cleaned.toLowerCase() === 'none of these') {
                         return 'None of these';
                     }
@@ -792,33 +1025,73 @@
                     title: row['Title'] || row.title || '',
                     description: row['Desc'] || row.description || '',
                     imageUrl: row['ImageOG'] || row.image_url || '',
-                    gpt1Category: cleanGptCategory(row['gpt1_category_desc'] || ''),
-                    gpt2Category: cleanGptCategory(row['gpt2_category_desc'] || ''),
-                    gptModelsAgree: row['gpt_models_agree'] || 'FALSE',
-                    allModelsAgree: row['all_models_agree'] || 'FALSE',
+                    
+                    // GPT categories
+                    gpt1Category: cleanCategory(row['gpt1_category_desc'] || ''),
+                    gpt2Category: cleanCategory(row['gpt2_category_desc'] || ''),
+                    
+                    // FAISS categories (up to 5)
                     faissCategory1: row['faiss_category_1'] || '',
                     faissConfidence1: parseFloat(row['faiss_confidence_1'] || '0'),
                     faissCategory2: row['faiss_category_2'] || '',
                     faissConfidence2: parseFloat(row['faiss_confidence_2'] || '0'),
                     faissCategory3: row['faiss_category_3'] || '',
                     faissConfidence3: parseFloat(row['faiss_confidence_3'] || '0'),
-                    highConfidence: row['high_confidence'] || 'FALSE',
-                    mediumConfidence: row['medium_confidence'] || 'FALSE',
-                    lowConfidence: row['low_confidence'] || 'FALSE',
-                    needsReview: row['needs_review'] || 'FALSE',
-                    priorityReview: row['priority_review'] || 'FALSE',
+                    faissCategory4: row['faiss_category_4'] || '',
+                    faissConfidence4: parseFloat(row['faiss_confidence_4'] || '0'),
+                    faissCategory5: row['faiss_category_5'] || '',
+                    faissConfidence5: parseFloat(row['faiss_confidence_5'] || '0'),
+                    
+                    // Agreement analysis
+                    pathMatch: row['GPT1_vs_GPT2_path_match'] === true || row['GPT1_vs_GPT2_path_match'] === 'true',
+                    exactMatch: row['GPT1_vs_GPT2_exact_match'] === true || row['GPT1_vs_GPT2_exact_match'] === 'true',
+                    sharedDepth: parseInt(row['GPT1_vs_GPT2_shared_depth'] || '0'),
+                    sharedPath: row['GPT1_vs_GPT2_shared_path'] || '',
+                    matchType: row['GPT1_vs_GPT2_match_type'] || '',
+                    relationship: row['GPT1_vs_GPT2_relationship'] || '',
+                    agreementQuality: parseFloat(row['GPT1_vs_GPT2_agreement_quality'] || '0'),
+                    
+                    // Quality indicators
+                    bothValid: row['GPT1_vs_GPT2_both_valid'] === true || row['GPT1_vs_GPT2_both_valid'] === 'true',
+                    correctedModelsAgree: row['corrected_models_agree'] === true || row['corrected_models_agree'] === 'true',
+                    highQualityAgreement: row['high_quality_agreement'] === true || row['high_quality_agreement'] === 'true',
+                    
+                    // Failure indicators
+                    bothNoneOfThese: row['both_none_of_these'] === true || row['both_none_of_these'] === 'true',
+                    eitherNoneOfThese: row['either_none_of_these'] === true || row['either_none_of_these'] === 'true',
+                    faissFailed: row['faiss_failed'] === true || row['faiss_failed'] === 'true',
+                    completeClassificationFailure: row['complete_classification_failure'] === true || row['complete_classification_failure'] === 'true',
+                    
+                    // Review metadata
+                    needsManualReview: row['needs_manual_review'] === true || row['needs_manual_review'] === 'true',
+                    reviewPriority: row['review_priority'] || 'low',
                     manualCategory: row['manual_category'] || '',
                     reviewNotes: row['review_notes'] || '',
                     reviewStatus: row['review_status'] || '',
+                    
                     originalRow: row
                 };
+            });
+            
+            // Sort by priority (high -> medium -> low) and then by agreement quality
+            products.sort((a, b) => {
+                const priorityOrder = { 'high': 3, 'medium': 2, 'low': 1 };
+                const aPriority = priorityOrder[a.reviewPriority] || 1;
+                const bPriority = priorityOrder[b.reviewPriority] || 1;
+                
+                if (aPriority !== bPriority) {
+                    return bPriority - aPriority; // High priority first
+                }
+                
+                // If same priority, sort by agreement quality (lower quality first for review)
+                return a.agreementQuality - b.agreementQuality;
             });
             
             // Initialize tracking objects
             decisions = {};
             selectedCategories = {};
             
-            console.log('Loaded', products.length, 'products');
+            console.log('Loaded', products.length, 'products with enhanced taxonomy data');
             
             currentProductIndex = 0;
             updateDisplay();
@@ -915,6 +1188,9 @@
             document.getElementById('product-description').textContent = currentProduct.description;
             
             loadProductImage(currentProduct.imageUrl);
+            updateAnalysisPanel(currentProduct);
+            updatePriorityIndicator(currentProduct);
+            updateFailureNotice(currentProduct);
             updateCategoriesDisplay(currentProduct);
             updateDecisionButtons();
             updateProgress();
@@ -923,24 +1199,145 @@
             preloadNextImages();
         }
 
+        function updateAnalysisPanel(product) {
+            // Update quality score
+            const qualityPercent = Math.round(product.agreementQuality * 100);
+            document.getElementById('quality-score').textContent = `Quality: ${qualityPercent}%`;
+            
+            // Update quality indicators
+            const indicatorsContainer = document.getElementById('quality-indicators');
+            indicatorsContainer.innerHTML = '';
+            
+            if (product.highQualityAgreement) {
+                indicatorsContainer.innerHTML += '<span class="indicator high-quality">High Quality</span>';
+            }
+            
+            if (product.correctedModelsAgree) {
+                indicatorsContainer.innerHTML += '<span class="indicator models-agree">Models Agree</span>';
+            }
+            
+            if (product.pathMatch) {
+                indicatorsContainer.innerHTML += '<span class="indicator path-match">Path Match</span>';
+            }
+            
+            if (product.exactMatch) {
+                indicatorsContainer.innerHTML += '<span class="indicator exact-match">Exact Match</span>';
+            }
+            
+            if (product.agreementQuality < 0.3) {
+                indicatorsContainer.innerHTML += '<span class="indicator error">Low Agreement</span>';
+            } else if (product.agreementQuality < 0.6) {
+                indicatorsContainer.innerHTML += '<span class="indicator warning">Medium Agreement</span>';
+            }
+            
+            // Update relationship info
+            const relationshipContainer = document.getElementById('relationship-info');
+            let relationshipText = '';
+            
+            if (product.relationship && product.sharedPath) {
+                relationshipText = `<strong>Taxonomy Relationship:</strong> <span style="color: #3b82f6; font-weight: 600;">${product.relationship}</span> categories<br>`;
+                relationshipText += `<strong>Shared Path:</strong> <span style="color: #6b7280;">${product.sharedPath}</span><br>`;
+                relationshipText += `<strong>Shared Depth:</strong> ${product.sharedDepth} levels<br>`;
+                
+                if (product.matchType && product.matchType !== product.relationship) {
+                    relationshipText += `<strong>Match Type:</strong> ${product.matchType}<br>`;
+                }
+                
+                // Add explanation of the relationship
+                let explanation = '';
+                switch(product.relationship.toLowerCase()) {
+                    case 'sibling':
+                        explanation = 'Both categories share the same parent path but branch into different subcategories.';
+                        break;
+                    case 'parent':
+                        explanation = 'One category is a parent of the other (more general → more specific).';
+                        break;
+                    case 'child':
+                        explanation = 'One category is a child of the other (more specific → more general).';
+                        break;
+                    case 'ancestor':
+                        explanation = 'One category is an ancestor of the other (general → specific, multiple levels).';
+                        break;
+                    case 'descendant':
+                        explanation = 'One category is a descendant of the other (specific → general, multiple levels).';
+                        break;
+                    case 'cousin':
+                        explanation = 'Categories share a common ancestor but are in different branches.';
+                        break;
+                    case 'exact':
+                        explanation = 'Both models suggested exactly the same category path.';
+                        break;
+                }
+                
+                if (explanation) {
+                    relationshipText += `<br><em style="color: #64748b; font-size: 0.9em;">${explanation}</em>`;
+                }
+            } else {
+                relationshipText = 'No detailed relationship analysis available';
+            }
+            
+            relationshipContainer.innerHTML = relationshipText;
+        }
+
+        function updatePriorityIndicator(product) {
+            const indicator = document.getElementById('priority-indicator');
+            
+            if (product.needsManualReview && product.reviewPriority !== 'low') {
+                indicator.classList.remove('hidden');
+                indicator.className = `priority-indicator priority-${product.reviewPriority}`;
+                indicator.textContent = `${product.reviewPriority.toUpperCase()} PRIORITY`;
+            } else {
+                indicator.classList.add('hidden');
+            }
+        }
+
+        function updateFailureNotice(product) {
+            const notice = document.getElementById('failure-notice');
+            const details = document.getElementById('failure-details');
+            
+            const failures = [];
+            
+            if (product.completeClassificationFailure) {
+                failures.push('Complete classification failure detected');
+            }
+            
+            if (product.faissFailed) {
+                failures.push('FAISS similarity search failed');
+            }
+            
+            if (product.bothNoneOfThese) {
+                failures.push('Both GPT models responded "None of these"');
+            } else if (product.eitherNoneOfThese) {
+                failures.push('One GPT model responded "None of these"');
+            }
+            
+            if (failures.length > 0) {
+                notice.classList.remove('hidden');
+                details.textContent = failures.join('. ');
+            } else {
+                notice.classList.add('hidden');
+            }
+        }
+
         function updateCategoriesDisplay(product) {
             const container = document.getElementById('categories-container');
             container.innerHTML = '';
 
             const categories = [];
 
-            // Add GPT1 category if available and not "None of these"
+            // Add GPT categories with relationship info
             if (product.gpt1Category && product.gpt1Category !== 'None of these') {
                 categories.push({
                     text: product.gpt1Category,
                     source: 'GPT-1',
                     confidence: null,
                     isCurrent: true,
-                    id: 'gpt1'
+                    id: 'gpt1',
+                    relationship: product.relationship,
+                    sharedPath: product.sharedPath
                 });
             }
 
-            // Add GPT2 category if available, different from GPT1, and not "None of these"
             if (product.gpt2Category && 
                 product.gpt2Category !== 'None of these' && 
                 product.gpt2Category !== product.gpt1Category) {
@@ -948,58 +1345,48 @@
                     text: product.gpt2Category,
                     source: 'GPT-2',
                     confidence: null,
-                    isCurrent: product.gpt1Category ? false : true,
-                    id: 'gpt2'
+                    isCurrent: !product.gpt1Category,
+                    id: 'gpt2',
+                    relationship: product.relationship,
+                    sharedPath: product.sharedPath
                 });
             }
 
-            // Add FAISS categories (up to 3)
-            if (product.faissCategory1) {
-                categories.push({
-                    text: product.faissCategory1,
-                    source: 'FAISS',
-                    confidence: product.faissConfidence1,
-                    isCurrent: false,
-                    id: 'faiss1'
-                });
-            }
+            // Add all 5 FAISS categories
+            const faissCategories = [
+                { cat: product.faissCategory1, conf: product.faissConfidence1, id: 'faiss1' },
+                { cat: product.faissCategory2, conf: product.faissConfidence2, id: 'faiss2' },
+                { cat: product.faissCategory3, conf: product.faissConfidence3, id: 'faiss3' },
+                { cat: product.faissCategory4, conf: product.faissConfidence4, id: 'faiss4' },
+                { cat: product.faissCategory5, conf: product.faissConfidence5, id: 'faiss5' }
+            ];
 
-            if (product.faissCategory2 && product.faissCategory2 !== product.faissCategory1) {
-                categories.push({
-                    text: product.faissCategory2,
-                    source: 'FAISS',
-                    confidence: product.faissConfidence2,
-                    isCurrent: false,
-                    id: 'faiss2'
-                });
-            }
+            faissCategories.forEach(({ cat, conf, id }, index) => {
+                if (cat && !categories.some(c => c.text === cat)) {
+                    categories.push({
+                        text: cat,
+                        source: 'FAISS',
+                        confidence: conf,
+                        isCurrent: false,
+                        id: id,
+                        rank: index + 1
+                    });
+                }
+            });
 
-            // Add third FAISS option if available
-            if (product.faissCategory3 && 
-                product.faissCategory3 !== product.faissCategory1 && 
-                product.faissCategory3 !== product.faissCategory2) {
-                categories.push({
-                    text: product.faissCategory3,
-                    source: 'FAISS',
-                    confidence: product.faissConfidence3,
-                    isCurrent: false,
-                    id: 'faiss3'
-                });
-            }
-
-            // Show "None of these" responses as special indicators
+            // Show failure messages
             if (product.gpt1Category === 'None of these' || product.gpt2Category === 'None of these') {
                 const noneDiv = document.createElement('div');
                 noneDiv.className = 'category-option';
-                noneDiv.style.background = '#fef2f2';
-                noneDiv.style.borderColor = '#fecaca';
-                noneDiv.style.opacity = '0.7';
+                noneDiv.style.background = 'linear-gradient(135deg, #fef2f2, #fecaca)';
+                noneDiv.style.borderColor = '#ef4444';
+                noneDiv.style.opacity = '0.8';
                 noneDiv.innerHTML = `
                     <div class="category-text" style="font-style: italic; color: #991b1b;">
                         ${product.gpt1Category === 'None of these' ? 'GPT-1' : 'GPT-2'} responded: "None of these"
                     </div>
                     <div class="category-meta">
-                        <span class="disagreement-badge">No Suggestion</span>
+                        <span class="indicator error">No Suggestion</span>
                     </div>
                 `;
                 container.appendChild(noneDiv);
@@ -1008,20 +1395,23 @@
             if (categories.length === 0) {
                 const noOptionsDiv = document.createElement('div');
                 noOptionsDiv.className = 'category-option';
-                noOptionsDiv.style.background = '#f9fafb';
-                noOptionsDiv.style.borderColor = '#d1d5db';
+                noOptionsDiv.style.background = '#f8fafc';
+                noOptionsDiv.style.borderColor = '#cbd5e1';
                 noOptionsDiv.style.opacity = '0.8';
                 noOptionsDiv.innerHTML = `
-                    <div class="category-text" style="font-style: italic; color: #6b7280;">
+                    <div class="category-text" style="font-style: italic; color: #64748b;">
                         No valid category suggestions available
                     </div>
                     <div class="category-meta">
-                        <span class="source-badge" style="background: #f3f4f6; color: #6b7280;">Manual Review Required</span>
+                        <span class="source-badge" style="background: #f1f5f9; color: #64748b;">Manual Review Required</span>
                     </div>
                 `;
                 container.appendChild(noOptionsDiv);
+                document.getElementById('category-count').textContent = '0 options';
                 return;
             }
+
+            document.getElementById('category-count').textContent = `${categories.length} options`;
 
             // Get current selection
             const currentSelection = selectedCategories[product.handle] || 
@@ -1038,39 +1428,86 @@
                     div.classList.add('current');
                 }
 
-                // Build category meta info with enhanced indicators
+                // Build enhanced meta info
                 let metaInfo = `<span class="source-badge">${category.source}</span>`;
                 
                 if (category.confidence !== null) {
                     const confPct = (category.confidence * 100).toFixed(1);
                     let confClass = 'confidence-badge';
-                    if (category.confidence >= 0.85) confClass += ' high-conf';
-                    else if (category.confidence >= 0.70) confClass += ' med-conf';
-                    else confClass += ' low-conf';
+                    if (category.confidence >= 0.9) confClass += ' very-high';
+                    else if (category.confidence >= 0.7) confClass += ' high';
+                    else if (category.confidence >= 0.5) confClass += ' medium';
+                    else confClass += ' low';
                     metaInfo += `<span class="${confClass}">${confPct}%</span>`;
                 }
                 
-                // Add agreement indicator for GPT models
-                if (category.source.startsWith('GPT')) {
-                    const agreementClass = product.gptModelsAgree === 'TRUE' ? 'agreement-badge' : 'disagreement-badge';
-                    const agreementText = product.gptModelsAgree === 'TRUE' ? 'Models Agree' : 'Models Disagree';
-                    metaInfo += `<span class="${agreementClass}">${agreementText}</span>`;
+                if (category.rank) {
+                    metaInfo += `<span class="source-badge" style="background: #e0e7ff; color: #3730a3;">#${category.rank}</span>`;
+                }
+                
+                // Add relationship indicators for GPT models
+                if (category.source.startsWith('GPT') && category.relationship) {
+                    let relationshipBadge = '';
+                    let relationshipColor = '';
+                    
+                    switch(category.relationship.toLowerCase()) {
+                        case 'sibling':
+                            relationshipBadge = 'Sibling Categories';
+                            relationshipColor = 'background: #dbeafe; color: #1d4ed8;';
+                            break;
+                        case 'parent':
+                            relationshipBadge = 'Parent → Child';
+                            relationshipColor = 'background: #dcfce7; color: #166534;';
+                            break;
+                        case 'child':
+                            relationshipBadge = 'Child → Parent';
+                            relationshipColor = 'background: #f0fdf4; color: #15803d;';
+                            break;
+                        case 'ancestor':
+                            relationshipBadge = 'Ancestor → Descendant';
+                            relationshipColor = 'background: #f3e8ff; color: #7c3aed;';
+                            break;
+                        case 'descendant':
+                            relationshipBadge = 'Descendant → Ancestor';
+                            relationshipColor = 'background: #fdf4ff; color: #a855f7;';
+                            break;
+                        case 'cousin':
+                            relationshipBadge = 'Cousin Categories';
+                            relationshipColor = 'background: #fef3c7; color: #92400e;';
+                            break;
+                        default:
+                            if (product.exactMatch) {
+                                relationshipBadge = 'Exact Match';
+                                relationshipColor = 'background: #ecfdf5; color: #059669;';
+                            } else if (product.pathMatch) {
+                                relationshipBadge = 'Path Match';
+                                relationshipColor = 'background: #f0f9ff; color: #0284c7;';
+                            }
+                    }
+                    
+                    if (relationshipBadge) {
+                        metaInfo += `<span class="indicator" style="${relationshipColor}">${relationshipBadge}</span>`;
+                    }
                 }
 
-                // Add confidence level indicators
-                if (product.highConfidence === 'TRUE') {
-                    metaInfo += `<span class="agreement-badge">High Confidence</span>`;
-                } else if (product.lowConfidence === 'TRUE') {
-                    metaInfo += `<span class="disagreement-badge">Low Confidence</span>`;
-                }
-
-                // Add priority indicators
-                if (product.priorityReview === 'TRUE') {
-                    metaInfo += `<span class="disagreement-badge">Priority Review</span>`;
+                // Create the main category display with path highlighting
+                let categoryDisplay = category.text;
+                
+                // For GPT categories, highlight the shared vs different parts
+                if (category.source.startsWith('GPT') && category.sharedPath && categories.length > 1) {
+                    const sharedPath = category.sharedPath;
+                    const fullPath = category.text;
+                    
+                    if (fullPath.startsWith(sharedPath)) {
+                        const remainingPath = fullPath.slice(sharedPath.length);
+                        categoryDisplay = `<span style="color: #6b7280; font-weight: 500;">${sharedPath}</span><span style="color: #0f172a; font-weight: 700;">${remainingPath}</span>`;
+                    } else {
+                        categoryDisplay = `<span style="color: #0f172a; font-weight: 700;">${fullPath}</span>`;
+                    }
                 }
 
                 div.innerHTML = `
-                    <div class="category-text">${category.text}</div>
+                    <div class="category-text" style="line-height: 1.5;">${categoryDisplay}</div>
                     <div class="category-meta">
                         ${metaInfo}
                     </div>
@@ -1117,8 +1554,16 @@
             const currentDecision = decisions[currentProduct.handle];
             const hasSelection = selectedCategories[currentProduct.handle];
             
-            productCard.classList.remove('approved', 'denied', 'changed');
+            productCard.classList.remove('approved', 'denied', 'changed', 'high-priority', 'medium-priority');
             
+            // Add priority styling
+            if (currentProduct.reviewPriority === 'high') {
+                productCard.classList.add('high-priority');
+            } else if (currentProduct.reviewPriority === 'medium') {
+                productCard.classList.add('medium-priority');
+            }
+            
+            // Add decision styling
             if (hasSelection) {
                 productCard.classList.add('changed');
             } else if (currentDecision === 'approve') {
@@ -1220,21 +1665,32 @@
                 case 'faiss1': return product.faissCategory1;
                 case 'faiss2': return product.faissCategory2;
                 case 'faiss3': return product.faissCategory3;
+                case 'faiss4': return product.faissCategory4;
+                case 'faiss5': return product.faissCategory5;
                 default: return '';
             }
         }
 
         function exportDecisions() {
-            // Get original headers and add new tracking columns if they don't exist
+            // Get original headers and add enhanced tracking columns
             const originalHeaders = Object.keys(csvData[0]);
-            const trackingColumns = ['decision', 'selected_category_source', 'final_category', 'category_changed', 'reviewer_notes'];
+            const trackingColumns = [
+                'decision', 
+                'selected_category_source', 
+                'final_category', 
+                'category_changed', 
+                'reviewer_notes',
+                'agreement_quality_score',
+                'priority_level'
+            ];
             
-            // Only add tracking columns if they don't already exist
             const newColumns = trackingColumns.filter(col => !originalHeaders.includes(col));
             const csvHeader = originalHeaders.concat(newColumns);
             
             const enhancedData = csvData.map((row, index) => {
-                const product = products[index];
+                const product = products.find(p => p.index === index);
+                if (!product) return Object.values(row);
+                
                 const decision = decisions[product.handle] || row.decision || '';
                 const selectedCategoryId = selectedCategories[product.handle];
                 
@@ -1249,21 +1705,19 @@
                     categoryChanged = 'true';
                     reviewerNotes = `Selected ${categorySource} option: ${finalCategory}`;
                 } else {
-                    // Use original/current category (GPT1 has priority)
-                    if (product.gpt1Category) {
+                    if (product.gpt1Category && product.gpt1Category !== 'None of these') {
                         finalCategory = product.gpt1Category;
                         categorySource = 'GPT1';
-                    } else if (product.gpt2Category) {
+                    } else if (product.gpt2Category && product.gpt2Category !== 'None of these') {
                         finalCategory = product.gpt2Category;
                         categorySource = 'GPT2';
                     }
-                    reviewerNotes = `Kept original ${categorySource} category`;
+                    reviewerNotes = categorySource ? `Kept original ${categorySource} category` : 'No valid category available';
                 }
                 
-                // Create the row data starting with original values
                 const rowData = [...Object.values(row)];
                 
-                // Update existing manual_category, review_notes, review_status if they exist
+                // Update existing columns
                 if (originalHeaders.includes('manual_category')) {
                     rowData[originalHeaders.indexOf('manual_category')] = selectedCategoryId ? finalCategory : row.manual_category;
                 }
@@ -1280,41 +1734,36 @@
                                                                        row.review_status || 'pending';
                 }
                 
-                // Add or update tracking columns
-                if (originalHeaders.includes('decision')) {
-                    rowData[originalHeaders.indexOf('decision')] = decision;
-                } else if (newColumns.includes('decision')) {
-                    rowData.push(decision);
-                }
-                
-                if (originalHeaders.includes('selected_category_source')) {
-                    rowData[originalHeaders.indexOf('selected_category_source')] = categorySource;
-                } else if (newColumns.includes('selected_category_source')) {
-                    rowData.push(categorySource);
-                }
-                
-                if (originalHeaders.includes('final_category')) {
-                    rowData[originalHeaders.indexOf('final_category')] = finalCategory;
-                } else if (newColumns.includes('final_category')) {
-                    rowData.push(finalCategory);
-                }
-                
-                if (originalHeaders.includes('category_changed')) {
-                    rowData[originalHeaders.indexOf('category_changed')] = categoryChanged;
-                } else if (newColumns.includes('category_changed')) {
-                    rowData.push(categoryChanged);
-                }
-                
-                if (originalHeaders.includes('reviewer_notes')) {
-                    rowData[originalHeaders.indexOf('reviewer_notes')] = reviewerNotes;
-                } else if (newColumns.includes('reviewer_notes')) {
-                    rowData.push(reviewerNotes);
-                }
+                // Add new tracking columns
+                newColumns.forEach(col => {
+                    switch(col) {
+                        case 'decision':
+                            rowData.push(decision);
+                            break;
+                        case 'selected_category_source':
+                            rowData.push(categorySource);
+                            break;
+                        case 'final_category':
+                            rowData.push(finalCategory);
+                            break;
+                        case 'category_changed':
+                            rowData.push(categoryChanged);
+                            break;
+                        case 'reviewer_notes':
+                            rowData.push(reviewerNotes);
+                            break;
+                        case 'agreement_quality_score':
+                            rowData.push(product.agreementQuality);
+                            break;
+                        case 'priority_level':
+                            rowData.push(product.reviewPriority);
+                            break;
+                    }
+                });
                 
                 return rowData;
             });
             
-            // Escape CSV values properly
             const escapeValue = (value) => {
                 if (value === null || value === undefined) return '';
                 const str = String(value);
@@ -1334,11 +1783,11 @@
                 const link = document.createElement('a');
                 
                 if (navigator.msSaveBlob) {
-                    navigator.msSaveBlob(blob, 'product_categories_reviewed.csv');
+                    navigator.msSaveBlob(blob, 'enhanced_taxonomy_reviewed.csv');
                 } else {
                     const url = URL.createObjectURL(blob);
                     link.href = url;
-                    link.download = 'product_categories_reviewed.csv';
+                    link.download = 'enhanced_taxonomy_reviewed.csv';
                     link.style.visibility = 'hidden';
                     document.body.appendChild(link);
                     link.click();
@@ -1348,8 +1797,9 @@
                 
                 const reviewedCount = Object.keys(decisions).length;
                 const changedCount = Object.keys(selectedCategories).length;
+                const highPriorityCount = products.filter(p => p.reviewPriority === 'high').length;
                 
-                alert(`Export successful!\n\nRows exported: ${enhancedData.length}\nReviewed products: ${reviewedCount}\nCategories changed: ${changedCount}`);
+                alert(`Export successful!\n\nRows exported: ${enhancedData.length}\nReviewed products: ${reviewedCount}\nCategories changed: ${changedCount}\nHigh priority items: ${highPriorityCount}`);
                 
             } catch (error) {
                 console.error('Export failed:', error);

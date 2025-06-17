@@ -21,7 +21,7 @@
         .container {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 1.5rem;
+            padding: 1rem;
         }
 
         .header {
@@ -123,8 +123,8 @@
             border-radius: 1rem;
             box-shadow: 0 4px 6px rgba(0,0,0,0.05);
             border: 2px solid #e2e8f0;
-            padding: 2rem;
-            margin-bottom: 2rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
             transition: all 0.3s ease;
         }
 
@@ -184,9 +184,9 @@
 
         .product-grid {
             display: grid;
-            grid-template-columns: 300px 1fr 400px;
-            gap: 2rem;
-            margin-bottom: 2rem;
+            grid-template-columns: 200px 1fr 300px;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
         }
 
         .image-container {
@@ -197,11 +197,11 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 1.5rem;
+            padding: 1rem;
             text-align: center;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
 
         .product-image {
@@ -221,33 +221,69 @@
         }
 
         .image-icon {
-            width: 5rem;
-            height: 5rem;
+            width: 3rem;
+            height: 3rem;
             background: linear-gradient(135deg, #dbeafe, #bfdbfe);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 1rem;
+            margin-bottom: 0.75rem;
         }
 
         .product-details h1 {
-            font-size: 2rem;
+            font-size: 1.5rem;
             font-weight: bold;
-            margin-bottom: 1rem;
+            margin-bottom: 0.75rem;
             color: #0f172a;
         }
 
-        .product-details p {
+        .product-description {
             color: #475569;
-            line-height: 1.7;
-            margin-bottom: 1.5rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .description-content {
+            transition: all 0.3s ease;
+        }
+
+        .description-content.collapsed {
+            max-height: 4.5rem;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .description-content.collapsed::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 1.5rem;
+            background: linear-gradient(to bottom, transparent, white);
+        }
+
+        .read-more-btn {
+            background: none;
+            border: none;
+            color: #3b82f6;
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 600;
+            padding: 0.25rem 0;
+            text-decoration: underline;
+            margin-top: 0.5rem;
+        }
+
+        .read-more-btn:hover {
+            color: #1d4ed8;
         }
 
         .analysis-panel {
             background: linear-gradient(135deg, #f8fafc, #f1f5f9);
             border-radius: 1rem;
-            padding: 1.5rem;
+            padding: 1rem;
             border: 2px solid #e2e8f0;
         }
 
@@ -366,8 +402,8 @@
             border-radius: 1rem;
             box-shadow: 0 4px 6px rgba(0,0,0,0.05);
             border: 2px solid #e2e8f0;
-            padding: 2rem;
-            margin-bottom: 2rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
         }
 
         .categories-header {
@@ -395,8 +431,8 @@
             background: #f8fafc;
             border: 2px solid #e2e8f0;
             border-radius: 1rem;
-            padding: 1.5rem;
-            margin-bottom: 1rem;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
             cursor: pointer;
             transition: all 0.3s ease;
             position: relative;
@@ -478,9 +514,9 @@
 
         .decisions-section {
             display: flex;
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-            padding: 2rem;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding: 1.5rem;
             background: white;
             border-radius: 1rem;
             box-shadow: 0 4px 6px rgba(0,0,0,0.05);
@@ -492,9 +528,9 @@
             color: #166534;
             border: 3px solid #22c55e;
             flex: 1;
-            padding: 1.5rem 2rem;
+            padding: 1rem 1.5rem;
             border-radius: 1rem;
-            font-size: 1.125rem;
+            font-size: 1rem;
             font-weight: bold;
             transition: all 0.3s ease;
         }
@@ -517,9 +553,9 @@
             color: #991b1b;
             border: 3px solid #ef4444;
             flex: 1;
-            padding: 1.5rem 2rem;
+            padding: 1rem 1.5rem;
             border-radius: 1rem;
-            font-size: 1.125rem;
+            font-size: 1rem;
             font-weight: bold;
             transition: all 0.3s ease;
         }
@@ -545,8 +581,8 @@
             border-radius: 1rem;
             box-shadow: 0 4px 6px rgba(0,0,0,0.05);
             border: 2px solid #e2e8f0;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
         }
 
         .nav-counter {
@@ -569,8 +605,8 @@
             border-radius: 1rem;
             box-shadow: 0 4px 6px rgba(0,0,0,0.05);
             border: 2px solid #e2e8f0;
-            padding: 2rem;
-            margin: 2rem 0;
+            padding: 1.5rem;
+            margin: 1rem 0;
         }
 
         .progress-header {
@@ -777,7 +813,7 @@
         @media (max-width: 1200px) {
             .product-grid {
                 grid-template-columns: 1fr;
-                gap: 1.5rem;
+                gap: 1rem;
             }
             
             .summary-grid {
@@ -789,6 +825,10 @@
                 flex-direction: column;
                 gap: 1rem;
             }
+            
+            .container {
+                padding: 0.75rem;
+            }
         }
     </style>
 </head>
@@ -798,7 +838,7 @@
         <div class="header-content">
             <div>
                 <h1 class="title">Enhanced Taxonomy Reviewer</h1>
-                <p class="subtitle" id="product-counter">Review and approve AI-generated product categories</p>
+                <p class="subtitle" id="product-counter">Review and approve AI-generated product categories with vendor insights</p>
             </div>
             <div style="display: flex; gap: 1rem; align-items: center;">
                 <button id="export-btn" class="btn btn-primary hidden">
@@ -817,8 +857,8 @@
             <svg class="upload-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
             </svg>
-            <h3 style="font-size: 1.25rem; font-weight: 600; color: #0f172a; margin-bottom: 0.75rem;">Upload Enhanced CSV File</h3>
-            <p style="color: #64748b; margin-bottom: 1.5rem;">Select your product taxonomy analysis CSV file to begin reviewing</p>
+            <h3 style="font-size: 1.25rem; font-weight: 600; color: #0f172a; margin-bottom: 0.75rem;">Upload Enhanced CSV with Vendor Data</h3>
+            <p style="color: #64748b; margin-bottom: 1.5rem;">Select your product taxonomy analysis CSV file with vendor recommendations to begin reviewing</p>
             <input type="file" accept=".csv" id="csv-upload" style="display: none;">
             <label for="csv-upload" class="btn btn-primary" style="cursor: pointer;">Choose File</label>
         </div>
@@ -841,6 +881,22 @@
                     <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
                 </div>
                 <div class="progress-percent" id="progress-percent">0% complete</div>
+            </div>
+
+            <!-- Decision Buttons -->
+            <div class="decisions-section">
+                <button id="approve-btn" class="btn-approve">
+                    <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span id="approve-text">Approve Current Selection</span>
+                </button>
+                <button id="deny-btn" class="btn-deny">
+                    <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                    Reject All Options
+                </button>
             </div>
 
             <!-- Product Card -->
@@ -867,7 +923,12 @@
                     <!-- Product Details -->
                     <div class="product-details">
                         <h1 id="product-title">Product Title</h1>
-                        <p id="product-description">Product description...</p>
+                        <div class="product-description">
+                            <div id="description-content" class="description-content collapsed">
+                                <span id="product-description">Product description...</span>
+                            </div>
+                            <button id="read-more-btn" class="read-more-btn hidden">Read more</button>
+                        </div>
                     </div>
 
                     <!-- Analysis Panel -->
@@ -903,22 +964,6 @@
                 <div id="categories-container">
                     <!-- Category options will be populated here -->
                 </div>
-            </div>
-
-            <!-- Decision Buttons -->
-            <div class="decisions-section">
-                <button id="approve-btn" class="btn-approve">
-                    <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                    </svg>
-                    <span id="approve-text">Approve Current Selection</span>
-                </button>
-                <button id="deny-btn" class="btn-deny">
-                    <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                    Reject All Options
-                </button>
             </div>
 
             <!-- Summary -->
@@ -1020,6 +1065,7 @@
             document.getElementById('skip-btn').addEventListener('click', skipProduct);
             document.getElementById('approve-btn').addEventListener('click', () => handleDecision('approve'));
             document.getElementById('deny-btn').addEventListener('click', () => handleDecision('deny'));
+            document.getElementById('read-more-btn').addEventListener('click', toggleDescription);
         }
 
         async function handleFileUpload(event) {
@@ -1075,6 +1121,15 @@
                     title: row['Title'] || row.title || '',
                     description: row['Desc'] || row.description || '',
                     imageUrl: row['ImageOG'] || row.image_url || '',
+                    
+                    // Vendor information
+                    vendor: row['Vendor'] || '',
+                    vendorHasContext: row['vendor_has_context'] === true || row['vendor_has_context'] === 'true',
+                    vendorPrimaryCategories: row['vendor_primary_categories'] || '',
+                    vendorDescription: row['vendor_description'] || '',
+                    vendorAgeRange: row['vendor_age_range'] || '',
+                    vendorRecommendedTaxonomies: row['vendor_recommended_taxonomies'] || '',
+                    vendorRecommendationCount: parseInt(row['vendor_recommendation_count'] || '0'),
                     
                     // GPT categories
                     gpt1Category: cleanCategory(row['gpt1_category_desc'] || ''),
@@ -1146,6 +1201,19 @@
             currentProductIndex = 0;
             updateDisplay();
             preloadNextImages();
+        }
+
+        function toggleDescription() {
+            const descriptionContent = document.getElementById('description-content');
+            const readMoreBtn = document.getElementById('read-more-btn');
+            
+            if (descriptionContent.classList.contains('collapsed')) {
+                descriptionContent.classList.remove('collapsed');
+                readMoreBtn.textContent = 'Read less';
+            } else {
+                descriptionContent.classList.add('collapsed');
+                readMoreBtn.textContent = 'Read more';
+            }
         }
 
         function showLoading() {
@@ -1235,7 +1303,25 @@
             document.getElementById('skip-btn').disabled = currentProductIndex === products.length - 1;
             
             document.getElementById('product-title').textContent = currentProduct.title;
-            document.getElementById('product-description').textContent = currentProduct.description;
+            
+            // Handle collapsible description
+            const descriptionElement = document.getElementById('product-description');
+            const descriptionContent = document.getElementById('description-content');
+            const readMoreBtn = document.getElementById('read-more-btn');
+            
+            descriptionElement.textContent = currentProduct.description;
+            
+            // Reset to collapsed state
+            descriptionContent.classList.add('collapsed');
+            
+            // Show read more button if description is long (more than ~300 characters)
+            if (currentProduct.description && currentProduct.description.length > 300) {
+                readMoreBtn.classList.remove('hidden');
+                readMoreBtn.textContent = 'Read more';
+            } else {
+                readMoreBtn.classList.add('hidden');
+                descriptionContent.classList.remove('collapsed');
+            }
             
             loadProductImage(currentProduct.imageUrl);
             updateAnalysisPanel(currentProduct);
@@ -1257,6 +1343,15 @@
             // Update quality indicators
             const indicatorsContainer = document.getElementById('quality-indicators');
             indicatorsContainer.innerHTML = '';
+            
+            // Add vendor indicator if available
+            if (product.vendor) {
+                indicatorsContainer.innerHTML += `<span class="indicator" style="background: #f0f9ff; color: #0c4a6e; border: 1px solid #38bdf8;">Vendor: ${product.vendor}</span>`;
+            }
+            
+            if (product.vendorHasContext && product.vendorRecommendationCount > 0) {
+                indicatorsContainer.innerHTML += `<span class="indicator" style="background: #ecfdf5; color: #065f46;">${product.vendorRecommendationCount} Vendor Recs</span>`;
+            }
             
             if (product.highQualityAgreement) {
                 indicatorsContainer.innerHTML += '<span class="indicator high-quality">High Quality</span>';
@@ -1282,6 +1377,9 @@
             
             // Update relationship display with enhanced visualization
             updateRelationshipDisplay(product);
+            
+            // Add vendor context if available
+            updateVendorContext(product);
         }
 
         function updateRelationshipDisplay(product) {
@@ -1330,6 +1428,51 @@
             relationshipHTML += `<div style="font-size: 0.8rem; color: #64748b; margin-top: 0.75rem; font-style: italic;">${relationshipInfo.explanation}</div>`;
 
             relationshipContainer.innerHTML = relationshipHTML;
+        }
+
+        function updateVendorContext(product) {
+            const analysisPanel = document.querySelector('.analysis-panel');
+            
+            // Remove existing vendor context
+            const existingVendorContext = analysisPanel.querySelector('.vendor-context');
+            if (existingVendorContext) {
+                existingVendorContext.remove();
+            }
+            
+            // Add vendor context if available
+            if (product.vendor && (product.vendorHasContext || product.vendorAgeRange || product.vendorDescription)) {
+                const vendorDiv = document.createElement('div');
+                vendorDiv.className = 'vendor-context';
+                vendorDiv.style.cssText = `
+                    background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+                    border: 2px solid #38bdf8;
+                    border-radius: 0.75rem;
+                    padding: 1rem;
+                    margin: 1rem 0;
+                `;
+                
+                let vendorHTML = `
+                    <div style="font-size: 0.875rem; font-weight: 700; color: #0c4a6e; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <span style="color: #0284c7;">●</span>
+                        <strong>Vendor Context: ${product.vendor}</strong>
+                    </div>
+                `;
+                
+                if (product.vendorAgeRange) {
+                    vendorHTML += `<div style="font-size: 0.875rem; color: #075985; margin-bottom: 0.5rem;"><strong>Age Range:</strong> ${product.vendorAgeRange}</div>`;
+                }
+                
+                if (product.vendorDescription) {
+                    vendorHTML += `<div style="font-size: 0.875rem; color: #075985; margin-bottom: 0.5rem;"><strong>Description:</strong> ${product.vendorDescription}</div>`;
+                }
+                
+                if (product.vendorRecommendationCount > 0) {
+                    vendorHTML += `<div style="font-size: 0.875rem; color: #075985;"><strong>Recommendations:</strong> ${product.vendorRecommendationCount} available</div>`;
+                }
+                
+                vendorDiv.innerHTML = vendorHTML;
+                analysisPanel.appendChild(vendorDiv);
+            }
         }
 
         function getRelationshipInfo(relationship) {
@@ -1433,13 +1576,31 @@
 
             const categories = [];
 
+            // Add vendor recommendations first if available
+            if (product.vendorRecommendedTaxonomies) {
+                const vendorCategories = product.vendorRecommendedTaxonomies.split('|').filter(cat => cat.trim());
+                vendorCategories.forEach((cat, index) => {
+                    if (cat.trim()) {
+                        categories.push({
+                            text: cat.trim(),
+                            source: 'Vendor',
+                            confidence: null,
+                            isCurrent: index === 0 && vendorCategories.length > 0,
+                            id: `vendor${index + 1}`,
+                            vendor: product.vendor,
+                            rank: index + 1
+                        });
+                    }
+                });
+            }
+
             // Add GPT categories with relationship info
             if (product.gpt1Category && product.gpt1Category !== 'None of these') {
                 categories.push({
                     text: product.gpt1Category,
                     source: 'GPT-1',
                     confidence: null,
-                    isCurrent: true,
+                    isCurrent: categories.length === 0,
                     id: 'gpt1',
                     relationship: product.relationship,
                     sharedPath: product.sharedPath
@@ -1453,7 +1614,7 @@
                     text: product.gpt2Category,
                     source: 'GPT-2',
                     confidence: null,
-                    isCurrent: !product.gpt1Category,
+                    isCurrent: categories.length === 0,
                     id: 'gpt2',
                     relationship: product.relationship,
                     sharedPath: product.sharedPath
@@ -1539,6 +1700,11 @@
                 // Build enhanced meta info
                 let metaInfo = `<span class="source-badge">${category.source}</span>`;
                 
+                // Add vendor-specific styling
+                if (category.source === 'Vendor') {
+                    metaInfo = `<span class="source-badge" style="background: linear-gradient(135deg, #f0f9ff, #e0f2fe); color: #0c4a6e; border: 1px solid #38bdf8;">Vendor: ${category.vendor}</span>`;
+                }
+                
                 if (category.confidence !== null) {
                     const confPct = (category.confidence * 100).toFixed(1);
                     let confClass = 'confidence-badge';
@@ -1549,8 +1715,10 @@
                     metaInfo += `<span class="${confClass}">${confPct}%</span>`;
                 }
                 
-                if (category.rank) {
+                if (category.rank && category.source !== 'Vendor') {
                     metaInfo += `<span class="source-badge" style="background: #e0e7ff; color: #3730a3;">#${category.rank}</span>`;
+                } else if (category.rank && category.source === 'Vendor') {
+                    metaInfo += `<span class="source-badge" style="background: #cffafe; color: #065f46;">Rec #${category.rank}</span>`;
                 }
                 
                 // Add relationship indicators for GPT models with updated naming
@@ -1722,7 +1890,14 @@
                 case 'faiss3': return product.faissCategory3;
                 case 'faiss4': return product.faissCategory4;
                 case 'faiss5': return product.faissCategory5;
-                default: return '';
+                default: 
+                    // Handle vendor categories
+                    if (categoryId.startsWith('vendor') && product.vendorRecommendedTaxonomies) {
+                        const vendorIndex = parseInt(categoryId.replace('vendor', '')) - 1;
+                        const vendorCategories = product.vendorRecommendedTaxonomies.split('|');
+                        return vendorCategories[vendorIndex]?.trim() || '';
+                    }
+                    return '';
             }
         }
 
@@ -1737,7 +1912,9 @@
                 'reviewer_notes',
                 'agreement_quality_score',
                 'priority_level',
-                'relationship_type'
+                'relationship_type',
+                'vendor_category_selected',
+                'vendor_recommendation_used'
             ];
             
             const newColumns = trackingColumns.filter(col => !originalHeaders.includes(col));
@@ -1754,10 +1931,22 @@
                 let categorySource = '';
                 let categoryChanged = 'false';
                 let reviewerNotes = '';
+                let vendorCategorySelected = 'false';
+                let vendorRecommendationUsed = 'false';
                 
                 if (selectedCategoryId) {
                     finalCategory = getSelectedCategoryText(product, selectedCategoryId);
-                    categorySource = selectedCategoryId.startsWith('faiss') ? 'FAISS' : selectedCategoryId.toUpperCase();
+                    
+                    if (selectedCategoryId.startsWith('vendor')) {
+                        categorySource = 'VENDOR';
+                        vendorCategorySelected = 'true';
+                        vendorRecommendationUsed = 'true';
+                    } else if (selectedCategoryId.startsWith('faiss')) {
+                        categorySource = 'FAISS';
+                    } else {
+                        categorySource = selectedCategoryId.toUpperCase();
+                    }
+                    
                     categoryChanged = 'true';
                     reviewerNotes = `Selected ${categorySource} option: ${finalCategory}`;
                 } else {
@@ -1818,6 +2007,12 @@
                             const displayRelationship = relationshipMapping[product.relationship?.toLowerCase()] || product.relationship || '';
                             rowData.push(displayRelationship);
                             break;
+                        case 'vendor_category_selected':
+                            rowData.push(vendorCategorySelected);
+                            break;
+                        case 'vendor_recommendation_used':
+                            rowData.push(vendorRecommendationUsed);
+                            break;
                     }
                 });
                 
@@ -1858,8 +2053,10 @@
                 const reviewedCount = Object.keys(decisions).length;
                 const changedCount = Object.keys(selectedCategories).length;
                 const highPriorityCount = products.filter(p => p.reviewPriority === 'high').length;
+                const vendorRecommendationsUsed = Object.values(selectedCategories).filter(id => id.startsWith('vendor')).length;
+                const vendorsWithContext = products.filter(p => p.vendor && p.vendorHasContext).length;
                 
-                alert(`Export successful!\n\nRows exported: ${enhancedData.length}\nReviewed products: ${reviewedCount}\nCategories changed: ${changedCount}\nHigh priority items: ${highPriorityCount}`);
+                alert(`Export successful!\n\nRows exported: ${enhancedData.length}\nReviewed products: ${reviewedCount}\nCategories changed: ${changedCount}\nHigh priority items: ${highPriorityCount}\nVendor recommendations used: ${vendorRecommendationsUsed}\nProducts with vendor context: ${vendorsWithContext}`);
                 
             } catch (error) {
                 console.error('Export failed:', error);

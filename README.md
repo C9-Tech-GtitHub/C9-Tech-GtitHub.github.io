@@ -7,6 +7,7 @@ This repository contains simple HTML tools for e-commerce tasks. Each page works
 - **index.html** – Home page with links to all tools.
 - **title-analyzer.html** – Product Title Structure Analysis Dashboard.
 - **reviewer.html** – AI Suggestion Reviewer for processing product attributes.
+- **taxonomy-reviewer.html** – Product Taxonomy Reviewer – manage product categories with AI suggestions.
 
 ## How to Use
 

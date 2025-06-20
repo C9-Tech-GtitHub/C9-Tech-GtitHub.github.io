@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intelligent Taxonomy Assignment Workflow</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2d3748;
+            margin-bottom: 40px;
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .workflow {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        
+        .phase {
+            background: #f8fafc;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            position: relative;
+        }
+        
+        .phase-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .phase-number {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+        }
+        
+        .step {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            border: 2px solid #e2e8f0;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .step:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+        }
+        
+        .step-title {
+            font-weight: bold;
+            color: #4a5568;
+            margin-bottom: 12px;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .step-description {
+            color: #718096;
+            line-height: 1.6;
+            font-size: 1rem;
+            margin-bottom: 15px;
+        }
+        
+        .arrow {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #667eea;
+            margin: 15px 0;
+            position: relative;
+        }
+        
+        .arrow::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 20%;
+            right: 20%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #667eea, transparent);
+            z-index: -1;
+        }
+        
+        /* Phase-specific styling */
+        .phase.context-discovery {
+            border-left: 6px solid #38b2ac;
+            background: linear-gradient(135deg, #e6fffa, #f0fff4);
+        }
+        
+        .phase.vendor-management {
+            border-left: 6px solid #ed8936;
+            background: linear-gradient(135deg, #fef5e7, #fffbeb);
+        }
+        
+        .phase.quality-control {
+            border-left: 6px solid #e53e3e;
+            background: linear-gradient(135deg, #fed7e2, #fef5e7);
+        }
+        
+        .phase.intelligent-matching {
+            border-left: 6px solid #3182ce;
+            background: linear-gradient(135deg, #e6f3ff, #f0f8ff);
+        }
+        
+        .phase.final-export {
+            border-left: 6px solid #38a169;
+            background: linear-gradient(135deg, #f0fff4, #e6fffa);
+        }
+        
+        .process-details {
+            background: #f7fafc;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            border-left: 4px solid #667eea;
+        }
+        
+        .process-details h4 {
+            color: #2d3748;
+            margin: 0 0 12px 0;
+            font-size: 1.1rem;
+        }
+        
+        .process-details ul {
+            margin: 0;
+            padding-left: 20px;
+            color: #4a5568;
+        }
+        
+        .process-details li {
+            margin-bottom: 6px;
+            line-height: 1.5;
+        }
+        
+        .gpt-context {
+            background: #e6f3ff;
+            border: 2px solid #3182ce;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .gpt-context h5 {
+            color: #3182ce;
+            margin: 0 0 10px 0;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .approval-gates {
+            background: #fff5f5;
+            border: 2px solid #e53e3e;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .approval-gates h5 {
+            color: #e53e3e;
+            margin: 0 0 10px 0;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .stats-preview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        .stat-box {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #4a5568;
+            margin-top: 5px;
+        }
+        
+        .decision-point {
+            background: #fff8dc;
+            border: 2px dashed #d69e2e;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            text-align: center;
+        }
+        
+        .decision-point h5 {
+            color: #d69e2e;
+            margin: 0 0 10px 0;
+            font-size: 1rem;
+        }
+        
+        @media (max-width: 768px) {
+            .steps {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-preview {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧠 Intelligent Taxonomy Assignment Workflow</h1>
+        
+        <div class="workflow">
+            <!-- Phase 1: Context Discovery -->
+            <div class="phase context-discovery">
+                <div class="phase-title">
+                    <div class="phase-number">1</div>
+                    🔍 Domain Context Discovery & L1 Category Selection
+                </div>
+                
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-title">📁 Upload & Parse Export</div>
+                        <div class="step-description">
+                            Upload Matrixify/AbleStar export and extract domain information
+                        </div>
+                        <div class="process-details">
+                            <h4>Processing Steps:</h4>
+                            <ul>
+                                <li>Parse CSV/Excel export file</li>
+                                <li>Extract unique domains from product URLs</li>
+                                <li>Clean and normalize product data</li>
+                                <li>Generate upload summary and statistics</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-title">🌐 Site Context Analysis</div>
+                        <div class="step-description">
+                            Automatically crawl site to understand business context
+                        </div>
+                        <div class="process-details">
+                            <h4>Site Data Collection:</h4>
+                            <ul>
+                                <li>Homepage title, description, og:image</li>
+                                <li>About Us page content analysis</li>
+                                <li>Site navigation structure</li>
+                                <li>Meta keywords and product categories</li>
+                            </ul>
+                        </div>
+                        <div class="gpt-context">
+                            <h5>🤖 GPT Analysis</h5>
+                            <p>GPT analyzes site content to understand business type, target audience, and product focus areas</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-title">🎯 L1 Category Recommendations</div>
+                        <div class="step-description">
+                            GPT recommends relevant Level 1 taxonomy categories
+                        </div>
+                        <div class="process-details">
+                            <h4>GPT Context Includes:</h4>
+                            <ul>
+                                <li>Site business description and focus</li>
+                                <li>Product type patterns from export</li>
+                                <li>Target demographic analysis</li>
+                                <li>Brand positioning insights</li>
+                            </ul>
+                        </div>
+                        <div class="decision-point">
+                            <h5>👤 Human Decision Point</h5>
+                            <p>Review and modify GPT's L1 category recommendations. Add or remove categories as needed.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="arrow">⬇️</div>
+
+            <!-- Phase 2: Vendor Management -->
+            <div class="phase vendor-management">
+                <div class="phase-title">
+                    <div class="phase-number">2</div>
+                    🏪 Vendor Database Management & Analysis
+                </div>
+                
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-title">📊 Vendor Discovery</div>
+                        <div class="step-description">
+                            Analyze vendors from export and check against existing database
+                        </div>
+                        <div class="stats-preview">
+                            <div class="stat-box">
+                                <div class="stat-number">52</div>
+                                <div class="stat-label">Total Vendors</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-number">23</div>
+                                <div class="stat-label">In Database</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-number">29</div>
+                                <div class="stat-label">New Vendors</div>
+                            </div>
+                        </div>
+                        <div class="process-details">
+                            <h4>Vendor Status Check:</h4>
+                            <ul>
+                                <li>✅ Existing vendors with complete taxonomy mappings</li>
+                                <li>⚠️ Existing vendors needing updates</li>
+                                <li>🆕 New vendors requiring analysis</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-title">🤖 Automated Vendor Research</div>
+                        <div class="step-description">
+                            GPT-powered vendor analysis for new/incomplete vendors
+                        </div>
+                        <div class="gpt-context">
+                            <h5>🤖 GPT Vendor Analysis</h5>
+                            <ul>
+                                <li>Crawl vendor website for brand information</li>
+                                <li>Analyze product categories and target audience</li>
+                                <li>Map to relevant taxonomy categories</li>
+                                <li>Generate keyword associations</li>
+                            </ul>
+                        </div>
+                        <div class="approval-gates">
+                            <h5>✅ Manual Approval Required</h5>
+                            <p>Review GPT-generated vendor profiles and taxonomy mappings before adding to database</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-title">📝 Manual Vendor Entry</div>
+                        <div class="step-description">
+                            Team can manually add/edit vendor information and approved taxonomies
+                        </div>
+                        <div class="process-details">
+                            <h4>Manual Entry Options:</h4>
+                            <ul>
+                                <li>Vendor profile information</li>
+                                <li>Approved taxonomy category mappings</li>
+                                <li>Keyword associations and weights</li>
+                                <li>Exclusion rules and special cases</li>
+                            </ul>
+                        </div>
+                        <div class="decision-point">
+                            <h5>👤 Continue or Complete Vendor Setup</h5>
+                            <p>Proceed with current vendor data or complete remaining vendor profiles</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="arrow">⬇️</div>
+
+            <!-- Phase 3: Quality Control & Existing Matches -->
+            <div class="phase quality-control">
+                <div class="phase-title">
+                    <div class="phase-number">3</div>
+                    🔍 Quality Control & Existing Match Analysis
+                </div>
+                
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-title">📋 Existing Match Audit</div>
+                        <div class="step-description">
+                            Analyze how many products already have correct taxonomy assignments
+                        </div>
+                        <div class="stats-preview">
+                            <div class="stat-box">
+                                <div class="stat-number">142</div>
+                                <div class="stat-label">Already Matched</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-number">67</div>
+                                <div class="stat-label">Has Attributes</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-number">167</div>
+                                <div class="stat-label">Needs Review</div>
+                            </div>
+                        </div>
+                        <div class="process-details">
+                            <h4>Quality Assessment:</h4>
+                            <ul>
+                                <li>Check existing taxonomy category assignments</li>
+                                <li>Validate attribute/metafield completeness</li>
+                                <li>Identify inconsistencies and errors</li>
+                                <li>Flag products needing attention</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-title">🎯 100% Keyword Matches</div>
+                        <div class="step-description">
+                            High-confidence matches based on vendor + keyword analysis
+                        </div>
+                        <div class="process-details">
+                            <h4>Perfect Match Criteria:</h4>
+                            <ul>
+                                <li>Vendor in database with taxonomy mappings</li>
+                                <li>Product type matches vendor keywords exactly</li>
+                                <li>Category confidence score > 95%</li>
+                                <li>No conflicting signals in product data</li>
+                            </ul>
+                        </div>
+                        <div class="approval-gates">
+                            <h5>✅ Bulk Approval Available</h5>
+                            <p>Review 100% matches and approve in batches or individually</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-title">⚠️ Flag & Review Process</div>
+                        <div class="step-description">
+                            Manual review interface for problematic or uncertain matches
+                        </div>
+                        <div class="process-details">
+                            <h4>Review Categories:</h4>
+                            <ul>
+                                <li>🔴 Incorrect existing assignments</li>
+                                <li>🟡 Low confidence matches</li>
+                                <li>🟢 Approved high-confidence matches</li>
+                                <li>⚪ Unprocessed products</li>
+                            </ul>
+                        </div>
+                        <div class="decision-point">
+                            <h5>👤 Approve Changes & Continue</h5>
+                            <p>Review flagged items, approve changes, and proceed to AI matching</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="arrow">⬇️</div>
+
+            <!-- Phase 4: AI-Enhanced Matching -->
+            <div class="phase intelligent-matching">
+                <div class="phase-title">
+                    <div class="phase-number">4</div>
+                    🤖 AI-Enhanced Intelligent Matching
+                </div>
+                
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-title">🧠 GPT Context Matching</div>
+                        <div class="step-description">
+                            Use all available context for intelligent categorization
+                        </div>
+                        <div class="gpt-context">
+                            <h5>🤖 Complete Context Analysis</h5>
+                            <ul>
+                                <li>Site business context and L1 categories</li>
+                                <li>Vendor profile and approved taxonomies</li>
+                                <li>Product title, description, tags, collections</li>
+                                <li>Keyword filter lists and exclusion rules</li>
+                                <li>Existing taxonomy patterns from similar products</li>
+                            </ul>
+                        </div>
+                        <div class="process-details">
+                            <h4>Smart Matching Features:</h4>
+                            <ul>
+                                <li>Multi-field context analysis</li>
+                                <li>Vendor-specific taxonomy filtering</li>
+                                <li>Confidence scoring with explanations</li>
+                                <li>Alternative category suggestions</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-title">🎯 Confidence-Based Sorting</div>
+                        <div class="step-description">
+                            Sort AI recommendations by confidence for efficient review
+                        </div>
+                        <div class="stats-preview">
+                            <div class="stat-box">
+                                <div class="stat-number">45</div>
+                                <div class="stat-label">High (90%+)</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-number">23</div>
+                                <div class="stat-label">Medium (70-89%)</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-number">12</div>
+                                <div class="stat-label">Low (<70%)</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-number">3</div>
+                                <div class="stat-label">No Match</div>
+                            </div>
+                        </div>
+                        <div class="process-details">
+                            <h4>Review Priority:</h4>
+                            <ul>
+                                <li>High confidence: Quick approve or bulk approve</li>
+                                <li>Medium confidence: Individual review</li>
+                                <li>Low confidence: Manual categorization</li>
+                                <li>No match: Research and manual assignment</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-title">✅ Final Approval Interface</div>
+                        <div class="step-description">
+                            Streamlined review interface with context and alternatives
+                        </div>
+                        <div class="process-details">
+                            <h4>Review Interface Features:</h4>
+                            <ul>
+                                <li>Product details with images</li>
+                                <li>AI reasoning and confidence scores</li>
+                                <li>Alternative category suggestions</li>
+                                <li>Vendor context and historical patterns</li>
+                                <li>Bulk actions for similar products</li>
+                            </ul>
+                        </div>
+                        <div class="approval-gates">
+                            <h5>✅ Approve AI Recommendations</h5>
+                            <p>Review and approve AI-generated taxonomy assignments with full context</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="arrow">⬇️</div>
+
+            <!-- Phase 5: Export & Implementation -->
+            <div class="phase final-export">
+                <div class="phase-title">
+                    <div class="phase-number">5</div>
+                    📤 Export & Implementation
+                </div>
+                
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-title">📊 Final Results Summary</div>
+                        <div class="step-description">
+                            Comprehensive summary of all taxonomy assignments and changes
+                        </div>
+                        <div class="stats-preview">
+                            <div class="stat-box">
+                                <div class="stat-number">342</div>
+                                <div class="stat-label">Successfully Matched</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-number">28</div>
+                                <div class="stat-label">Manual Review</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-number">6</div>
+                                <div class="stat-label">No Category</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-number">91%</div>
+                                <div class="stat-label">Success Rate</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-title">📁 Export Options</div>
+                        <div class="step-description">
+                            Multiple export formats for different implementation needs
+                        </div>
+                        <div class="process-details">
+                            <h4>Export Formats:</h4>
+                            <ul>
+                                <li>Shopify CSV import format</li>
+                                <li>Matrixify bulk update format</li>
+                                <li>API endpoint data for custom integration</li>
+                                <li>Detailed report with confidence scores</li>
+                                <li>Vendor library updates for future use</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-title">🔄 Database Updates</div>
+                        <div class="step-description">
+                            Update vendor library and system knowledge base
+                        </div>
+                        <div class="process-details">
+                            <h4>System Learning:</h4>
+                            <ul>
+                                <li>Update vendor taxonomy mappings</li>
+                                <li>Refine keyword associations</li>
+                                <li>Store successful pattern matches</li>
+                                <li>Flag problematic categories for review</li>
+                                <li>Generate insights for future improvements</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

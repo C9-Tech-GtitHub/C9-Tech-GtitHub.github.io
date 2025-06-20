@@ -1,0 +1,1517 @@
+{
+  "Paper Wings": {
+    "description": "Australian children's clothing brand specializing in unique graphic tees, dresses, and casual wear for kids aged 0-12 years. Known for vintage-inspired designs and comfortable everyday clothing.",
+    "age_range": "0-12 years",
+    "primary_categories": [
+      "clothing",
+      "apparel"
+    ],
+    "gender": "unisex",
+    "product_types": [
+      "t-shirts",
+      "dresses",
+      "casual wear",
+      "graphic tees"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default"
+  },
+  "Missie Munster": {
+    "description": "MNSTRKIDS IS A LIFESTYLE BRAND. CREATED FROM A LOVE OF YOUTH CULTURE. BABY BOYS AND GIRLS CLOTHING SWIMWEAR AND DENIM. Specializes in edgy, cool kids fashion with street-style influence.",
+    "age_range": "baby to kids",
+    "primary_categories": [
+      "clothing",
+      "swimwear",
+      "denim"
+    ],
+    "gender": "boys and girls",
+    "product_types": [
+      "clothing",
+      "swimwear",
+      "denim",
+      "lifestyle apparel"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default",
+    "recommended_taxonomies": [
+      "Apparel & Accessories > Clothing > Baby & Toddler Clothing > Baby & Toddler Swimwear",
+      "Apparel & Accessories > Clothing > Baby & Toddler Clothing > Baby & Toddler Tops"
+    ]
+  },
+  "Little Wings": {
+    "description": "Children's fashion brand focusing on comfortable, stylish clothing for babies and kids. Emphasizes quality fabrics and contemporary designs for everyday wear.",
+    "age_range": "baby to kids",
+    "primary_categories": [
+      "clothing",
+      "apparel"
+    ],
+    "gender": "unisex",
+    "product_types": [
+      "baby clothing",
+      "kids clothing",
+      "fashion apparel"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default"
+  },
+  "Bebe by Minihaha": {
+    "description": "Premium baby and toddler clothing brand specializing in high-quality, fashionable pieces for the youngest customers. Focus on comfort, style and functionality for babies and toddlers.",
+    "age_range": "baby to toddler",
+    "primary_categories": [
+      "baby clothing",
+      "toddler clothing"
+    ],
+    "gender": "unisex",
+    "product_types": [
+      "baby wear",
+      "toddler wear",
+      "premium baby clothing"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default",
+    "recommended_taxonomies": [
+      "Apparel & Accessories > Clothing > Baby & Toddler Clothing > Baby One-Pieces",
+      "Apparel & Accessories > Clothing > Baby & Toddler Clothing > Baby & Toddler Sleepwear"
+    ]
+  },
+  "Jellycat": {
+    "description": "World-renowned British soft toy company creating high-quality plush toys, stuffed animals, and comfort toys. Famous for Bashful Bunnies, Amuseable collection, and innovative soft toy designs suitable from birth.",
+    "age_range": "birth+",
+    "primary_categories": [
+      "toys",
+      "soft toys",
+      "plush"
+    ],
+    "gender": "unisex",
+    "product_types": [
+      "stuffed animals",
+      "plush toys",
+      "comfort toys",
+      "soft toys"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default",
+    "recommended_taxonomies": [
+      "Baby & Toddler > Baby Toys & Activity Equipment > Baby Soothers > Plush Toys",
+      "Toys & Games > Toys > Dolls, Playsets & Toy Figures > Stuffed Animals",
+      "Media > Books > Print Books"
+    ]
+  },
+  "Mini Rodini": {
+    "description": "Swedish children's clothing brand known for organic materials, playful prints, and sustainable fashion. Creates clothing for babies and children with bold, creative designs and environmental consciousness.",
+    "age_range": "baby to kids",
+    "primary_categories": [
+      "clothing",
+      "organic apparel"
+    ],
+    "gender": "unisex",
+    "product_types": [
+      "organic clothing",
+      "sustainable fashion",
+      "kids wear"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default"
+  },
+  "Bobo Choses": {
+    "description": "Spanish children's clothing brand with artistic, creative designs. Known for imaginative prints, sustainable practices, and clothing that celebrates childhood creativity for babies and kids.",
+    "age_range": "baby to kids",
+    "primary_categories": [
+      "clothing",
+      "creative fashion"
+    ],
+    "gender": "unisex",
+    "product_types": [
+      "artistic clothing",
+      "creative kids wear",
+      "sustainable fashion"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default"
+  },
+  "Band of Boys": {
+    "description": "New Zealand children's clothing brand creating cool, comfortable casual wear for boys and kids. Known for streetwear-inspired designs, hoodies, shorts, and laid-back lifestyle clothing.",
+    "age_range": "toddler to kids",
+    "primary_categories": [
+      "clothing",
+      "casual wear"
+    ],
+    "gender": "boys focused, some unisex",
+    "product_types": [
+      "casual clothing",
+      "streetwear",
+      "hoodies",
+      "shorts",
+      "lifestyle wear"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default",
+    "recommended_taxonomies": [
+      "Apparel & Accessories > Clothing > Baby & Toddler Clothing > Baby & Toddler Outerwear",
+      "Apparel & Accessories > Clothing > Baby & Toddler Clothing > Baby & Toddler Tops"
+    ]
+  },
+  "The Animals Observatory": {
+    "description": "Spanish children's clothing brand with distinctive animal-themed and nature-inspired designs. Creates unique, artistic clothing for kids with bold prints and contemporary cuts.",
+    "age_range": "baby to kids",
+    "primary_categories": [
+      "clothing",
+      "artistic fashion"
+    ],
+    "gender": "unisex",
+    "product_types": [
+      "artistic clothing",
+      "animal-themed wear",
+      "unique kids fashion"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default",
+    "recommended_taxonomies": [
+      "Apparel & Accessories > Clothing > Baby & Toddler Clothing > Baby & Toddler Tops",
+      "Apparel & Accessories > Clothing > Baby & Toddler Clothing > Baby & Toddler Bottoms"
+    ]
+  },
+  "Huxbaby": {
+    "description": "Australian children's clothing brand known for contemporary basics and cool graphics. Creates comfortable, stylish clothing for babies and kids with a modern edge.",
+    "age_range": "baby to kids",
+    "primary_categories": [
+      "clothing",
+      "basics"
+    ],
+    "gender": "unisex",
+    "product_types": [
+      "basics",
+      "contemporary clothing",
+      "graphic tees"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default"
+  },
+  "Nana Huchy": {
+    "description": "Australian soft toy company creating whimsical, character-driven plush toys and comfort items. Known for unique personalities and storytelling approach to toy design.",
+    "age_range": "birth+",
+    "primary_categories": [
+      "toys",
+      "soft toys",
+      "plush"
+    ],
+    "gender": "unisex",
+    "product_types": [
+      "soft toys",
+      "character toys",
+      "comfort items"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default",
+    "recommended_taxonomies": [
+      "Toys & Games > Toys > Dolls, Playsets & Toy Figures > Stuffed Animals"
+    ]
+  },
+  "Crywolf": {
+    "description": "Australian children's brand specializing in sun protection clothing and swimwear. Creates UPF 50+ clothing, hats, and swimwear designed for active kids and sun safety.",
+    "age_range": "baby to kids",
+    "primary_categories": [
+      "clothing",
+      "swimwear",
+      "sun protection"
+    ],
+    "gender": "unisex",
+    "product_types": [
+      "swimwear",
+      "sun protection",
+      "rash vests",
+      "hats"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default"
+  },
+  "Peggy": {
+    "description": "Peggy is an Australian children's clothing brand offering vintage-inspired designs for girls aged 0-12 years. Their collections feature high-quality garments with exclusive prints, designed to be worn, loved, and passed down.",
+    "age_range": "0-12 years",
+    "primary_categories": [
+      "clothing",
+      "apparel"
+    ],
+    "gender": "female",
+    "product_types": [
+      "dresses",
+      "playsuits",
+      "pinafores",
+      "tops",
+      "bottoms"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default"
+  },
+  "Cinnamon Baby": {
+    "description": "Cinnamon Baby is a Melbourne-based children's clothing boutique focusing on comfortable and sustainable clothing for newborns up to five years. Their collections feature high-quality products and unique designs intended to last and be passed down for generations.",
+    "age_range": "0-5 years",
+    "primary_categories": [
+      "clothing",
+      "accessories"
+    ],
+    "gender": "unisex",
+    "product_types": [
+      "rompers",
+      "tees",
+      "shorts",
+      "dresses"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default"
+  },
+  "Alimrose Designs": {
+    "description": "Alimrose Designs is a leading Australian brand in the children's gift market, known for its handcrafted dolls, plush toys, and baby accessories. With a passion for design and quality fabrics, Alimrose creates heirloom-quality products that are cherished worldwide.",
+    "age_range": "0+ years",
+    "primary_categories": [
+      "toys",
+      "accessories"
+    ],
+    "gender": "unisex",
+    "product_types": [
+      "dolls",
+      "plush toys",
+      "rattles",
+      "bibs"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default"
+  },
+  "Alphabet Soup": {
+    "description": "Alphabet Soup is an Australian kids' streetwear label inspired by skate, surf, and music culture. Catering to children aged 1-14 years, the brand offers creative and functional clothing with a cool and edgy aesthetic.",
+    "age_range": "1-14 years",
+    "primary_categories": [
+      "clothing",
+      "apparel"
+    ],
+    "gender": "boys",
+    "product_types": [
+      "t-shirts",
+      "shorts",
+      "jackets",
+      "hoodies"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default"
+  },
+  "Kapow Kids": {
+    "description": "Kapow Kids is a Melbourne-based children's clothing brand known for its bold prints and imaginative designs. Catering to kids from newborn to 8 years, their collections are ethically made with a focus on comfort and style.",
+    "age_range": "0-8 years",
+    "primary_categories": [
+      "clothing",
+      "apparel"
+    ],
+    "gender": "unisex",
+    "product_types": [
+      "rompers",
+      "dresses",
+      "leggings",
+      "tops"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default"
+  },
+  "Fox and Finch": {
+    "description": "Fox and Finch is an Australian children's clothing brand offering a blend of classic style and fashion-forward designs. Their collections feature high-quality garments for babies and children, combining comfort with contemporary trends.",
+    "age_range": "0-10 years",
+    "primary_categories": [
+      "clothing",
+      "apparel"
+    ],
+    "gender": "unisex",
+    "product_types": [
+      "dresses",
+      "tops",
+      "pants",
+      "knitwear"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default"
+  },
+  "Tiger Tribe": {
+    "description": "Tiger Tribe is an Australian brand creating compact and portable toys and gifts for children. Their products are designed to nurture creativity and confidence in kids, offering a range of activity sets, stationery, and travel toys.",
+    "age_range": "0+ years",
+    "primary_categories": [
+      "toys",
+      "activity sets",
+      "stationery"
+    ],
+    "gender": "unisex",
+    "product_types": [
+      "coloring sets",
+      "bath toys",
+      "travel toys",
+      "creative kits"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default"
+  },
+  "Purebaby": {
+    "description": "Purebaby is an Australian-owned company specializing in organic clothing for babies and children. Established in 2002, they offer beautifully designed products made with awareness and care for the environment, using certified organic cotton.",
+    "age_range": "0-12 years",
+    "primary_categories": [
+      "clothing",
+      "organic apparel"
+    ],
+    "gender": "unisex",
+    "product_types": [
+      "onesies",
+      "sleepwear",
+      "bodysuits",
+      "accessories"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default"
+  },
+  "ergoPOUCH": {
+    "description": "ergoPOUCH is an Australian brand specializing in ergonomically designed sleepwear for babies and children. Their products are made with natural fibers and designed to help babies sleep safely and comfortably.",
+    "age_range": "0-6 years",
+    "primary_categories": [
+      "sleepwear",
+      "sleep accessories"
+    ],
+    "gender": "unisex",
+    "product_types": [
+      "sleep sacks",
+      "swaddles",
+      "pajamas",
+      "sleep suits"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default",
+    "recommended_taxonomies": [
+      "Baby & Toddler > Swaddling & Receiving Blankets"
+    ]
+  },
+  "Salt Water": {
+    "description": "Salt Water Sandals are classic, durable sandals for children and adults. Made from waterproof leather with a non-slip rubber sole, they are perfect for beach and casual wear, combining style and practicality.",
+    "age_range": "0+ years",
+    "primary_categories": [
+      "footwear"
+    ],
+    "gender": "unisex",
+    "product_types": [
+      "sandals"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default"
+  },
+  "Playforever": {
+    "description": "Playforever is a London-based designer brand creating timeless, elegant toy vehicles inspired by classic racing cars and planes. Their toys are designed in the UK and built to last using high-quality materials, making them suitable for both children and adults.",
+    "age_range": "3+ years",
+    "primary_categories": [
+      "toys",
+      "vehicles"
+    ],
+    "gender": "unisex",
+    "product_types": [
+      "toy cars",
+      "planes",
+      "vehicles"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default"
+  },
+  "Toshi": {
+    "description": "Toshi is an Australian designer lifestyle brand dedicated to creating children's accessories, headwear, and organic baby gifts. Established in 1999, Toshi offers aesthetically driven products with high integrity and intelligent functionality.",
+    "age_range": "0-8 years",
+    "primary_categories": [
+      "clothing",
+      "accessories"
+    ],
+    "gender": "unisex",
+    "product_types": [
+      "hats",
+      "beanies",
+      "swimwear",
+      "sleepwear"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default"
+  },
+  "VEJA": {
+    "description": "VEJA is a French footwear brand known for producing sustainable sneakers using eco-friendly materials like organic cotton, wild rubber, and recycled plastic bottles. Their kids' collection offers stylish and comfortable shoes with a commitment to environmental responsibility.",
+    "age_range": "0-12 years",
+    "primary_categories": [
+      "footwear"
+    ],
+    "gender": "unisex",
+    "product_types": [
+      "sneakers",
+      "trainers"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default"
+  },
+  "Kaloo": {
+    "description": "Kaloo is a French brand specializing in soft toys and comforters designed to provide emotional well-being and sensory development for children. Their products are known for their softness, innovative materials, and attention to detail.",
+    "age_range": "0+ years",
+    "primary_categories": [
+      "toys",
+      "plush"
+    ],
+    "gender": "unisex",
+    "product_types": [
+      "plush toys",
+      "comforters",
+      "dolls"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default"
+  },
+  "Tiny Cottons": {
+    "description": "Tiny Cottons is a Barcelona-based children's clothing brand offering high-quality, durable garments with bold designs and playful prints. Established in 2012, they focus on creating stylish and comfortable clothing made primarily from Pima cotton.",
+    "age_range": "0-12 years",
+    "primary_categories": [
+      "clothing",
+      "apparel"
+    ],
+    "gender": "unisex",
+    "product_types": [
+      "t-shirts",
+      "sweatshirts",
+      "pants",
+      "accessories"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default"
+  },
+  "Tip Toey Joey": {
+    "description": "Tip Toey Joey is a Brazilian brand specializing in high-quality leather shoes for babies and toddlers. Their barefoot shoes are designed to support natural foot development, combining comfort, protection, and style.",
+    "age_range": "0-5 years",
+    "primary_categories": [
+      "footwear"
+    ],
+    "gender": "unisex",
+    "product_types": [
+      "pre-walkers",
+      "first walkers",
+      "sandals",
+      "boots"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default"
+  },
+  "Lauren Sissons Studio": {
+    "description": "Lauren Sissons Studio is an Australian brand offering joyful collections of kids' birthday cards, educational flashcards, and art prints. Each piece features hand-drawn illustrations designed to spark curiosity and smiles.",
+    "age_range": "All ages",
+    "primary_categories": [
+      "stationery",
+      "art"
+    ],
+    "gender": "unisex",
+    "product_types": [
+      "greeting cards",
+      "flashcards",
+      "art prints"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default"
+  },
+  "Jamie Kay": {
+    "description": "Jamie Kay is a New Zealand-based children's clothing brand celebrated for its ethereal designs and commitment to eco-conscious practices. They create soft, breathable clothing using natural and sustainable fabrics like organic cotton and bamboo.",
+    "age_range": "0-10 years",
+    "primary_categories": [
+      "clothing",
+      "apparel"
+    ],
+    "gender": "unisex",
+    "product_types": [
+      "rompers",
+      "dresses",
+      "sleepwear",
+      "knitwear"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default"
+  },
+  "Pearson and Pearson": {
+    "description": "Pearson and Pearson is a renowned educational publishing company, providing a wide range of learning materials and resources for students and educators worldwide.",
+    "age_range": "All ages",
+    "primary_categories": [
+      "educational materials",
+      "books"
+    ],
+    "gender": "unisex",
+    "product_types": [
+      "textbooks",
+      "workbooks",
+      "digital resources"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default"
+  },
+  "BIBS Dummies": {
+    "description": "BIBS is a premium Danish baby brand established in 1978, known for its iconic round Colour pacifier. They offer a variety of dummies covering all nipple types, focusing on high-quality and stylish baby essentials.",
+    "age_range": "0-3 years",
+    "primary_categories": [
+      "baby products"
+    ],
+    "gender": "unisex",
+    "product_types": [
+      "pacifiers",
+      "bibs",
+      "baby bottles"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default"
+  },
+  "Snuggle Hunny": {
+    "description": "Snuggle Hunny is a leading Australian retailer of toddler clothing, accessories, and bedding. They offer a wide range of organic and sustainable products with unique and beautiful designs exclusive to their brand.",
+    "age_range": "0-5 years",
+    "primary_categories": [
+      "clothing",
+      "bedding",
+      "accessories"
+    ],
+    "gender": "unisex",
+    "product_types": [
+      "swaddles",
+      "growsuits",
+      "headbands",
+      "blankets"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default"
+  },
+  "Lauren Hinkley Cards": {
+    "description": "Lauren Hinkley is a leading Australian retailer of quality jewellery, accessories, and stationery for kids, known for its unique designs and collections.",
+    "age_range": "3-12 years",
+    "primary_categories": [
+      "accessories",
+      "stationery"
+    ],
+    "gender": "female",
+    "product_types": [
+      "jewellery",
+      "hair accessories",
+      "greeting cards"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default"
+  },
+  "Buckets and Spades": {
+    "description": "Buckets and Spades is Australia\u2019s premier destination for designer children's clothing, offering high-quality garments from leading Australian and international designers.",
+    "age_range": "0-12 years",
+    "primary_categories": [
+      "clothing"
+    ],
+    "gender": "unisex",
+    "product_types": [
+      "dresses",
+      "tops",
+      "pants",
+      "outerwear"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default"
+  },
+  "Gund": {
+    "description": "Gund is an American manufacturer of plush stuffed animals, known for its high-quality and innovative products. Established in 1898, Gund has a rich history of creating beloved soft toys.",
+    "age_range": "0+ years",
+    "primary_categories": [
+      "toys"
+    ],
+    "gender": "unisex",
+    "product_types": [
+      "plush toys",
+      "teddy bears",
+      "licensed characters"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default"
+  },
+  "Bunnies By The Bay": {
+    "description": "Bunnies By The Bay is a company focused on creating gifts for infants, offering a range of plush bunnies in different outfits, each with its own name and a short section of verse.",
+    "age_range": "0-5 years",
+    "primary_categories": [
+      "toys",
+      "gifts"
+    ],
+    "gender": "unisex",
+    "product_types": [
+      "plush toys",
+      "comforters",
+      "gift sets"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default"
+  },
+  "Paddington Bear": {
+    "description": "Paddington Bear is a beloved British children's character created by Michael Bond in 1958. The character has been featured in numerous books, television series, and films, and is known for his distinctive blue coat and red hat.",
+    "age_range": "3+ years",
+    "primary_categories": [
+      "toys",
+      "books",
+      "apparel"
+    ],
+    "gender": "unisex",
+    "product_types": [
+      "plush toys",
+      "storybooks",
+      "clothing"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default"
+  },
+  "Crocodile Creek": {
+    "description": "Crocodile Creek is a brand offering a wide range of high-quality children's products, including puzzles, lunchboxes, and backpacks, known for their vibrant designs and durability.",
+    "age_range": "3-12 years",
+    "primary_categories": [
+      "toys",
+      "accessories"
+    ],
+    "gender": "unisex",
+    "product_types": [
+      "puzzles",
+      "lunchboxes",
+      "backpacks"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default"
+  },
+  "Bugaboo": {
+    "description": "Bugaboo is a Dutch design company that develops and produces mobility products, including strollers and luggage systems, known for their innovative design and functionality.",
+    "age_range": "0-3 years",
+    "primary_categories": [
+      "baby gear"
+    ],
+    "gender": "unisex",
+    "product_types": [
+      "strollers",
+      "car seats",
+      "travel systems"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default"
+  },
+  "Miniland": {
+    "description": "Miniland is a company that offers educational toys and resources aimed at promoting the comprehensive development of children, with a focus on diversity and inclusion.",
+    "age_range": "0-12 years",
+    "primary_categories": [
+      "educational toys"
+    ],
+    "gender": "unisex",
+    "product_types": [
+      "dolls",
+      "puzzles",
+      "learning games"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default"
+  },
+  "Vulli": {
+    "description": "Vulli is a French company best known for creating Sophie la Girafe, a popular teething toy made from natural rubber, beloved by parents and babies worldwide.",
+    "age_range": "0-2 years",
+    "primary_categories": [
+      "baby products"
+    ],
+    "gender": "unisex",
+    "product_types": [
+      "teething toys",
+      "baby rattles",
+      "bath toys"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default"
+  },
+  "Chlo\u00e9": {
+    "description": "Chlo\u00e9 is a French luxury fashion house founded in 1952 by Gaby Aghion. The Chlo\u00e9 children's collection embodies the brand's signature elegance and femininity, offering beautifully crafted clothing and accessories that reflect the Parisian chic aesthetic.",
+    "age_range": "0-14 years",
+    "primary_categories": [
+      "clothing",
+      "accessories"
+    ],
+    "gender": "female",
+    "product_types": [
+      "dresses",
+      "tops",
+      "skirts",
+      "jackets",
+      "bags"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default"
+  },
+  "World Of Eric Carle": {
+    "description": "The World of Eric Carle is a brand that brings the beloved stories and characters of author and illustrator Eric Carle to life through a range of products. Known for 'The Very Hungry Caterpillar', the brand focuses on creativity, discovery, and learning.",
+    "age_range": "0-6 years",
+    "primary_categories": [
+      "books",
+      "toys",
+      "educational materials"
+    ],
+    "gender": "unisex",
+    "product_types": [
+      "board books",
+      "plush toys",
+      "puzzles",
+      "learning games"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default"
+  },
+  "nununu": {
+    "description": "nununu is a contemporary children's fashion brand from Israel, offering minimalist and edgy designs that challenge traditional kids' fashion norms. The brand focuses on unisex clothing that encourages individuality and self-expression.",
+    "age_range": "0-14 years",
+    "primary_categories": [
+      "clothing"
+    ],
+    "gender": "unisex",
+    "product_types": [
+      "t-shirts",
+      "hoodies",
+      "pants",
+      "dresses",
+      "outerwear"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default"
+  },
+  "DKNY": {
+    "description": "DKNY (Donna Karan New York) is an American fashion brand established in 1989, known for its urban and contemporary style. The DKNY Kids line offers practical and stylish clothing that reflects the energy of New York City.",
+    "age_range": "2-16 years",
+    "primary_categories": [
+      "clothing",
+      "accessories"
+    ],
+    "gender": "unisex",
+    "product_types": [
+      "t-shirts",
+      "dresses",
+      "jackets",
+      "bags",
+      "shoes"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default"
+  },
+  "One Red Fly": {
+    "description": "One Red Fly is an Australian children's clothing brand offering contemporary designs with exclusive prints and high-quality fabrics. The brand focuses on creating stylish and comfortable clothing for girls.",
+    "age_range": "3-14 years",
+    "primary_categories": [
+      "clothing"
+    ],
+    "gender": "female",
+    "product_types": [
+      "dresses",
+      "skirts",
+      "tops",
+      "knitwear"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default"
+  },
+  "Minti": {
+    "description": "Minti is a Melbourne-based kids' clothing brand known for its original hand-drawn graphics, playful streetwear-inspired style, and quality fabrics. Ethically made, Minti pieces are designed for both comfort and fun.",
+    "age_range": "0-12 years",
+    "primary_categories": [
+      "clothing",
+      "apparel"
+    ],
+    "gender": "unisex",
+    "product_types": [
+      "t-shirts",
+      "dresses",
+      "sweatshirts",
+      "pants",
+      "casual wear"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default",
+    "recommended_taxonomies": [
+      "Apparel & Accessories > Clothing > Baby & Toddler Clothing > Baby & Toddler Tops",
+      "Apparel & Accessories > Clothing > Baby & Toddler Clothing > Baby & Toddler Bottoms",
+      "Apparel & Accessories > Clothing > Baby & Toddler Clothing > Baby & Toddler Dresses",
+      "Apparel & Accessories > Clothing > Baby & Toddler Clothing > Baby & Toddler Outerwear"
+    ]
+  },
+  "Wilson and Frenchy": {
+    "description": "Wilson and Frenchy is an Australian label known for its soft, organic cotton baby clothing and sleepwear. The brand\u2019s collections are designed with comfort, style, and sustainability in mind.",
+    "age_range": "Premmie-7 years",
+    "primary_categories": [
+      "clothing",
+      "sleepwear",
+      "baby essentials"
+    ],
+    "gender": "unisex",
+    "product_types": [
+      "zipsuits",
+      "bodysuits",
+      "leggings",
+      "sleep bags"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default"
+  },
+  "Munster Kids": {
+    "description": "Munster Kids creates playful, edgy kids' clothing inspired by skate and surf culture. The label is based in Australia and is celebrated for its adventurous graphics and streetwise comfort.",
+    "age_range": "0-14 years",
+    "primary_categories": [
+      "clothing",
+      "apparel"
+    ],
+    "gender": "unisex",
+    "product_types": [
+      "tees",
+      "hoodies",
+      "shorts",
+      "pants",
+      "jackets"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default"
+  },
+  "Nature Baby": {
+    "description": "Nature Baby is a New Zealand brand focused on organic, sustainable babywear and essentials. Their products use natural materials such as organic cotton and merino wool for gentle, safe everyday wear.",
+    "age_range": "Newborn-4 years",
+    "primary_categories": [
+      "clothing",
+      "sleepwear",
+      "essentials"
+    ],
+    "gender": "unisex",
+    "product_types": [
+      "onesies",
+      "sleepwear",
+      "blankets",
+      "swaddles"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default"
+  },
+  "Scotch and Soda": {
+    "description": "Scotch & Soda is a Dutch fashion brand offering adventurous and high-quality kids\u2019 clothing with a distinct, eclectic style. Their designs blend classic and contemporary elements.",
+    "age_range": "4-16 years",
+    "primary_categories": [
+      "clothing",
+      "apparel"
+    ],
+    "gender": "unisex",
+    "product_types": [
+      "t-shirts",
+      "jeans",
+      "dresses",
+      "jackets"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default",
+    "recommended_taxonomies": [
+      "Apparel & Accessories > Clothing > Baby & Toddler Clothing > Baby & Toddler Tops",
+      "Apparel & Accessories > Clothing > Baby & Toddler Clothing > Baby & Toddler Bottoms",
+      "Apparel & Accessories > Clothing > Baby & Toddler Clothing > Baby & Toddler Outerwear"
+    ]
+  },
+  "Ziggy Lou": {
+    "description": "Ziggy Lou is a Melbourne label offering heirloom-quality baby knitwear and accessories in warm, muted tones. Their collections focus on timeless designs, softness, and practical comfort.",
+    "age_range": "Newborn-5 years",
+    "primary_categories": [
+      "clothing",
+      "knitwear"
+    ],
+    "gender": "unisex",
+    "product_types": [
+      "rompers",
+      "jumpers",
+      "beanies",
+      "blankets"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default",
+    "recommended_taxonomies": [
+      "Apparel & Accessories > Clothing > Baby & Toddler Clothing > Baby & Toddler Outerwear",
+      "Apparel & Accessories > Clothing Accessories > Baby & Toddler Clothing Accessories > Baby & Toddler Hats"
+    ]
+  },
+  "Scotch Rbelle": {
+    "description": "Scotch R\u2019Belle is the girls\u2019 line from Scotch & Soda, featuring playful, eclectic fashion for girls inspired by the main brand\u2019s signature look. Known for its European flair and creative detailing.",
+    "age_range": "4-12 years",
+    "primary_categories": [
+      "clothing",
+      "apparel"
+    ],
+    "gender": "female",
+    "product_types": [
+      "dresses",
+      "tops",
+      "skirts",
+      "jackets"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default",
+    "recommended_taxonomies": [
+      "Apparel & Accessories > Clothing > Baby & Toddler Clothing > Baby & Toddler Dresses",
+      "Apparel & Accessories > Clothing > Baby & Toddler Clothing > Baby & Toddler Tops"
+    ]
+  },
+  "BOSS": {
+    "description": "BOSS Kidswear by Hugo Boss offers premium, modern clothing for children, blending classic tailoring and contemporary style for all occasions.",
+    "age_range": "0-16 years",
+    "primary_categories": [
+      "clothing",
+      "apparel"
+    ],
+    "gender": "unisex",
+    "product_types": [
+      "t-shirts",
+      "pants",
+      "dresses",
+      "jackets"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default",
+    "recommended_taxonomies": [
+      "Apparel & Accessories > Clothing > Baby & Toddler Clothing > Baby & Toddler Outerwear",
+      "Apparel & Accessories > Clothing > Baby & Toddler Clothing > Baby & Toddler Tops"
+    ]
+  },
+  "Marc Jacobs": {
+    "description": "Marc Jacobs Kids brings the designer\u2019s signature quirk and playful style to children\u2019s clothing, offering trendy, urban-inspired pieces for boys and girls.",
+    "age_range": "2-12 years",
+    "primary_categories": [
+      "clothing",
+      "apparel"
+    ],
+    "gender": "unisex",
+    "product_types": [
+      "t-shirts",
+      "dresses",
+      "jackets",
+      "accessories"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default",
+    "recommended_taxonomies": [
+      "Apparel & Accessories > Clothing > Baby & Toddler Clothing > Baby & Toddler Outerwear",
+      "Apparel & Accessories > Clothing > Baby & Toddler Clothing > Baby & Toddler Tops"
+    ]
+  },
+  "Goldie and Ace": {
+    "description": "Goldie and Ace is an Australian label specialising in vintage-inspired, high-quality kidswear with a modern twist. Their garments are designed to last and be loved from season to season.",
+    "age_range": "0-6 years",
+    "primary_categories": [
+      "clothing",
+      "apparel"
+    ],
+    "gender": "unisex",
+    "product_types": [
+      "rompers",
+      "overalls",
+      "t-shirts",
+      "pants"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default",
+    "recommended_taxonomies": [
+      "Apparel & Accessories > Clothing > Baby & Toddler Clothing > Baby One-Pieces",
+      "Apparel & Accessories > Clothing > Baby & Toddler Clothing > Baby & Toddler Tops"
+    ]
+  },
+  "Halcyon Nights": {
+    "description": "Halcyon Nights creates imaginative, colourful clothing and bedding for babies and kids, featuring original prints by local Australian artists. Their collections encourage play, discovery, and creativity.",
+    "age_range": "Newborn-8 years",
+    "primary_categories": [
+      "clothing",
+      "bedding",
+      "accessories"
+    ],
+    "gender": "unisex",
+    "product_types": [
+      "rompers",
+      "sleepwear",
+      "blankets",
+      "swaddles"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default",
+    "recommended_taxonomies": [
+      "Apparel & Accessories > Clothing > Baby & Toddler Clothing > Baby & Toddler Sleepwear",
+      "Apparel & Accessories > Clothing > Baby & Toddler Clothing > Baby One-Pieces"
+    ]
+  },
+  "Rock Your Baby": {
+    "description": "Rock Your Baby is an Australian kidswear label known for its bold prints, pop culture collaborations, and offbeat style. Their high-quality garments are made for babies, toddlers, and kids.",
+    "age_range": "0-12 years",
+    "primary_categories": [
+      "clothing"
+    ],
+    "gender": "unisex",
+    "product_types": [
+      "t-shirts",
+      "dresses",
+      "jackets",
+      "pants"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default",
+    "recommended_taxonomies": [
+      "Apparel & Accessories > Clothing > Baby & Toddler Clothing > Baby & Toddler Outerwear",
+      "Apparel & Accessories > Clothing > Baby & Toddler Clothing > Baby & Toddler Tops"
+    ]
+  },
+  "Tutu Du Monde": {
+    "description": "Tutu Du Monde is a Sydney-based luxury girls\u2019 brand famed for ethereal, hand-crafted dresses, tutus, and accessories inspired by ballet and vintage glamour.",
+    "age_range": "1-14 years",
+    "primary_categories": [
+      "clothing",
+      "accessories"
+    ],
+    "gender": "female",
+    "product_types": [
+      "dresses",
+      "tutus",
+      "headpieces",
+      "capes"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default",
+    "recommended_taxonomies": [
+      "Apparel & Accessories > Clothing > Baby & Toddler Clothing > Baby & Toddler Dresses"
+    ]
+  },
+  "Bella and Lace": {
+    "description": "Bella and Lace is an Australian girlswear label featuring playful, vintage-inspired pieces with whimsical prints and beautiful detailing.",
+    "age_range": "0-10 years",
+    "primary_categories": [
+      "clothing"
+    ],
+    "gender": "female",
+    "product_types": [
+      "dresses",
+      "tops",
+      "skirts",
+      "knitwear"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default",
+    "recommended_taxonomies": [
+      "Apparel & Accessories > Clothing > Baby & Toddler Clothing > Baby & Toddler Dresses"
+    ]
+  },
+  "Olli Ella": {
+    "description": "Olli Ella creates timeless toys, nursery essentials, and home d\u00e9cor for modern families, focusing on sustainability and imaginative play.",
+    "age_range": "All ages",
+    "primary_categories": [
+      "toys",
+      "homeware",
+      "storage"
+    ],
+    "gender": "unisex",
+    "product_types": [
+      "dolls",
+      "baskets",
+      "furniture",
+      "decor"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default",
+    "recommended_taxonomies": [
+      "Home & Garden > Decor > Decorative Baskets",
+      "Toys & Games > Toys > Dolls, Playsets & Toy Figures"
+    ]
+  },
+  "Acorn Kids": {
+    "description": "Acorn Kids is a Melbourne-based children\u2019s accessories label making ethically handmade beanies, hats, and scarves with fun, functional designs.",
+    "age_range": "Newborn-8 years",
+    "primary_categories": [
+      "accessories"
+    ],
+    "gender": "unisex",
+    "product_types": [
+      "beanies",
+      "sun hats",
+      "mittens",
+      "scarves"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default",
+    "recommended_taxonomies": [
+      "Apparel & Accessories > Clothing Accessories > Baby & Toddler Clothing Accessories > Baby & Toddler Hats",
+      "Apparel & Accessories > Clothing Accessories > Baby & Toddler Clothing Accessories > Baby & Toddler Gloves & Mittens"
+    ]
+  },
+  "Janod": {
+    "description": "Janod is a French brand making traditional wooden and cardboard toys that inspire learning and imaginative play for children.",
+    "age_range": "0-12 years",
+    "primary_categories": [
+      "toys",
+      "games"
+    ],
+    "gender": "unisex",
+    "product_types": [
+      "puzzles",
+      "pretend play",
+      "educational toys",
+      "musical instruments"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default",
+    "recommended_taxonomies": [
+      "Toys & Games > Toys > Learning & Educational Toys",
+      "Toys & Games > Toys > Pretend Play"
+    ]
+  },
+  "Marlo Kids": {
+    "description": "Marlo Kids is an Australian label offering chic and affordable girlswear with bespoke fabrics, intricate detailing, and timeless silhouettes.",
+    "age_range": "3 months-16 years",
+    "primary_categories": [
+      "clothing"
+    ],
+    "gender": "female",
+    "product_types": [
+      "dresses",
+      "rompers",
+      "tops",
+      "skirts"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default",
+    "recommended_taxonomies": [
+      "Apparel & Accessories > Clothing > Baby & Toddler Clothing > Baby & Toddler Dresses"
+    ]
+  },
+  "Bobux": {
+    "description": "Bobux is a New Zealand brand specialising in podiatrist-approved, high-quality shoes for children that support natural foot development.",
+    "age_range": "Newborn-8 years",
+    "primary_categories": [
+      "footwear"
+    ],
+    "gender": "unisex",
+    "product_types": [
+      "pre-walkers",
+      "first walkers",
+      "sandals",
+      "boots"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default",
+    "recommended_taxonomies": [
+      "Apparel & Accessories > Shoes > Baby & Toddler Shoes"
+    ]
+  },
+  "O.B. Designs": {
+    "description": "O.B. Designs is an Australian brand making ethically crafted soft toys, teethers, and nursery d\u00e9cor with a focus on safety and comfort.",
+    "age_range": "Newborn-5 years",
+    "primary_categories": [
+      "toys",
+      "nursery decor"
+    ],
+    "gender": "unisex",
+    "product_types": [
+      "plush toys",
+      "rattles",
+      "blankets",
+      "wall hangings"
+    ],
+    "added_date": "2025-06-16",
+    "source": "default"
+  },
+  "Marie France": {
+    "description": "French children's clothing brand.",
+    "age_range": "",
+    "primary_categories": [],
+    "gender": "",
+    "product_types": [],
+    "added_date": "2025-06-17",
+    "source": "added_stub"
+  },
+  "Pretty Brave": {
+    "description": "NZ brand specialising in leather baby and child shoes.",
+    "age_range": "",
+    "primary_categories": [
+      "footwear"
+    ],
+    "gender": "",
+    "product_types": [
+      "shoes"
+    ],
+    "added_date": "2025-06-17",
+    "source": "added_stub"
+  },
+  "eeni meeni miini moh": {
+    "description": "Premium Australian children's lifestyle and apparel brand.",
+    "age_range": "",
+    "primary_categories": [
+      "clothing"
+    ],
+    "gender": "",
+    "product_types": [],
+    "added_date": "2025-06-17",
+    "source": "added_stub"
+  },
+  "Love to Dream": {
+    "description": "Innovative swaddles, sleep bags, and sleep suits for babies.",
+    "age_range": "",
+    "primary_categories": [
+      "sleepwear"
+    ],
+    "gender": "",
+    "product_types": [
+      "swaddles",
+      "sleep bags"
+    ],
+    "added_date": "2025-06-17",
+    "source": "added_stub"
+  },
+  "Karl Lagerfeld": {
+    "description": "Premium designer kidswear collection.",
+    "age_range": "",
+    "primary_categories": [
+      "clothing",
+      "accessories"
+    ],
+    "gender": "",
+    "product_types": [],
+    "added_date": "2025-06-17",
+    "source": "added_stub"
+  },
+  "Coco and Ginger": {
+    "description": "Ethically produced, hand-embroidered children's clothing.",
+    "age_range": "",
+    "primary_categories": [
+      "clothing"
+    ],
+    "gender": "",
+    "product_types": [],
+    "added_date": "2025-06-17",
+    "source": "added_stub"
+  },
+  "Petite Amalie": {
+    "description": "Australian boutique childrenswear.",
+    "age_range": "",
+    "primary_categories": [
+      "clothing"
+    ],
+    "gender": "",
+    "product_types": [],
+    "added_date": "2025-06-17",
+    "source": "added_stub"
+  },
+  "GNancy": {
+    "description": "Australian label for comfortable, stylish sleepwear.",
+    "age_range": "",
+    "primary_categories": [
+      "sleepwear"
+    ],
+    "gender": "",
+    "product_types": [],
+    "added_date": "2025-06-17",
+    "source": "added_stub"
+  },
+  "ALPHABLOCKS": {
+    "description": "Educational TV show and merchandise for early literacy.",
+    "age_range": "",
+    "primary_categories": [
+      "educational"
+    ],
+    "gender": "",
+    "product_types": [],
+    "added_date": "2025-06-17",
+    "source": "added_stub"
+  },
+  "Hair Bow": {
+    "description": "Brand specialising in children's hair accessories.",
+    "age_range": "",
+    "primary_categories": [
+      "accessories"
+    ],
+    "gender": "",
+    "product_types": [
+      "hair bows"
+    ],
+    "added_date": "2025-06-17",
+    "source": "added_stub"
+  },
+  "Doudou et Compagnie": {
+    "description": "French brand of soft toys and comforters.",
+    "age_range": "",
+    "primary_categories": [
+      "toys"
+    ],
+    "gender": "",
+    "product_types": [
+      "comforters"
+    ],
+    "added_date": "2025-06-17",
+    "source": "added_stub"
+  },
+  "Love Mae": {
+    "description": "Eco-friendly children\u2019s bamboo dinnerware & decor.",
+    "age_range": "",
+    "primary_categories": [
+      "homeware",
+      "dining"
+    ],
+    "gender": "",
+    "product_types": [],
+    "added_date": "2025-06-17",
+    "source": "added_stub"
+  },
+  "Popupshop": {
+    "description": "Organic, sustainable children\u2019s clothing.",
+    "age_range": "",
+    "primary_categories": [
+      "clothing"
+    ],
+    "gender": "",
+    "product_types": [],
+    "added_date": "2025-06-17",
+    "source": "added_stub"
+  },
+  "NUMBERBLOCKS": {
+    "description": "Educational TV show and merchandise for early numeracy.",
+    "age_range": "",
+    "primary_categories": [
+      "educational"
+    ],
+    "gender": "",
+    "product_types": [],
+    "added_date": "2025-06-17",
+    "source": "added_stub"
+  },
+  "Silver Cross": {
+    "description": "Luxury British prams and baby gear.",
+    "age_range": "",
+    "primary_categories": [
+      "baby gear"
+    ],
+    "gender": "",
+    "product_types": [
+      "prams"
+    ],
+    "added_date": "2025-06-17",
+    "source": "added_stub"
+  },
+  "Ohaldo": {
+    "description": "Children's clothing & accessories.",
+    "age_range": "",
+    "primary_categories": [
+      "clothing"
+    ],
+    "gender": "",
+    "product_types": [],
+    "added_date": "2025-06-17",
+    "source": "added_stub"
+  },
+  "Rylee and Cru": {
+    "description": "Artistic, whimsical kids clothing from California.",
+    "age_range": "",
+    "primary_categories": [
+      "clothing"
+    ],
+    "gender": "",
+    "product_types": [],
+    "added_date": "2025-06-17",
+    "source": "added_stub"
+  },
+  "Weegoamigo": {
+    "description": "Fun, colourful baby blankets & accessories.",
+    "age_range": "",
+    "primary_categories": [
+      "bedding"
+    ],
+    "gender": "",
+    "product_types": [
+      "blankets"
+    ],
+    "added_date": "2025-06-17",
+    "source": "added_stub"
+  },
+  "Scotch Shrunk": {
+    "description": "Boys\u2019 line by Scotch & Soda.",
+    "age_range": "",
+    "primary_categories": [
+      "clothing"
+    ],
+    "gender": "boys",
+    "product_types": [],
+    "added_date": "2025-06-17",
+    "source": "added_stub"
+  },
+  "Kruselings": {
+    "description": "Fantasy dolls designed for creative play.",
+    "age_range": "",
+    "primary_categories": [
+      "toys"
+    ],
+    "gender": "",
+    "product_types": [
+      "dolls"
+    ],
+    "added_date": "2025-06-17",
+    "source": "added_stub"
+  },
+  "Girly Girls": {
+    "description": "Fashion and accessories for young girls.",
+    "age_range": "",
+    "primary_categories": [
+      "clothing",
+      "accessories"
+    ],
+    "gender": "girls",
+    "product_types": [],
+    "added_date": "2025-06-17",
+    "source": "added_stub"
+  },
+  "I Dig Denim": {
+    "description": "Swedish denim and casual wear for kids.",
+    "age_range": "",
+    "primary_categories": [
+      "clothing"
+    ],
+    "gender": "",
+    "product_types": [
+      "jeans",
+      "tops"
+    ],
+    "added_date": "2025-06-17",
+    "source": "added_stub"
+  },
+  "Camilla": {
+    "description": "Iconic Australian label known for luxurious prints and resort wear.",
+    "age_range": "",
+    "primary_categories": [
+      "clothing"
+    ],
+    "gender": "",
+    "product_types": [],
+    "added_date": "2025-06-17",
+    "source": "added_stub"
+  },
+  "Eves Sister": {
+    "description": "Affordable, on-trend girlswear brand.",
+    "age_range": "",
+    "primary_categories": [
+      "clothing"
+    ],
+    "gender": "girls",
+    "product_types": [],
+    "added_date": "2025-06-17",
+    "source": "added_stub"
+  },
+  "Rubbabu": {
+    "description": "Soft, natural rubber toys for babies and kids.",
+    "age_range": "",
+    "primary_categories": [
+      "toys"
+    ],
+    "gender": "",
+    "product_types": [
+      "soft toys"
+    ],
+    "added_date": "2025-06-17",
+    "source": "added_stub"
+  },
+  "Chloe": {
+    "description": "Luxury French label for kids (see Chlo\u00e9 entry).",
+    "age_range": "",
+    "primary_categories": [
+      "clothing",
+      "accessories"
+    ],
+    "gender": "",
+    "product_types": [],
+    "added_date": "2025-06-17",
+    "source": "added_stub"
+  }
+}
